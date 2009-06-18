@@ -1,0 +1,298 @@
+(defvar running-windows (eq system-type 'windows-nt))
+(defvar running-x (eq window-system 'x))
+(defvar running-gui (or
+                     running-windows
+                     running-x))
+
+(if running-windows
+    (prefer-coding-system 'windows-1251))
+(prefer-coding-system 'utf-8)
+;;(set-default-coding-systems 'utf-8)
+;;(set-terminal-coding-system 'utf-8)
+;;(set-keyboard-coding-system 'utf-8)
+
+(cond (running-windows
+       (set-default-font "-*-Lucida Console-normal-r-normal-normal-13-97-96-96-c-*-iso10646-1")
+       (add-to-list 'default-frame-alist
+                    '(font . "-*-Lucida Console-normal-r-normal-normal-13-97-96-96-c-*-iso10646-1")))
+      (running-x
+       (set-default-font "-*-terminus-medium-r-*-*-14-*-*-*-*-*-iso10646-1")
+       (setq default-frame-alist
+             (append '((font . "-*-terminus-medium-r-*-*-14-*-*-*-*-*-iso10646-1"))
+                     default-frame-alist))))
+
+(cond ((file-exists-p "~/.emacs.d/site-lisp")
+       (add-to-list 'load-path "~/.emacs.d/site-lisp")
+       (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+           (let* ((my-lisp-dir "~/.emacs.d/site-lisp/")
+                  (default-directory my-lisp-dir))
+             (setq load-path (cons my-lisp-dir load-path))
+             (normal-top-level-add-subdirs-to-load-path)))))
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(blink-cursor-mode nil)
+ '(c-basic-offset 4)
+ '(c-cleanup-list (quote (scope-operator brace-else-brace brace-elseif-brace brace-catch-brace empty-defun-braces)))
+ '(c-default-style (quote ((java-mode . "java") (awk-mode . "awk") (other . "bsd"))))
+ '(c-echo-syntactic-information-p nil)
+ '(c-hanging-braces-alist (quote ((block-close . c-snug-do-while) (statement-cont) (substatement-open after) (brace-list-open) (brace-entry-open) (extern-lang-open after) (namespace-open after) (namespace-close) (module-open after) (composition-open after) (inexpr-class-open after) (inexpr-class-close before) (arglist-cont-nonempty))))
+ '(c-offsets-alist (quote ((arglist-cont-nonempty . ++) (member-init-cont . 0) (substatement-open . 0))))
+ '(c-require-final-newline (quote ((c-mode . t) (c++-mode . t) (objc-mode . t) (java-mode . t) (erlang-mode . t) (haskell-mode . t))))
+ '(column-number-mode t)
+ '(compilation-read-command nil)
+ '(compilation-scroll-output t)
+ '(delete-selection-mode t)
+ '(ecb-gzip-setup (quote cons))
+ '(ecb-options-version "2.32")
+ '(ecb-primary-secondary-mouse-buttons (quote mouse-1--mouse-2))
+ '(ecb-source-path (quote (("e:" "e:"))))
+ '(ecb-tar-setup (quote cons))
+ '(ecb-tip-of-the-day nil)
+ '(ecb-wget-setup (quote cons))
+ '(ecb-windows-width 0.25)
+ '(font-lock-mode t t (font-lock))
+ '(indent-tabs-mode nil)
+ '(inhibit-startup-screen t)
+ '(iswitchb-mode t)
+ '(pc-selection-mode t nil (pc-select))
+ '(require-final-newline t)
+ '(scroll-bar-mode (quote right))
+ '(scroll-step 1)
+ '(show-paren-mode t)
+ '(show-paren-style (quote expression))
+ '(toolbar-visible-p nil)
+ '(transient-mark-mode t)
+ '(truncate-lines t)
+ '(truncate-partial-width-windows nil)
+ '(which-function-mode t))
+
+(fset 'yes-or-no-p 'y-or-n-p)
+
+(cond (running-gui
+       (custom-set-faces
+        ;; custom-set-faces was added by Custom.
+        ;; If you edit it by hand, you could mess it up, so be careful.
+        ;; Your init file should contain only one such instance.
+        ;; If there is more than one, they won't work right.
+        '(default ((t (:background "lightgrey"))))
+        '(font-lock-comment-face ((t (:foreground "steelblue"))))
+        '(font-lock-constant-face ((t (:foreground "magenta4"))))
+        '(font-lock-doc-string-face ((t (:foreground "steelblue"))))
+        '(font-lock-function-name-face ((t (:foreground "black"))))
+        '(font-lock-keyword-face ((t (:foreground "darkblue" :weight bold))))
+        '(font-lock-preprocessor-face ((t (:foreground "darkgreen" :bold t))))
+        '(font-lock-string-face ((t (:foreground "darkgreen"))))
+        '(font-lock-type-face ((t (:foreground "blue"))))
+        '(font-lock-variable-name-face ((t (:foreground "black"))))
+        '(highlight-beyond-fill-column-face ((t (:background "darkgrey"))))
+        '(show-paren-match ((t (:background "lightpink2"))))
+        '(show-paren-mismatch ((default nil) (nil (:background "red"))))))
+      ((not running-gui)
+       ))
+
+(push '("<\\?xml\\b[^>]*\\bencoding=\"utf-8\"[^>]*\\?>" . utf-8) auto-coding-regexp-alist)
+
+(cond
+ (running-windows
+  (defun insert-uuid ()
+    "Insert UUID in upper case to current buffer using `uuidgen' for generation."
+    (interactive)
+    (save-excursion
+      (if mark-active (kill-region (mark) (point)))
+      (shell-command "uuidgen -c" t)
+      (forward-char 36)
+      (delete-char 1))
+    )
+  (define-key global-map "\C-cg" 'insert-uuid)))
+
+(define-key global-map (kbd "<f7>") 'compile)
+(define-key global-map "\C-cj" 'fume-prompt-function-goto)
+(define-key global-map "\C-g" 'goto-line)
+(define-key global-map "\C-w" 'backward-kill-word)
+
+(defvar paired-dirs nil "*")
+(make-variable-buffer-local 'paired-dirs)
+(put 'paired-dirs 'safe-local-variable (lambda (val) (or
+                                                      (stringp val)
+                                                      (listp val))))
+
+(defun try-paired-files-in-dirs (name basedir dirs)
+  ""
+  (setq dir (car dirs))
+  (cond (dir
+         (setq dir (if (file-name-absolute-p dir)
+                       dir
+                     (concat basedir "/" dir)))
+         (cond ((file-exists-p (concat dir "/" name))
+                (find-file (concat dir "/" name))
+                t)
+               (t
+                (try-paired-files-in-dirs name basedir (cdr dirs)))
+               ))
+        )
+  )
+
+(defun try-paired-files (extlessname extensions)
+  ""
+  (setq ext (car extensions))
+  (setq name (file-name-nondirectory extlessname))
+  (cond (ext
+         (if (try-paired-files-in-dirs (concat name "." ext) (file-name-directory extlessname) (if (listp paired-dirs)
+                                                                                                   (cons (file-name-directory extlessname) paired-dirs)
+                                                                                                   (list (file-name-directory extlessname) paired-dirs)))
+             t
+           (try-paired-files extlessname (cdr extensions)))
+         ))
+  )
+
+(defun get-paired-extensions (file-name)
+  ""
+  (setq ext (file-name-extension file-name))
+  (cond (nil ())
+        ((equal ext "h") '("c" "cpp" "cxx"))
+        ((equal ext "hpp") '("cpp" "cxx" "c"))
+        ((equal ext "c") '("h" "hpp" "hxx"))
+        ((equal ext "cpp") '("hpp" "h" "hxx"))))
+
+(defun try-paired-buffer-name (name buffers)
+  ""
+  (setq buf (car buffers))
+  (cond ((and buf (buffer-file-name buf))
+         (if (equal (file-name-nondirectory (buffer-file-name buf)) name)
+             (switch-to-buffer buf)
+           (try-paired-buffer-name name (cdr buffers))))
+        ((cdr buffers)
+         (try-paired-buffer-name name (cdr buffers)))))
+
+(defun try-paired-buffers (basename extensions)
+  ""
+  (setq ext (car extensions))
+  (cond (ext
+         (try-paired-buffer-name (concat (file-name-nondirectory basename) "." ext) (buffer-list))
+         )
+        (t
+         nil)))
+
+(defun find-paired-file ()
+  "Find header of implementation file in existent buffers"
+  (interactive)
+  (if (buffer-file-name)
+      (if (not (try-paired-buffers (file-name-sans-extension (buffer-file-name)) (get-paired-extensions (buffer-file-name))))
+          (try-paired-files (file-name-sans-extension (buffer-file-name)) (get-paired-extensions (buffer-file-name))))))
+
+
+(add-hook 'c-mode-common-hook
+          '(lambda ()
+             (define-key c-mode-base-map (kbd "<RET>") 'newline-and-indent)
+             (define-key c-mode-base-map "\M-o" 'find-paired-file)
+             (modify-syntax-entry ?_ "w")
+             (setq show-trailing-whitespace t)
+             ;;(highlight-beyond-fill-column)
+             (set-variable 'fill-column 90 t)
+             ))
+
+(add-hook 'makefile-mode-hook
+          '(lambda ()
+             (modify-syntax-entry ?_ "w")
+             ))
+
+(add-hook 'python-mode-hook
+          '(lambda ()
+             (define-key python-mode-map (kbd "<RET>") 'newline-and-indent)
+             (modify-syntax-entry ?_ "w")
+             (setq show-trailing-whitespace t)
+             ))
+
+(add-hook 'latex-mode-hook
+          '(lambda ()
+             (define-key latex-mode-map (kbd "<RET>") 'newline-and-indent)
+             (turn-on-auto-fill)
+             ))
+
+(add-hook 'haskell-mode-hook
+          '(lambda ()
+             (define-key haskell-mode-map [?\C-c ?\C-r] 'inferior-haskell-reload-file)
+             (setq show-trailing-whitespace t)
+             ))
+
+;; Set list of modes in which trailing whtespace must be deleted on save without prompt
+(setq delete-trailing-whitespace-auto-modes
+      '(c++-mode c-mode haskell-mode makefile-gmake-mode))
+
+;; Check mode, ask to delete trailing whitespace and delete it when required
+(defun delete-trailing-whitespace-if-confirmed ()
+  "Delete all the trailing whitespace across the current buffer, asking user for confirmation."
+  (if (buffer-file-name)
+      (if (and
+           (not (member (file-name-nondirectory (buffer-file-name)) '("COMMIT_EDITMSG" "TAG_EDITMSG")))
+           (save-excursion (goto-char (point-min))
+                           (re-search-forward "[[:blank:]]$" nil t))
+           (or
+            (member major-mode delete-trailing-whitespace-auto-modes)
+            (y-or-n-p (format "Delete trailing whitespace from %s? " (buffer-name)))))
+          (delete-trailing-whitespace))))
+(add-hook 'before-save-hook 'delete-trailing-whitespace-if-confirmed)
+
+(setq auto-mode-alist
+      (append
+       '(("\\.[wW][xX][sS]\\'" . xml-mode))
+       '(("\\.[mM][aA][kK]\\'" . makefile-gmake-mode))
+       '(("[mM][aA][kK][eE][fF][iI][lL][eE]\\'" . makefile-gmake-mode))
+       '(("\\.[hg]s$"  . haskell-mode))
+       '(("\\.hi$"     . haskell-mode))
+       '(("\\.l[hg]s$" . literate-haskell-mode))
+       '(("/COMMIT_EDITMSG$" . text-mode))
+       '(("/TAG_EDITMSG$" . text-mode))
+       '(("\\.org\\'" . org-mode))
+       auto-mode-alist))
+
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+
+(cond ((locate-library "template")
+       (require 'template)
+       (template-initialize)))
+
+;; (cond ((and
+;;        running-windows
+;;        (equal (getenv "USERDOMAIN") "TRANSAS"))
+;;       (setq tags-table-list
+;;             '("C:/VS.NET2003/Vc7/include" "C:/VS.NET2003/Vc7/PlatformSDK/Include"))
+;;       (custom-set-variables
+;;        '(ps-lpr-command "lpr")
+;;        '(ps-lpr-switches (quote ("-S" "cruncher" "-P" "lp" "-o" "l"))))))
+
+(autoload 'haskell-mode "haskell-mode"
+  "Major mode for editing Haskell scripts." t)
+(autoload 'literate-haskell-mode "haskell-mode"
+  "Major mode for editing literate Haskell scripts." t)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+(setq haskell-font-lock-symbols t)
+(autoload 'inferior-haskell-load-file "inf-haskell"
+  "Major mode for Haskell interaction." t)
+
+(setq ispell-dictionary "en")
+
+(add-hook 'text-mode-hook
+          '(lambda ()
+             (if (member (file-name-nondirectory (buffer-file-name buf)) '("COMMIT_EDITMSG" "TAG_EDITMSG"))
+                 (flyspell-mode t))
+             ))
+
+(setq org-todo-keywords
+      '((sequence "TODO(/!)" "ACTIVE(a!)" "|" "DONE(d!)" "CANCELLED(c@)")))
+(setq org-log-done 'time)
+
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+
+;; Bookmarks
+(global-set-key [f2] 'bookmark-jump)
+(global-set-key [C-f2] 'bookmark-set)
+(setq bookmark-save-flag nil)
