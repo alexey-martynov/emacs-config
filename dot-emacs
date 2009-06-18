@@ -191,8 +191,8 @@
              (define-key c-mode-base-map "\M-o" 'find-paired-file)
              (modify-syntax-entry ?_ "w")
              (setq show-trailing-whitespace t)
-             ;;(highlight-beyond-fill-column)
-             (set-variable 'fill-column 90 t)
+             (font-lock-add-keywords nil
+                                     '(("\\(?://\\|\\*\\).*\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))
              ))
 
 (add-hook 'makefile-mode-hook
