@@ -114,49 +114,56 @@
 (define-key global-map "\C-g" 'goto-line)
 (define-key global-map "\C-w" 'backward-kill-word)
 
-(defvar paired-dirs nil "*")
-(make-variable-buffer-local 'paired-dirs)
-(put 'paired-dirs 'safe-local-variable (lambda (val) (or
-                                                      (stringp val)
-                                                      (listp val))))
+;;(defvar paired-dirs nil "*")
+;;(make-variable-buffer-local 'paired-dirs)
+;;(put 'paired-dirs 'safe-local-variable (lambda (val) (or
+;;                                                      (stringp val)
+;;                                                      (listp val))))
 
-(defun try-paired-files-in-dirs (name basedir dirs)
-  ""
-  (setq dir (car dirs))
-  (cond (dir
-         (setq dir (if (file-name-absolute-p dir)
-                       dir
-                     (concat basedir "/" dir)))
-         (cond ((file-exists-p (concat dir "/" name))
-                (find-file (concat dir "/" name))
-                t)
-               (t
-                (try-paired-files-in-dirs name basedir (cdr dirs)))
-               ))
-        )
-  )
+;; (defun try-paired-files-in-dirs (name basedir dirs)
+;;   ""
+;;   (setq dir (car dirs))
+;;   (cond (dir
+;;          (setq dir (if (file-name-absolute-p dir)
+;;                        dir
+;;                      (concat basedir "/" dir)))
+;;          (cond ((file-exists-p (concat dir "/" name))
+;;                 (find-file (concat dir "/" name))
+;;                 t)
+;;                (t
+;;                 (try-paired-files-in-dirs name basedir (cdr dirs)))
+;;                ))
+;;         )
+;;   )
 
-(defun try-paired-files (extlessname extensions)
-  ""
-  (setq ext (car extensions))
-  (setq name (file-name-nondirectory extlessname))
-  (cond (ext
-         (if (try-paired-files-in-dirs (concat name "." ext) (file-name-directory extlessname) (if (listp paired-dirs)
-                                                                                                   (cons (file-name-directory extlessname) paired-dirs)
-                                                                                                   (list (file-name-directory extlessname) paired-dirs)))
-             t
-           (try-paired-files extlessname (cdr extensions)))
-         ))
-  )
+;; (defun try-paired-files (extlessname extensions)
+;;   ""
+;;   (setq ext (car extensions))
+;;   (setq name (file-name-nondirectory extlessname))
+;;   (cond (ext
+;;          (if (try-paired-files-in-dirs (concat name "." ext) (file-name-directory extlessname) (if (listp paired-dirs)
+;;                                                                                                    (cons (file-name-directory extlessname) paired-dirs)
+;;                                                                                                    (list (file-name-directory extlessname) paired-dirs)))
+;;              t
+;;            (try-paired-files extlessname (cdr extensions)))
+;;          ))
+;;   )
 
-(defun get-paired-extensions (file-name)
-  ""
-  (setq ext (file-name-extension file-name))
-  (cond (nil ())
-        ((equal ext "h") '("c" "cpp" "cxx"))
-        ((equal ext "hpp") '("cpp" "cxx" "c"))
-        ((equal ext "c") '("h" "hpp" "hxx"))
-        ((equal ext "cpp") '("hpp" "h" "hxx"))))
+;; (defun get-paired-extensions (file-name)
+;;   ""
+;;   (setq ext (file-name-extension file-name))
+;;   (cond (nil ())
+;;         ((equal ext "h") '("c" "cpp" "cxx"))
+;;         ((equal ext "hpp") '("cpp" "cxx" "c"))
+;;         ((equal ext "c") '("h" "hpp" "hxx"))
+;;         ((equal ext "cpp") '("hpp" "h" "hxx"))))
+
+(setq cc-other-file-alist
+      '(("\\.cpp$" (".hpp" ".h"))
+        ("\\.c$" (".c" ".cpp"))
+        ("\\.hpp$" (".cpp" ".c"))
+        ("\\.h$" (".c" ".cpp"))))
+(put 'ff-search-directories 'safe-local-variable 'listp)
 
 (defun try-paired-buffer-name (name buffers)
   ""
@@ -184,11 +191,11 @@
       (if (not (try-paired-buffers (file-name-sans-extension (buffer-file-name)) (get-paired-extensions (buffer-file-name))))
           (try-paired-files (file-name-sans-extension (buffer-file-name)) (get-paired-extensions (buffer-file-name))))))
 
-
 (add-hook 'c-mode-common-hook
           '(lambda ()
-             (define-key c-mode-base-map (kbd "<RET>") 'newline-and-indent)
-             (define-key c-mode-base-map "\M-o" 'find-paired-file)
+             (local-set-key (kbd "<RET>") 'newline-and-indent)
+             ;; (local-set-key (kbd "M-o") 'find-paired-file)
+             (local-set-key (kbd "\C-co") 'ff-find-other-file)
              (modify-syntax-entry ?_ "w")
              (setq show-trailing-whitespace t)
              (font-lock-add-keywords nil
