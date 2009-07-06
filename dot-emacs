@@ -191,6 +191,11 @@
       (if (not (try-paired-buffers (file-name-sans-extension (buffer-file-name)) (get-paired-extensions (buffer-file-name))))
           (try-paired-files (file-name-sans-extension (buffer-file-name)) (get-paired-extensions (buffer-file-name))))))
 
+(require 'compile)
+
+;;; Boost.Test fatal errors
+(add-to-list 'compilation-error-regexp-alist '("^\\(.+\\)(\\([[:digit:]]+\\)):[[:space:]]*\\(?:fatal \\)?error" 1 2 nil 2))
+
 (add-hook 'c-mode-common-hook
           '(lambda ()
              (local-set-key (kbd "<RET>") 'newline-and-indent)
