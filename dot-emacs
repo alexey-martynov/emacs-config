@@ -270,7 +270,7 @@
 (autoload 'inferior-haskell-load-file "inf-haskell"
   "Major mode for Haskell interaction." t)
 
-(setq ispell-dictionary "en")
+(setq ispell-dictionary "american")
 
 (add-hook 'text-mode-hook
           '(lambda ()
