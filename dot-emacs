@@ -206,9 +206,15 @@
                  (linum-mode t))
              ))
 
+(add-hook 'erlang-mode-hook
+          '(lambda ()
+             (define-key erlang-mode-map (kbd "<RET>") 'newline-and-indent)
+             (setq show-trailing-whitespace t)
+             ))
+
 ;; Set list of modes in which trailing whtespace must be deleted on save without prompt
 (setq delete-trailing-whitespace-auto-modes
-      '(c++-mode c-mode haskell-mode makefile-gmake-mode))
+      '(c++-mode c-mode haskell-mode erlang-mode makefile-gmake-mode))
 
 ;; Check mode, ask to delete trailing whitespace and delete it when required
 (defun delete-trailing-whitespace-if-confirmed ()
