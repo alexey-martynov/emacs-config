@@ -164,6 +164,8 @@
              (local-set-key (kbd "\C-co") 'ff-find-other-file)
              (modify-syntax-entry ?_ "w")
              (setq show-trailing-whitespace t)
+             (if (>= emacs-major-version 23)
+                 (linum-mode t))
              (font-lock-add-keywords nil
                                      '(("\\(?://\\|\\*\\).*\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))
              ))
@@ -171,6 +173,8 @@
 (add-hook 'makefile-mode-hook
           '(lambda ()
              (modify-syntax-entry ?_ "w")
+             (if (>= emacs-major-version 23)
+                 (linum-mode t))
              ))
 
 (add-hook 'python-mode-hook
@@ -178,6 +182,8 @@
              (define-key python-mode-map (kbd "<RET>") 'newline-and-indent)
              (modify-syntax-entry ?_ "w")
              (setq show-trailing-whitespace t)
+             (if (>= emacs-major-version 23)
+                 (linum-mode t))
              ))
 
 (add-hook 'latex-mode-hook
@@ -190,6 +196,8 @@
           '(lambda ()
              (define-key haskell-mode-map [?\C-c ?\C-r] 'inferior-haskell-reload-file)
              (setq show-trailing-whitespace t)
+             (if (>= emacs-major-version 23)
+                 (linum-mode t))
              ))
 
 ;; Set list of modes in which trailing whtespace must be deleted on save without prompt
