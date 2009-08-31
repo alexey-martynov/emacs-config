@@ -98,7 +98,10 @@
         '(font-lock-function-name-face ((t (:foreground "black"))))
         '(font-lock-keyword-face ((t (:foreground "darkblue" :weight bold))))
         '(font-lock-preprocessor-face ((t (:foreground "darkgreen" :bold t))))
-        '(font-lock-string-face ((t (:foreground "darkgreen"))))
+        (cond ((>= emacs-major-version 23)
+               '(font-lock-string-face ((t (:foreground "darkgreen" :italic t)))))
+              (t
+               '(font-lock-string-face ((t (:foreground "darkgreen"))))))
         '(font-lock-type-face ((t (:foreground "blue"))))
         '(font-lock-variable-name-face ((t (:foreground "black"))))
         '(highlight-beyond-fill-column-face ((t (:background "darkgrey"))))
