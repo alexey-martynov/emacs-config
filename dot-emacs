@@ -83,6 +83,7 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq make-backup-files nil)
+(setq split-width-threshold most-positive-fixnum)
 
 (cond (running-gui
        (custom-set-faces
