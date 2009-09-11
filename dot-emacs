@@ -67,6 +67,7 @@
  '(font-lock-mode t t (font-lock))
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
+ '(initial-scratch-message nil)
  '(iswitchb-mode t)
  '(pc-selection-mode t nil (pc-select))
  '(require-final-newline t)
