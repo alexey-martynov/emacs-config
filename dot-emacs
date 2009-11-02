@@ -1,3 +1,4 @@
+;; -*- mode: lisp -*-
 (defvar running-windows (eq system-type 'windows-nt))
 (defvar running-x (eq window-system 'x))
 (defvar running-gui (or
@@ -178,7 +179,7 @@
              (if (>= emacs-major-version 23)
                  (linum-mode t))
              (font-lock-add-keywords nil
-                                     '(("\\(?://\\|\\*\\).*\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))
+                                     '(("\\(?://\\|\\*\\).*\\<\\(FIXME\\|TODO\\|BUG\\|HACK\\):" 1 font-lock-warning-face t)))
              ))
 
 (add-hook 'makefile-mode-hook
