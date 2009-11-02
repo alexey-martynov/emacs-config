@@ -247,6 +247,7 @@
 
 (cond ((locate-library "template")
        (require 'template)
+       (add-to-list 'template-find-file-commands 'ff-find-other-file)
        (template-initialize)))
 
 ;; (cond ((and
