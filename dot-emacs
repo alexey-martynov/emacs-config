@@ -106,10 +106,15 @@
         '(font-lock-type-face ((t (:foreground "blue"))))
         '(font-lock-variable-name-face ((t (:foreground "black"))))
         '(highlight-beyond-fill-column-face ((t (:background "darkgrey"))))
-        '(show-paren-match ((t (:background "lightpink2"))))
-        '(show-paren-mismatch ((default nil) (nil (:background "red"))))))
+        ;;'(show-paren-match ((t (:background "lightpink2"))))
+        ;;'(show-paren-mismatch ((default nil) (nil (:background "red"))))
+ ))
       ((not running-gui)
        ))
+
+(require 'color-theme)
+(load "color-theme-twilight")
+(color-theme-twilight)
 
 (push '("<\\?xml\\b[^>]*\\bencoding=\"utf-8\"[^>]*\\?>" . utf-8) auto-coding-regexp-alist)
 
