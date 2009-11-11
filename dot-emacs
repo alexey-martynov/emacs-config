@@ -143,32 +143,6 @@
         ("\\.h$" (".c" ".cpp"))))
 (put 'ff-search-directories 'safe-local-variable 'listp)
 
-(defun try-paired-buffer-name (name buffers)
-  ""
-  (setq buf (car buffers))
-  (cond ((and buf (buffer-file-name buf))
-         (if (equal (file-name-nondirectory (buffer-file-name buf)) name)
-             (switch-to-buffer buf)
-           (try-paired-buffer-name name (cdr buffers))))
-        ((cdr buffers)
-         (try-paired-buffer-name name (cdr buffers)))))
-
-(defun try-paired-buffers (basename extensions)
-  ""
-  (setq ext (car extensions))
-  (cond (ext
-         (try-paired-buffer-name (concat (file-name-nondirectory basename) "." ext) (buffer-list))
-         )
-        (t
-         nil)))
-
-(defun find-paired-file ()
-  "Find header of implementation file in existent buffers"
-  (interactive)
-  (if (buffer-file-name)
-      (if (not (try-paired-buffers (file-name-sans-extension (buffer-file-name)) (get-paired-extensions (buffer-file-name))))
-          (try-paired-files (file-name-sans-extension (buffer-file-name)) (get-paired-extensions (buffer-file-name))))))
-
 (require 'compile)
 (setq compilation-scroll-output t)
 
