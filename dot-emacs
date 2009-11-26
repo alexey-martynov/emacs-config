@@ -240,8 +240,16 @@
        '(("\\.l[hg]s$" . literate-haskell-mode))
        '(("/COMMIT_EDITMSG$" . text-mode))
        '(("/TAG_EDITMSG$" . text-mode))
-       '(("\\.org\\'" . org-mode))
+       '(("\\.org$" . org-mode))
        auto-mode-alist))
+
+(require 'mmm-mode)
+(mmm-add-classes
+ '((embedded-erlang
+    :submode erlang-mode
+    :front "<erl>"
+    :back "</erl>")))
+(set-variable 'mmm-global-classes '(universal embedded-erlang))
 
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 
@@ -274,9 +282,10 @@
 
 (add-hook 'text-mode-hook
           '(lambda ()
-             (if (member (file-name-nondirectory (buffer-file-name buf)) '("COMMIT_EDITMSG" "TAG_EDITMSG"))
-                 (flyspell-mode t))
-             ))
+             (if (buffer-file-name (current-buffer))
+                 (if (member (file-name-nondirectory (buffer-file-name (current-buffer))) '("COMMIT_EDITMSG" "TAG_EDITMSG"))
+                     (flyspell-mode t))
+               )))
 
 (cond ((locate-library "org-install")
        (require 'org-install)

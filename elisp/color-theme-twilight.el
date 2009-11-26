@@ -53,6 +53,7 @@
 	  (ido-first-match ((t (:foreground "#8F9D6A"))))
 	  (ido-only-match ((t (:foreground "#8F9D6A"))))
 	  (mumamo-background-chunk-submode ((t (:background "#222222"))))
+	  (mmm-default-submode-face ((t (:background "#222222"))))
 
 	  (font-lock-string-face ((t (:foreground "#8F9D6A"))))
 	  (font-lock-type-face ((t (:foreground "#9B703F"))))
