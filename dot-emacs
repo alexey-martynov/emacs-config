@@ -55,7 +55,8 @@
                                    (objc-mode . t)
                                    (java-mode . t)
                                    (erlang-mode . t)
-                                   (haskell-mode . t))))
+                                   (haskell-mode . t)
+                                   (html-mode . t))))
  '(column-number-mode t)
  '(compilation-read-command nil)
  '(compilation-window-height 20)
@@ -164,6 +165,16 @@
 ;;; Boost.Test fatal errors
 (add-to-list 'compilation-error-regexp-alist '("^\\(.+\\)(\\([[:digit:]]+\\)):[[:space:]]*\\(?:fatal \\)?error" 1 2 nil 2))
 
+(require 'mmm-mode)
+(mmm-add-classes
+ '((embedded-erlang
+    :submode erlang-mode
+    :front "<erl>"
+    :back "</erl>")))
+(set-variable 'mmm-global-classes '(universal embedded-erlang))
+
+(require 'sgml-mode)
+
 (add-hook 'c-mode-common-hook
           '(lambda ()
              (local-set-key (kbd "<RET>") 'newline-and-indent)
@@ -212,6 +223,14 @@
              (setq show-trailing-whitespace t)
              ))
 
+(add-hook 'html-mode-hook
+          '(lambda ()
+            (define-key html-mode-map (kbd "<RET>") 'newline-and-indent)
+            (setq show-trailing-whitespace t)
+            (mmm-mode-on)
+            ))
+
+
 ;; Set list of modes in which trailing whtespace must be deleted on save without prompt
 (setq delete-trailing-whitespace-auto-modes
       '(c++-mode c-mode haskell-mode erlang-mode makefile-gmake-mode))
@@ -241,15 +260,8 @@
        '(("/COMMIT_EDITMSG$" . text-mode))
        '(("/TAG_EDITMSG$" . text-mode))
        '(("\\.org$" . org-mode))
+       '(("\\.yaws$" . html-mode))
        auto-mode-alist))
-
-(require 'mmm-mode)
-(mmm-add-classes
- '((embedded-erlang
-    :submode erlang-mode
-    :front "<erl>"
-    :back "</erl>")))
-(set-variable 'mmm-global-classes '(universal embedded-erlang))
 
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 
