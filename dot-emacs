@@ -56,7 +56,7 @@
                                    (haskell-mode . t))))
  '(column-number-mode t)
  '(compilation-read-command nil)
- '(compilation-window-height 15)
+ '(compilation-window-height 20)
  '(delete-selection-mode t)
  '(ecb-gzip-setup (quote cons))
  '(ecb-options-version "2.32")
