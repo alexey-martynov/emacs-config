@@ -291,3 +291,28 @@
 (global-set-key [f2] 'bookmark-jump)
 (global-set-key [C-f2] 'bookmark-set)
 (setq bookmark-save-flag nil)
+
+(defvar gud-run-args ""
+  "Arguments for running program inside GDB")
+
+(defvar gud-run-args-history nil
+  "History for arguments for running program inside GDB")
+
+(add-hook 'gdb-mode-hook
+          '(lambda ()
+            (global-set-key (kbd "<f10>") 'gud-next)
+            (global-set-key (kbd "<f11>") 'gud-step)
+            (global-set-key (kbd "<f5>") 'gud-cont)
+            (global-set-key (kbd "C-<f5>") '(lambda ()
+                                             (interactive)
+                                             (switch-to-buffer gud-comint-buffer)
+                                             (let ((args (if current-prefix-arg
+                                                             (read-shell-command "Run with args: " gud-run-args
+                                                                                 (if (equal (car gud-run-args-history) gud-run-args)
+                                                                                     '(gud-run-args-history . 1)
+                                                                                     'gud-run-args-history))
+                                                             gud-run-args)))
+                                               (unless (equal args gud-run-args)
+                                                 (setq gud-run-args args))
+                                               (gud-call (concat "run " args)))))
+            (global-set-key (kbd "S-<f5>") 'gud-finish)))
