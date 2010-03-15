@@ -41,7 +41,7 @@
 	  (font-lock-constant-face ((t (:foreground "#CF6A4C"))))
 	  (font-lock-doc-string-face ((t (:foreground "DarkOrange"))))
 	  (font-lock-function-name-face ((t (:foreground "#9B703F"))))
-	  (font-lock-keyword-face ((t (:foreground "#CDA869"))))
+	  (font-lock-keyword-face ((t (:foreground "#CDA869" :bold t))))
 	  (font-lock-preprocessor-face ((t (:foreground "Aquamarine"))))
 	  (font-lock-reference-face ((t (:foreground "SlateBlue"))))
 
