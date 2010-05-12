@@ -85,6 +85,9 @@
 (setq make-backup-files nil)
 (setq split-width-threshold most-positive-fixnum)
 
+(if running-x
+    (global-set-key [f13] 'toggle-input-method))
+
 ;;(cond (running-gui
 ;;       (custom-set-faces
 ;;        ;; custom-set-faces was added by Custom.
