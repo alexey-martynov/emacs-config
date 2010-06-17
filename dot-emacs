@@ -316,8 +316,7 @@
             (global-set-key (kbd "S-<f5>") 'gud-finish)))
 
 
-(cond ((locate-library "slime")
-       (setq inferior-lisp-program "/usr/bin/sbcl")
-       ;;(add-to-list 'load-path "the path of your slime directory")
-       (require 'slime-autoloads)
-       (slime-setup)))
+(require 'slime)
+(add-to-list 'slime-lisp-implementations '(clbuild ("~/clbuild/clbuild" "lisp")))
+(setq slime-default-lisp 'clbuild)
+       (slime-setup);;))
