@@ -55,7 +55,7 @@
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
- '(iswitch-buffer-ignore (quote ("^\\*Minibuf-[0-9]+\\*$")))
+ '(iswitch-buffer-ignore (quote ("Minibuf-[0-9]+")))
  '(iswitchb-mode t)
  '(pc-selection-mode t nil (pc-select))
  '(require-final-newline t)
