@@ -225,6 +225,8 @@
 ;; Set list of modes in which trailing whtespace must be deleted on save without prompt
 (setq delete-trailing-whitespace-auto-modes
       '(c++-mode c-mode haskell-mode erlang-mode makefile-gmake-mode))
+(defvar delete-trailing-whitespace-keep-exts
+  '("gif" "png" "jpeg" "jpg" "GIF" "PNG" "JPEG" "JPG"))
 
 ;; Check mode, ask to delete trailing whitespace and delete it when required
 (defun delete-trailing-whitespace-if-confirmed ()
@@ -232,6 +234,12 @@
   (if (buffer-file-name)
       (if (and
            (not (member (file-name-nondirectory (buffer-file-name)) '("COMMIT_EDITMSG" "TAG_EDITMSG")))
+           (let ((ext (file-name-extension (buffer-file-name))))
+             (cond
+              (ext
+               (not (member-ignore-case ext delete-trailing-whitespace-keep-exts)))
+              (t
+               nil)))
            (save-excursion (goto-char (point-min))
                            (re-search-forward "[[:blank:]]$" nil t))
            (or
