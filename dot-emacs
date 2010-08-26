@@ -175,7 +175,7 @@
              (if (>= emacs-major-version 23)
                  (linum-mode t))
              (font-lock-add-keywords nil
-                                     '(("\\(?://\\|\\*\\).*\\<\\(FIXME\\|TODO\\|BUG\\|HACK\\):" 1 font-lock-warning-face t)))
+                                     '(("\\(?:/\\(?:/\\|\\*\\)\\).*\\<\\(FIXME\\|TODO\\|BUG\\|HACK\\):" 1 font-lock-warning-face t)))
              ))
 
 (add-hook 'makefile-mode-hook
