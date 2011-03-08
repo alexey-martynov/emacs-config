@@ -1,4 +1,4 @@
-;; -*- mode: lisp -*-
+;; -*- mode: elisp -*-
 (defvar running-windows (eq system-type 'windows-nt))
 (defvar running-x (eq window-system 'x))
 ;;(defvar running-gui (or
@@ -78,38 +78,12 @@
 (if running-x
     (global-set-key [f13] 'toggle-input-method))
 
-;;(cond (running-gui
-;;       (custom-set-faces
-;;        ;; custom-set-faces was added by Custom.
-;;        ;; If you edit it by hand, you could mess it up, so be careful.
-;;        ;; Your init file should contain only one such instance.
-;;        ;; If there is more than one, they won't work right.
-;;        '(default ((t (:background "lightgrey"))))
-;;        '(font-lock-comment-face ((t (:foreground "steelblue"))))
-;;        '(font-lock-constant-face ((t (:foreground "magenta4"))))
-;;        '(font-lock-doc-string-face ((t (:foreground "steelblue"))))
-;;        '(font-lock-function-name-face ((t (:foreground "black"))))
-;;        '(font-lock-keyword-face ((t (:foreground "darkblue" :weight bold))))
-;;        '(font-lock-preprocessor-face ((t (:foreground "darkgreen" :bold t))))
-;;        (cond ((>= emacs-major-version 23)
-;;               '(font-lock-string-face ((t (:foreground "darkgreen" :italic t)))))
-;;              (t
-;;               '(font-lock-string-face ((t (:foreground "darkgreen"))))))
-;;        '(font-lock-type-face ((t (:foreground "blue"))))
-;;        '(font-lock-variable-name-face ((t (:foreground "black"))))
-;;        '(highlight-beyond-fill-column-face ((t (:background "darkgrey"))))
-;;        ;;'(show-paren-match ((t (:background "lightpink2"))))
-;;        ;;'(show-paren-mismatch ((default nil) (nil (:background "red"))))
-;; ))
-;;      ((not running-gui)
-;;       ))
-
-(cond ((locate-library "color-theme")
-       (require 'color-theme)
-       (load "color-theme-twilight")
-       ;; Select color theme for default frame
-       (if window-system
-           (color-theme-twilight))))
+(when (locate-library "color-theme")
+  (require 'color-theme)
+  (load "color-theme-twilight")
+  ;; Select color theme for default frame
+  (if window-system
+      (color-theme-twilight)))
 
 ;; Setup hook to set color theme for X and Microsoft Windows
 (add-hook 'after-make-frame-functions
@@ -123,8 +97,7 @@
 
 (push '("<\\?xml\\b[^>]*\\bencoding=\"utf-8\"[^>]*\\?>" . utf-8) auto-coding-regexp-alist)
 
-(cond
- (running-windows
+(when running-windows
   (defun insert-uuid ()
     "Insert UUID in upper case to current buffer using `uuidgen' for generation."
     (interactive)
@@ -132,9 +105,8 @@
       (if mark-active (kill-region (mark) (point)))
       (shell-command "uuidgen -c" t)
       (forward-char 36)
-      (delete-char 1))
-    )
-  (define-key global-map "\C-cg" 'insert-uuid)))
+      (delete-char 1)))
+  (define-key global-map "\C-cg" 'insert-uuid))
 
 ;;(define-key global-map "\C-cj" 'fume-prompt-function-goto)
 
@@ -151,19 +123,17 @@
 ;;; Boost.Test fatal errors
 (add-to-list 'compilation-error-regexp-alist '("^\\(.+\\)(\\([[:digit:]]+\\)):[[:space:]]*\\(?:fatal \\)?error" 1 2 nil 2))
 
-(cond
- ((locate-library "mmm-mode")
+(when (locate-library "mmm-mode")
   (require 'mmm-mode)
   (mmm-add-classes
    '((embedded-erlang
       :submode erlang-mode
       :front "<erl>"
       :back "</erl>")))
-  (set-variable 'mmm-global-classes '(universal embedded-erlang))))
+  (set-variable 'mmm-global-classes '(universal embedded-erlang)))
 
-(cond
- ((locate-library "sgml-mode")
-  (require 'sgml-mode)))
+(when (locate-library "sgml-mode")
+  (require 'sgml-mode))
 
 (add-hook 'c-mode-common-hook
           '(lambda ()
@@ -172,10 +142,10 @@
              (local-set-key (kbd "<f7>") 'compile)
              (modify-syntax-entry ?_ "w")
              (setq show-trailing-whitespace t)
-             (if (>= emacs-major-version 23)
-                 (linum-mode t))
              (font-lock-add-keywords nil
                                      '(("\\(?:/\\(?:/\\|\\*\\)\\).*\\<\\(FIXME\\|TODO\\|BUG\\|HACK\\):" 1 font-lock-warning-face t)))
+             (font-lock-mode t)
+             (gtags-mode t)
              ))
 
 (add-hook 'makefile-mode-hook
@@ -264,10 +234,10 @@
 
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 
-(cond ((locate-library "template")
-       (require 'template)
-       (add-to-list 'template-find-file-commands 'ff-find-other-file)
-       (template-initialize)))
+(when (locate-library "template")
+  (require 'template)
+  (add-to-list 'template-find-file-commands 'ff-find-other-file)
+  (template-initialize))
 
 ;; (cond ((and
 ;;        running-windows
@@ -298,8 +268,7 @@
                      (flyspell-mode t))
                )))
 
-(cond
- ((locate-library "org-install")
+(when(locate-library "org-install")
   (require 'org-install)
   (setq org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)" "CANCELLED(c@/!)"))))
 
@@ -312,7 +281,7 @@
   ;;(setq org-log-done 'time)
   (global-set-key "\C-cl" 'org-store-link)
   (global-set-key "\C-ca" 'org-agenda)
-  (global-set-key "\C-cb" 'org-iswitchb)))
+  (global-set-key "\C-cb" 'org-iswitchb))
 
 ;; Bookmarks
 (global-set-key [f2] 'bookmark-jump)
@@ -345,9 +314,14 @@
             (global-set-key (kbd "S-<f5>") 'gud-finish)))
 
 
-(cond
- ((locate-library "slime")
+(when (locate-library "slime")
   (require 'slime)
-  (add-to-list 'slime-lisp-implementations '(clbuild ("~/clbuild/clbuild" "lisp")))
-  (setq slime-default-lisp 'clbuild)
-  (slime-setup)))
+  ;;(add-to-list 'slime-lisp-implementations '(clbuild ("~/clbuild2/clbuild" "lisp")))
+  ;;(setq slime-default-lisp 'clbuild)
+  (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
+  (setq slime-default-lisp 'sbcl)
+  (slime-setup '(slime-repl slime-sbcl-exts))
+  (setq slime-net-coding-system 'utf-8-unix)
+  (add-hook 'slime-mode-hook
+            (lambda ()
+              (local-set-key (kbd "<RET>") 'newline-and-indent))))
