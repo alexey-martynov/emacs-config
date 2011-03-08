@@ -1,4 +1,4 @@
-;; -*- mode: elisp -*-
+;; -*- mode: emacs-lisp -*-
 (defvar running-windows (eq system-type 'windows-nt))
 (defvar running-x (eq window-system 'x))
 ;;(defvar running-gui (or
@@ -12,19 +12,25 @@
 ;;(set-terminal-coding-system 'utf-8)
 ;;(set-keyboard-coding-system 'utf-8)
 
-(cond (running-windows
-       ;;(set-default-font "-*-DejaVu Sans Mono-normal-r-normal-normal-11-*-*-*-*-*-iso10646-1")
-       (set-default-font "DejaVu Sans Mono-11")
-       (add-to-list 'default-frame-alist
-                    '(font . "DejaVu Sans Mono-11"))));'(font . "-*-DejaVu Sans Mono-normal-r-normal-normal-11-*-*-*-*-*-iso10646-1"))))
+(when running-windows
+  (set-default-font "DejaVu Sans Mono-11")
+  (add-to-list 'default-frame-alist
+               '(font . "DejaVu Sans Mono-11")))
+      ;;(running-x
+      ;; (set-default-font "xft:DejaVu Sans Mono-11")
+      ;; (add-to-list 'default-frame-alist
+      ;;              '(font . "xft:DejaVu Sans Mono-11"))))
+       ;;(set-default-font "-*-dejavu sans mono-medium-r-normal-*-12-*-*-*-*-*-iso10646-1")
+       ;;(add-to-list 'default-frame-alist
+       ;;             '(font . "-*-dejavu sans mono-medium-r-normal-*-12-*-*-*-*-*-iso10646-1"))));'(font . "-*-DejaVu Sans Mono-normal-r-normal-normal-11-*-*-*-*-*-iso10646-1"))))
 
-(cond ((file-exists-p "~/.emacs.d/site-lisp")
-       (add-to-list 'load-path "~/.emacs.d/site-lisp")
-       (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-           (let* ((my-lisp-dir "~/.emacs.d/site-lisp/")
-                  (default-directory my-lisp-dir))
-             (setq load-path (cons my-lisp-dir load-path))
-             (normal-top-level-add-subdirs-to-load-path)))))
+(when (file-exists-p "~/.emacs.d/site-lisp")
+  (add-to-list 'load-path "~/.emacs.d/site-lisp")
+  (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+      (let* ((my-lisp-dir "~/.emacs.d/site-lisp/")
+             (default-directory my-lisp-dir))
+        (setq load-path (cons my-lisp-dir load-path))
+        (normal-top-level-add-subdirs-to-load-path))))
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
@@ -33,13 +39,36 @@
   ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil)
  '(c-basic-offset 4)
- '(c-cleanup-list (quote (scope-operator brace-else-brace brace-elseif-brace brace-catch-brace empty-defun-braces)))
+ '(c-cleanup-list (quote (scope-operator
+                          brace-else-brace
+                          brace-elseif-brace
+                          brace-catch-brace
+                          empty-defun-braces)))
  '(c-default-style (quote ((java-mode . "java")
                            (awk-mode . "awk")
                            (other . "bsd"))))
  '(c-echo-syntactic-information-p nil)
- '(c-hanging-braces-alist (quote ((block-close . c-snug-do-while) (statement-cont) (substatement-open after) (brace-list-open) (brace-entry-open) (extern-lang-open after) (namespace-open after) (namespace-close) (module-open after) (composition-open after) (inexpr-class-open after) (inexpr-class-close before) (arglist-cont-nonempty))))
- '(c-offsets-alist (quote ((arglist-cont-nonempty . ++) (member-init-cont . 0) (substatement-open . 0))))
+ '(c-hanging-braces-alist (quote ((block-close . c-snug-do-while)
+                                  (statement-cont)
+                                  (substatement-open after)
+                                  (brace-list-open)
+                                  (brace-entry-open)
+                                  (extern-lang-open after)
+                                  (namespace-open after)
+                                  (namespace-close)
+                                  (module-open after)
+                                  (composition-open after)
+                                  (inexpr-class-open after)
+                                  (inexpr-class-close before)
+                                  (arglist-cont-nonempty))))
+ '(c-offsets-alist (quote ((arglist-intro . ++)
+                           (arglist-cont . 0)
+                           (arglist-cont-nonempty . ++)
+                           (inher-intro . ++)
+                           (inher-cont . 0)
+                           (member-init-cont . 0)
+                           (statement-cont . ++)
+                           (substatement-open . 0))))
  '(c-require-final-newline (quote ((c-mode . t)
                                    (c++-mode . t)
                                    (objc-mode . t)
@@ -49,7 +78,6 @@
                                    (html-mode . t))))
  '(column-number-mode t)
  '(compilation-read-command nil)
- ;;'(compilation-window-height 20)
  '(delete-selection-mode t)
  '(font-lock-mode t t (font-lock))
  '(indent-tabs-mode nil)
@@ -57,10 +85,15 @@
  '(initial-scratch-message nil)
  '(iswitch-buffer-ignore (quote ("Minibuf-[0-9]+")))
  '(iswitchb-mode t)
+ '(pulse-flag (quote never))
  '(require-final-newline t)
+ '(safe-local-variable-values (quote ((c-label-offset . -2)
+                                      (c-argdecl-indent . 0)
+                                      (c-brace-offset . -2)
+                                      (c-continued-statement-offset . 2))))
  '(scroll-bar-mode (quote right))
  '(scroll-conservatively 1000000)
- '(scroll-margin 3)
+;; '(scroll-margin 3)
  '(scroll-preserve-screen-position 1)
  '(scroll-step 1)
  '(show-paren-mode t)
@@ -78,6 +111,8 @@
 (if running-x
     (global-set-key [f13] 'toggle-input-method))
 
+(windmove-default-keybindings 'meta)
+
 (when (locate-library "color-theme")
   (require 'color-theme)
   (load "color-theme-twilight")
@@ -92,7 +127,6 @@
             (select-frame frame)
             (if window-system
                 (color-theme-twilight)
-              ;;(color-theme-tty-dark)
               )))
 
 (push '("<\\?xml\\b[^>]*\\bencoding=\"utf-8\"[^>]*\\?>" . utf-8) auto-coding-regexp-alist)
@@ -108,17 +142,16 @@
       (delete-char 1)))
   (define-key global-map "\C-cg" 'insert-uuid))
 
-;;(define-key global-map "\C-cj" 'fume-prompt-function-goto)
-
 (setq cc-other-file-alist
       '(("\\.cpp$" (".hpp" ".h"))
-        ("\\.c$" (".c" ".cpp"))
+        ("\\.c$" (".h" ".hpp"))
         ("\\.hpp$" (".cpp" ".c"))
-        ("\\.h$" (".c" ".cpp"))))
+        ("\\.h$" (".cpp" ".c"))))
 (put 'ff-search-directories 'safe-local-variable 'listp)
 
 (require 'compile)
 (setq compilation-scroll-output t)
+(put 'compile-command 'safe-local-variable 'stringp)
 
 ;;; Boost.Test fatal errors
 (add-to-list 'compilation-error-regexp-alist '("^\\(.+\\)(\\([[:digit:]]+\\)):[[:space:]]*\\(?:fatal \\)?error" 1 2 nil 2))
@@ -135,17 +168,35 @@
 (when (locate-library "sgml-mode")
   (require 'sgml-mode))
 
+(autoload 'gtags-mode "gtags" "" t)
+
+(defun my-imenu-helper()
+  (let (index-alist
+        (result t)
+        alist)
+    ;; Create a list for this buffer only when needed.
+    (while (eq result t)
+      (setq index-alist (imenu--make-index-alist))
+      (setq result (imenu--mouse-menu index-alist t))
+      (and (equal result imenu--rescan-item)
+           (imenu--cleanup)
+           (setq result t imenu--index-alist nil)))
+    result))
+
+(defun my-imenu() (interactive) (imenu (my-imenu-helper)))
+
 (add-hook 'c-mode-common-hook
           '(lambda ()
              (local-set-key (kbd "<RET>") 'newline-and-indent)
              (local-set-key (kbd "\C-co") 'ff-find-other-file)
              (local-set-key (kbd "<f7>") 'compile)
+             (local-set-key (kbd "C-c M-m") 'my-imenu)
+             (local-set-key (kbd "C-c , s") 'semantic-analyze-proto-impl-toggle)
              (modify-syntax-entry ?_ "w")
              (setq show-trailing-whitespace t)
+             (gtags-mode 1)
              (font-lock-add-keywords nil
                                      '(("\\(?:/\\(?:/\\|\\*\\)\\).*\\<\\(FIXME\\|TODO\\|BUG\\|HACK\\):" 1 font-lock-warning-face t)))
-             (font-lock-mode t)
-             (gtags-mode t)
              ))
 
 (add-hook 'makefile-mode-hook
@@ -191,32 +242,38 @@
             (mmm-mode-on)
             ))
 
+(setq delete-trailing-whitespace-mode nil)
+(make-variable-buffer-local 'delete-trailing-whitespace-mode)
+(put 'delete-trailing-whitespace-mode 'safe-local-variable #'(lambda (val) (or (eq val t) (eq val nil))))
 
-;; Set list of modes in which trailing whtespace must be deleted on save without prompt
-(setq delete-trailing-whitespace-auto-modes
-      '(c++-mode c-mode haskell-mode erlang-mode makefile-gmake-mode))
-(defvar delete-trailing-whitespace-keep-exts
-  '("gif" "png" "jpeg" "jpg" "GIF" "PNG" "JPEG" "JPG"))
+(defcustom delete-trailing-whitespace-keep-exts
+  '("gif" "png" "jpeg" "jpg")
+  "List of file extensions int which traling whitespace cleanup never performs")
 
-;; Check mode, ask to delete trailing whitespace and delete it when required
-(defun delete-trailing-whitespace-if-confirmed ()
-  "Delete all the trailing whitespace across the current buffer, asking user for confirmation."
+(defun delete-trailing-whitespace-on-save ()
   (if (buffer-file-name)
       (if (and
+           (buffer-local-value 'delete-trailing-whitespace-mode (current-buffer))
            (not (member (file-name-nondirectory (buffer-file-name)) '("COMMIT_EDITMSG" "TAG_EDITMSG")))
            (let ((ext (file-name-extension (buffer-file-name))))
              (cond
               (ext
                (not (member-ignore-case ext delete-trailing-whitespace-keep-exts)))
               (t
-               nil)))
+               t)))
            (save-excursion (goto-char (point-min))
-                           (re-search-forward "[[:blank:]]$" nil t))
-           (or
-            (member major-mode delete-trailing-whitespace-auto-modes)
-            (y-or-n-p (format "Delete trailing whitespace from %s? " (buffer-name)))))
+                           (re-search-forward "[[:blank:]]$" nil t)))
           (delete-trailing-whitespace))))
-(add-hook 'before-save-hook 'delete-trailing-whitespace-if-confirmed)
+
+(defun delete-trailing-whitespace-mode (&optional arg)
+  (interactive "P")
+  (prog1 (setq delete-trailing-whitespace-mode
+               (if (null arg) (not delete-trailing-whitespace-mode)
+                 (> (prefix-numeric-value arg) 0)))))
+
+(add-to-list 'minor-mode-alist '(delete-trailing-whitespace-mode " TWS"))
+
+(add-hook 'before-save-hook 'delete-trailing-whitespace-on-save)
 
 (setq auto-mode-alist
       (append
@@ -237,6 +294,30 @@
 (when (locate-library "template")
   (require 'template)
   (add-to-list 'template-find-file-commands 'ff-find-other-file)
+  (setq template-expansion-alist '(("CPP_HEADER_GUARD" (insert (let ((dir (car (reverse (split-string (car template-file) "/" t)))))
+                                                                 (if (/= 0 (length dir))
+                                                                     (setq dir (concat dir "_")))
+                                                                 (let ((filename (concat dir (nth 2 template-file) (nth 4 template-file))))
+                                                                   (do ((index (- (length filename) 1) (- index 1))
+                                                                        (result nil)
+                                                                        (need-separator nil))
+                                                                       ((< index 0) (apply 'string result))
+                                                                     (let ((case-fold-search nil))
+                                                                       (cond ((string-match-p "[[:upper:]]" (substring filename index (+ index 1)))
+                                                                              (push (aref filename index) result)
+                                                                              (if (/= 0 index)
+                                                                                  (setq need-separator t)))
+                                                                             ((char-equal ?. (aref filename index))
+                                                                              (push ?_ result)
+                                                                              (setq need-separator nil))
+                                                                             ((char-equal ?_ (aref filename index))
+                                                                              (push ?_ result)
+                                                                              (setq need-separator nil))
+                                                                             (t
+                                                                              (if need-separator
+                                                                                  (push ?_ result))
+                                                                              (push (upcase (aref filename index)) result)
+                                                                              (setq need-separator nil)))))))))))
   (template-initialize))
 
 ;; (cond ((and
@@ -248,16 +329,17 @@
 ;;        '(ps-lpr-command "lpr")
 ;;        '(ps-lpr-switches (quote ("-S" "cruncher" "-P" "lp" "-o" "l"))))))
 
-(autoload 'haskell-mode "haskell-mode"
-  "Major mode for editing Haskell scripts." t)
-(autoload 'literate-haskell-mode "haskell-mode"
-  "Major mode for editing literate Haskell scripts." t)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-(setq haskell-font-lock-symbols t)
-(autoload 'inferior-haskell-load-file "inf-haskell"
-  "Major mode for Haskell interaction." t)
+(when (locate-library "haskell-mode")
+  (autoload 'haskell-mode "haskell-mode"
+    "Major mode for editing Haskell scripts." t)
+  (autoload 'literate-haskell-mode "haskell-mode"
+    "Major mode for editing literate Haskell scripts." t)
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+  (setq haskell-font-lock-symbols t)
+  (autoload 'inferior-haskell-load-file "inf-haskell"
+    "Major mode for Haskell interaction." t))
 
 (setq ispell-dictionary "american")
 
@@ -268,7 +350,7 @@
                      (flyspell-mode t))
                )))
 
-(when(locate-library "org-install")
+(when (locate-library "org-install")
   (require 'org-install)
   (setq org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)" "CANCELLED(c@/!)"))))
 
@@ -314,14 +396,28 @@
             (global-set-key (kbd "S-<f5>") 'gud-finish)))
 
 
+(when (locate-library "w3m")
+  (require 'w3m-load))
+
 (when (locate-library "slime")
   (require 'slime)
-  ;;(add-to-list 'slime-lisp-implementations '(clbuild ("~/clbuild2/clbuild" "lisp")))
-  ;;(setq slime-default-lisp 'clbuild)
-  (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
-  (setq slime-default-lisp 'sbcl)
-  (slime-setup '(slime-repl slime-sbcl-exts))
-  (setq slime-net-coding-system 'utf-8-unix)
+  (add-to-list 'slime-lisp-implementations '(local-sbcl ("/emc/martya/local/bin/sbcl")))
+  (setq slime-default-lisp 'local-sbcl)
+  (slime-setup '(slime-fancy slime-asdf))
+  (when (locate-library "closure-template-html-mode")
+    (autoload 'closure-template-html-mode "closure-template-html-mode" "" t)
+    (add-to-list 'auto-mode-alist
+                 '("\\.tmpl$" . closure-template-html-mode)))
+  (setq common-lisp-hyperspec-root "file:///home/alexey/docs/lisp/HyperSpec/")
+  (when (locate-library "w3m")
+    (require 'hyperspec)
+    (defun hyperspec-lookup (&optional symbol-name)
+      (interactive)
+      (let ((browse-url-browser-function 'w3m-browse-url))
+        (if symbol-name
+            (common-lisp-hyperspec symbol-name)
+          (call-interactively 'common-lisp-hyperspec)))))
   (add-hook 'slime-mode-hook
-            (lambda ()
-              (local-set-key (kbd "<RET>") 'newline-and-indent))))
+            '(lambda ()
+               (local-set-key (kbd "<RET>") 'newline-and-indent)
+               (delete-trailing-whitespace-mode 1))))
