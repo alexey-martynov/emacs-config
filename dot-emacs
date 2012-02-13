@@ -1,11 +1,8 @@
 ;; -*- mode: emacs-lisp -*-
 (defvar running-windows (eq system-type 'windows-nt))
 (defvar running-x (eq window-system 'x))
-;;(defvar running-gui (or
-;;                     running-windows
-;;                     running-x))
 
-(if running-windows
+(when running-windows
     (prefer-coding-system 'windows-1251))
 (prefer-coding-system 'utf-8)
 ;;(set-default-coding-systems 'utf-8)
@@ -16,13 +13,6 @@
   (set-default-font "DejaVu Sans Mono-11")
   (add-to-list 'default-frame-alist
                '(font . "DejaVu Sans Mono-11")))
-      ;;(running-x
-      ;; (set-default-font "xft:DejaVu Sans Mono-11")
-      ;; (add-to-list 'default-frame-alist
-      ;;              '(font . "xft:DejaVu Sans Mono-11"))))
-       ;;(set-default-font "-*-dejavu sans mono-medium-r-normal-*-12-*-*-*-*-*-iso10646-1")
-       ;;(add-to-list 'default-frame-alist
-       ;;             '(font . "-*-dejavu sans mono-medium-r-normal-*-12-*-*-*-*-*-iso10646-1"))));'(font . "-*-DejaVu Sans Mono-normal-r-normal-normal-11-*-*-*-*-*-iso10646-1"))))
 
 (when (file-exists-p "~/.emacs.d/site-lisp")
   (add-to-list 'load-path "~/.emacs.d/site-lisp")
@@ -38,7 +28,7 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil)
- '(c-basic-offset 4)
+ '(c-basic-offset 2)
  '(c-cleanup-list (quote (scope-operator
                           brace-else-brace
                           brace-elseif-brace
@@ -65,7 +55,6 @@
                            (arglist-cont . 0)
                            (arglist-cont-nonempty . ++)
                            (inher-intro . ++)
-                           (inher-cont . 0)
                            (member-init-cont . 0)
                            (statement-cont . ++)
                            (substatement-open . 0))))
@@ -93,7 +82,6 @@
                                       (c-continued-statement-offset . 2))))
  '(scroll-bar-mode (quote right))
  '(scroll-conservatively 1000000)
-;; '(scroll-margin 3)
  '(scroll-preserve-screen-position 1)
  '(scroll-step 1)
  '(show-paren-mode t)
@@ -112,6 +100,9 @@
     (global-set-key [f13] 'toggle-input-method))
 
 (windmove-default-keybindings 'meta)
+
+(unless window-system
+  (xterm-mouse-mode t))
 
 (when (locate-library "color-theme")
   (require 'color-theme)
@@ -142,7 +133,9 @@
       (delete-char 1)))
   (define-key global-map "\C-cg" 'insert-uuid))
 
-(setq cc-other-file-alist
+(require 'find-file)
+
+(setq ff-other-file-alist
       '(("\\.cpp$" (".hpp" ".h"))
         ("\\.c$" (".h" ".hpp"))
         ("\\.hpp$" (".cpp" ".c"))
@@ -168,7 +161,8 @@
 (when (locate-library "sgml-mode")
   (require 'sgml-mode))
 
-(autoload 'gtags-mode "gtags" "" t)
+(when (locate-library "gtags")
+  (autoload 'gtags-mode "gtags" "" t))
 
 (defun my-imenu-helper()
   (let (index-alist
@@ -194,7 +188,13 @@
              (local-set-key (kbd "C-c , s") 'semantic-analyze-proto-impl-toggle)
              (modify-syntax-entry ?_ "w")
              (setq show-trailing-whitespace t)
-             (gtags-mode 1)
+             (when (locate-library "gtags")
+               (gtags-mode 1))
+             ;(ede-minor-mode 1)
+             (if (not (save-excursion (goto-char (point-min))
+                                      (re-search-forward "[[:blank:]]$" nil t)))
+                 (delete-trailing-whitespace-mode 1))
+             ;; Tune search directories
              (font-lock-add-keywords nil
                                      '(("\\(?:/\\(?:/\\|\\*\\)\\).*\\<\\(FIXME\\|TODO\\|BUG\\|HACK\\):" 1 font-lock-warning-face t)))
              ))
@@ -202,8 +202,6 @@
 (add-hook 'makefile-mode-hook
           '(lambda ()
              (modify-syntax-entry ?_ "w")
-             (if (>= emacs-major-version 23)
-                 (linum-mode t))
              ))
 
 (add-hook 'python-mode-hook
@@ -211,8 +209,6 @@
              (define-key python-mode-map (kbd "<RET>") 'newline-and-indent)
              (modify-syntax-entry ?_ "w")
              (setq show-trailing-whitespace t)
-             (if (>= emacs-major-version 23)
-                 (linum-mode t))
              ))
 
 (add-hook 'latex-mode-hook
@@ -225,8 +221,6 @@
           '(lambda ()
              (define-key haskell-mode-map [?\C-c ?\C-r] 'inferior-haskell-reload-file)
              (setq show-trailing-whitespace t)
-             (if (>= emacs-major-version 23)
-                 (linum-mode t))
              ))
 
 (add-hook 'erlang-mode-hook
@@ -277,6 +271,7 @@
 
 (setq auto-mode-alist
       (append
+       '(("\\.h$" . c++-mode))
        '(("\\.[wW][xX][sS]\\'" . xml-mode))
        '(("\\.[mM][aA][kK]\\'" . makefile-gmake-mode))
        '(("[mM][aA][kK][eE][fF][iI][lL][eE]\\'" . makefile-gmake-mode))
@@ -289,7 +284,8 @@
        '(("\\.yaws$" . html-mode))
        auto-mode-alist))
 
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
 
 (when (locate-library "template")
   (require 'template)
@@ -368,6 +364,7 @@
 ;; Bookmarks
 (global-set-key [f2] 'bookmark-jump)
 (global-set-key [C-f2] 'bookmark-set)
+(global-set-key [M-f2] 'bookmark-bmenu-list)
 (setq bookmark-save-flag nil)
 
 (defvar gud-run-args ""
@@ -401,8 +398,8 @@
 
 (when (locate-library "slime")
   (require 'slime)
-  (add-to-list 'slime-lisp-implementations '(local-sbcl ("/emc/martya/local/bin/sbcl")))
-  (setq slime-default-lisp 'local-sbcl)
+  (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
+  (setq slime-default-lisp 'sbcl)
   (slime-setup '(slime-fancy slime-asdf))
   (when (locate-library "closure-template-html-mode")
     (autoload 'closure-template-html-mode "closure-template-html-mode" "" t)
@@ -420,4 +417,13 @@
   (add-hook 'slime-mode-hook
             '(lambda ()
                (local-set-key (kbd "<RET>") 'newline-and-indent)
-               (delete-trailing-whitespace-mode 1))))
+               (delete-trailing-whitespace-mode 1)
+               ;;(unless (slime-connected-p)
+               ;;  (save-excursion (slime)))))
+  )))
+
+(when (locate-library "mof-mode")
+  (require 'mof-mode))
+
+(when (locate-library "closure-template-html-mode")
+  (require 'closure-template-html-mode))
