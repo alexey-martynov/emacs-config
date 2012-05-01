@@ -435,5 +435,37 @@
 (when (locate-library "mof-mode")
   (require 'mof-mode))
 
+(defun closure-template-compile ()
+  "Compile CL-Closure-Template file"
+  (interactive)
+  (save-buffer)
+  (when (slime-connected-p)
+    (message "Trying to compile")
+    (let ((result (slime-eval `(cl:handler-case (cl:progn
+                                                 (closure-template:compile-template :common-lisp-backend
+                                                                                    (cl:parse-namestring ,(buffer-file-name)))
+                                                 (cl:cons t t))
+                                                (t (e)
+                                                   (cl:cons nil (cl:format nil "~A" e)))))))
+      (if (car result)
+          (message "Template compilation was done")
+        (message "Template compilation error: %s" (cdr result))))))
+
+
 (when (locate-library "closure-template-html-mode")
-  (require 'closure-template-html-mode))
+  (autoload 'closure-template-html-mode "closure-template-html-mode" "Major mode for editing Closure Templates" t)
+  (add-to-list 'auto-mode-alist '("\\.tmpl\\'" . closure-template-html-mode))
+  (add-hook 'closure-template-html-mode-hook
+            '(lambda ()
+               (define-key closure-template-html-mode-map (kbd "C-c C-l") 'closure-template-compile)
+               (setq show-trailing-whitespace t)
+               (if (not (save-excursion (goto-char (point-min))
+                                        (re-search-forward "[[:blank:]]$" nil t)))
+                   (delete-trailing-whitespace-mode 1)))))
+
+(add-hook 'js-mode-hook
+          '(lambda ()
+             (setq show-trailing-whitespace t)
+             (if (not (save-excursion (goto-char (point-min))
+                                      (re-search-forward "[[:blank:]]$" nil t)))
+                 (delete-trailing-whitespace-mode 1))))
