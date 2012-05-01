@@ -346,7 +346,8 @@
   (autoload 'inferior-haskell-load-file "inf-haskell"
     "Major mode for Haskell interaction." t))
 
-(setq ispell-dictionary "american")
+(setq ispell-dictionary "en_US")
+(setq ispell-program-name "aspell")
 
 (add-hook 'text-mode-hook
           '(lambda ()
