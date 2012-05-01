@@ -1,0 +1,2 @@
+# SLIME is used via symbolic link to actual implementation in SBCL
+slime
