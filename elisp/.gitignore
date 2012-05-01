@@ -1,2 +1,4 @@
 # SLIME is used via symbolic link to actual implementation in SBCL
 slime
+# Closure-Template mode is obtained via symbolic link to actual implementation
+closure-template-html-mode.el
