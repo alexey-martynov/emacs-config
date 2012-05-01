@@ -90,6 +90,7 @@
  '(transient-mark-mode t)
  '(truncate-lines t)
  '(truncate-partial-width-windows nil)
+ '(visible-bell t)
  '(which-function-mode t))
 
 (fset 'yes-or-no-p 'y-or-n-p)
