@@ -180,6 +180,14 @@
 
 (defun my-imenu() (interactive) (imenu (my-imenu-helper)))
 
+(add-hook 'emacs-lisp-mode-hook
+          '(lambda ()
+             (setq show-trailing-whitespace t)
+             (if (not (save-excursion (goto-char (point-min))
+                                      (re-search-forward "[[:blank:]]$" nil t)))
+                 (delete-trailing-whitespace-mode 1))
+             ))
+
 (add-hook 'c-mode-common-hook
           '(lambda ()
              (local-set-key (kbd "<RET>") 'newline-and-indent)
