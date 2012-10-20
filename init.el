@@ -299,6 +299,7 @@
        '(("/TAG_EDITMSG$" . text-mode))
        '(("\\.org$" . org-mode))
        '(("\\.yaws$" . html-mode))
+       '(("\\.php3?$" . html-mode))
        auto-mode-alist))
 
 (when (fboundp 'tool-bar-mode)
@@ -477,3 +478,7 @@
              (if (not (save-excursion (goto-char (point-min))
                                       (re-search-forward "[[:blank:]]$" nil t)))
                  (delete-trailing-whitespace-mode 1))))
+
+(when (locate-library "php-mode")
+  (autoload 'php-mode "php-mode" "Major mode `php-mode' for editing PHP code." t))
+  ;(add-to-list 'auto-mode-alist '("\\.php\\'" . php-mode)))
