@@ -152,6 +152,14 @@
 
 (when (locate-library "mmm-mode")
   (require 'mmm-mode)
+  (setq mmm-global-mode 'maybe)
+  (when (locate-library "php-mode")
+    (mmm-add-mode-ext-class nil "\\.php3?\\'" 'html-php)
+    (mmm-add-classes
+     '((html-php
+        :submode php-mode
+        :front "<\\?\\(php\\)?"
+        :back "\\?>"))))
   (mmm-add-classes
    '((embedded-erlang
       :submode erlang-mode
