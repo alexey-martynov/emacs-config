@@ -458,3 +458,11 @@
 (when (locate-library "php-mode")
   (autoload 'php-mode "php-mode" "Major mode `php-mode' for editing PHP code." t))
   ;(add-to-list 'auto-mode-alist '("\\.php\\'" . php-mode)))
+
+(when (locate-library "uniquify")
+  (require 'uniquify)
+  (setq uniquify-buffer-name-style 'reverse)
+  (setq uniquify-separator "/")
+  (setq uniquify-after-kill-buffer-p t)
+  (setq uniquify-ignore-buffers-re "^\\*")
+  (setq post-forward-angle-brackets 'post-forward-angle-brackets))
