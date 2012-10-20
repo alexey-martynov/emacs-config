@@ -191,6 +191,12 @@
 
 (defun my-imenu() (interactive) (imenu (my-imenu-helper)))
 
+(when (locate-library "fic-mode")
+  (require 'fic-mode)
+  (add-hook 'prog-mode-hook 'fic-mode)
+  (push '(fic-face . font-lock-warning-face) face-remapping-alist)
+  (push "HACK" fic-highlighted-words))
+
 (add-hook 'emacs-lisp-mode-hook
           '(lambda ()
              (setq show-trailing-whitespace t)
@@ -214,9 +220,6 @@
              (if (not (save-excursion (goto-char (point-min))
                                       (re-search-forward "[[:blank:]]$" nil t)))
                  (delete-trailing-whitespace-mode 1))
-             ;; Tune search directories
-             (font-lock-add-keywords nil
-                                     '(("\\(?:/\\(?:/\\|\\*\\)\\).*\\<\\(FIXME\\|TODO\\|BUG\\|HACK\\):" 1 font-lock-warning-face t)))
              ))
 
 (add-hook 'makefile-mode-hook
