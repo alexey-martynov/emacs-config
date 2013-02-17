@@ -76,10 +76,6 @@
  '(iswitchb-mode t)
  '(pulse-flag (quote never))
  '(require-final-newline t)
- '(safe-local-variable-values (quote ((c-label-offset . -2)
-                                      (c-argdecl-indent . 0)
-                                      (c-brace-offset . -2)
-                                      (c-continued-statement-offset . 2))))
  '(scroll-bar-mode (quote right))
  '(scroll-conservatively 1000000)
  '(scroll-preserve-screen-position 1)
@@ -422,23 +418,6 @@
 
 (when (locate-library "mof-mode")
   (require 'mof-mode))
-
-(defun closure-template-compile ()
-  "Compile CL-Closure-Template file"
-  (interactive)
-  (save-buffer)
-  (when (slime-connected-p)
-    (message "Trying to compile")
-    (let ((result (slime-eval `(cl:handler-case (cl:progn
-                                                 (closure-template:compile-template :common-lisp-backend
-                                                                                    (cl:parse-namestring ,(buffer-file-name)))
-                                                 (cl:cons t t))
-                                                (t (e)
-                                                   (cl:cons nil (cl:format nil "~A" e)))))))
-      (if (car result)
-          (message "Template compilation was done")
-        (message "Template compilation error: %s" (cdr result))))))
-
 
 (when (locate-library "closure-template-html-mode")
   (autoload 'closure-template-html-mode "closure-template-html-mode" "Major mode for editing Closure Templates" t)
