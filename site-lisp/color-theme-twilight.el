@@ -36,6 +36,7 @@
 	  (border-glyph ((t (nil))))
 	  (buffers-tab ((t (:background "#141414" :foreground "#CACACA"))))
 	  (font-lock-builtin-face ((t (:foreground "#CACACA"))))
+          ;; Original
 	  ;;(font-lock-comment-face ((t (:foreground "#5F5A60"))))
 	  (font-lock-comment-face ((t (:foreground "#867f87"))))
 	  (font-lock-constant-face ((t (:foreground "#CF6A4C"))))
@@ -44,6 +45,7 @@
 	  (font-lock-keyword-face ((t (:foreground "#CDA869" :bold t))))
 	  (font-lock-preprocessor-face ((t (:foreground "Aquamarine"))))
 	  (font-lock-reference-face ((t (:foreground "SlateBlue"))))
+          (smerge-refined-change ((t (:background "sienna3"))))
 
 	  (font-lock-regexp-grouping-backslash ((t (:foreground "#E9C062"))))
 	  (font-lock-regexp-grouping-construct ((t (:foreground "red"))))
@@ -60,7 +62,8 @@
 	  (font-lock-variable-name-face ((t (:foreground "#7587A6"))))
 	  (font-lock-warning-face ((t (:background "#662335" :foreground "red"))))
 	  (gui-element ((t (:background "#D4D0C8" :foreground "black"))))
-	  ;;(region ((t (:background "#27292A"))))
+          ;; Original
+	  ;;(region ((t (:background "#404345"))))
           (region ((t (:background "#5C6163"))))
 	  (mode-line ((t (:background "grey75" :foreground "black"))))
 	  (highlight ((t (:background "#111111"))))
@@ -68,7 +71,7 @@
 	  (left-margin ((t (nil))))
 	  (text-cursor ((t (:background "yellow" :foreground "black"))))
 	  (toolbar ((t (nil))))
-          (show-paren-match ((t (:background "#09093F"))));;"royalblue4"))))
-        ;;'(show-paren-mismatch ((default nil) (nil (:background "red"))))
+          (show-paren-match ((t (:background "#09093F"))))
+          ;;(show-paren-mismatch ((default nil) (nil (:background "red"))))
 	  (underline ((nil (:underline nil))))
 	  (zmacs-region ((t (:background "snow" :foreground "blue")))))))
