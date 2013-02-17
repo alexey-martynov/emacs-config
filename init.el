@@ -411,7 +411,9 @@
   (add-hook 'slime-mode-hook
             '(lambda ()
                (local-set-key (kbd "<RET>") 'newline-and-indent)
-               (delete-trailing-whitespace-mode 1)
+               (if (not (save-excursion (goto-char (point-min))
+                                        (re-search-forward "[[:blank:]]$" nil t)))
+                   (delete-trailing-whitespace-mode 1))
                ;;(unless (slime-connected-p)
                ;;  (save-excursion (slime)))))
   )))
