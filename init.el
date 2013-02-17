@@ -438,6 +438,7 @@
              (if (not (save-excursion (goto-char (point-min))
                                       (re-search-forward "[[:blank:]]$" nil t)))
                  (delete-trailing-whitespace-mode 1))))
+(add-hook 'js-mode-hook #'fic-mode)
 
 (when (locate-library "php-mode")
   (autoload 'php-mode "php-mode" "Major mode `php-mode' for editing PHP code." t))
