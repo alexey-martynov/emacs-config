@@ -451,3 +451,6 @@
   (setq uniquify-after-kill-buffer-p t)
   (setq uniquify-ignore-buffers-re "^\\*")
   (setq post-forward-angle-brackets 'post-forward-angle-brackets))
+
+(when (locate-library "egg")
+  (require 'egg))
