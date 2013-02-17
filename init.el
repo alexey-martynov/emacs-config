@@ -110,17 +110,14 @@
   (require 'color-theme)
   (load "color-theme-twilight")
   ;; Select color theme for default frame
-  (if window-system
-      (color-theme-twilight)))
+  (color-theme-twilight))
 
 ;; Setup hook to set color theme for X and Microsoft Windows
 (add-hook 'after-make-frame-functions
           (lambda (frame)
             (set-variable 'color-theme-is-global nil)
             (select-frame frame)
-            (if window-system
-                (color-theme-twilight)
-              )))
+            (color-theme-twilight)))
 
 (push '("<\\?xml\\b[^>]*\\bencoding=\"utf-8\"[^>]*\\?>" . utf-8) auto-coding-regexp-alist)
 
