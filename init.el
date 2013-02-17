@@ -97,6 +97,11 @@
     (global-set-key [f13] 'toggle-input-method))
 
 (windmove-default-keybindings 'meta)
+(unless (or running-windows running-x)
+  (global-set-key (kbd "ESC <left>") 'windmove-left)
+  (global-set-key (kbd "ESC <right>") 'windmove-right)
+  (global-set-key (kbd "ESC <down>") 'windmove-down)
+  (global-set-key (kbd "ESC <up>") 'windmove-up))
 
 (unless window-system
   (xterm-mouse-mode t))
