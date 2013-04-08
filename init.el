@@ -22,6 +22,9 @@
         (setq load-path (cons my-lisp-dir load-path))
         (normal-top-level-add-subdirs-to-load-path))))
 
+(when (file-exists-p "~/.emacs.d/themes")
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/themes"))
+
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
@@ -106,18 +109,7 @@
 (unless window-system
   (xterm-mouse-mode t))
 
-(when (locate-library "color-theme")
-  (require 'color-theme)
-  (load "color-theme-twilight")
-  ;; Select color theme for default frame
-  (color-theme-twilight))
-
-;; Setup hook to set color theme for X and Microsoft Windows
-(add-hook 'after-make-frame-functions
-          (lambda (frame)
-            (set-variable 'color-theme-is-global nil)
-            (select-frame frame)
-            (color-theme-twilight)))
+(load-theme 'twilight t)
 
 (push '("<\\?xml\\b[^>]*\\bencoding=\"utf-8\"[^>]*\\?>" . utf-8) auto-coding-regexp-alist)
 
