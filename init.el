@@ -1,4 +1,3 @@
-(message "Custom init")
 ;; -*- mode: emacs-lisp -*-
 (defvar running-windows (eq system-type 'windows-nt))
 (defvar running-x (eq window-system 'x))
@@ -133,6 +132,10 @@
         ("\\.hpp$" (".cpp" ".c"))
         ("\\.h$" (".cpp" ".c"))))
 (put 'ff-search-directories 'safe-local-variable 'listp)
+
+(setf completion-ignored-extensions
+      (append completion-ignored-extensions
+              '(".hi")))
 
 (require 'compile)
 (setq compilation-scroll-output t)
