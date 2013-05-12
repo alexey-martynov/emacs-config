@@ -1,3 +1,4 @@
+(message "Custom init")
 ;; -*- mode: emacs-lisp -*-
 (defvar running-windows (eq system-type 'windows-nt))
 (defvar running-x (eq window-system 'x))
@@ -214,8 +215,13 @@
 
 (add-hook 'makefile-mode-hook
           '(lambda ()
+             (local-set-key (kbd "<f7>") 'compile)
              (modify-syntax-entry ?_ "w")
              ))
+
+(add-hook 'compilation-mode-hook
+          '(lambda ()
+             (local-set-key (kbd "<f7>") 'recompile)))
 
 (add-hook 'python-mode-hook
           '(lambda ()
