@@ -218,9 +218,9 @@
              (when (locate-library "gtags")
                (gtags-mode 1))
              ;(ede-minor-mode 1)
-             (if (not (save-excursion (goto-char (point-min))
-                                      (re-search-forward "[[:blank:]]$" nil t)))
-                 (delete-trailing-whitespace-mode 1))
+;             (if (not (save-excursion (goto-char (point-min))
+;                                      (re-search-forward "[[:blank:]]$" nil t)))
+             (delete-trailing-whitespace-mode 'clean)
              ))
 
 (add-hook 'makefile-mode-hook
@@ -239,6 +239,9 @@
           '(lambda ()
              (define-key latex-mode-map (kbd "<RET>") 'newline-and-indent)
              (turn-on-auto-fill)
+             (setq show-trailing-whitespace t)
+             (delete-trailing-whitespace-mode 'clean)
+             (local-set-key (kbd "<f7>") 'compile)
              ))
 
 (add-hook 'haskell-mode-hook
