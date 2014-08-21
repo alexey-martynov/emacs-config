@@ -25,7 +25,10 @@
   (interactive "P")
   (prog1 (setq delete-trailing-whitespace-mode
                (if (null arg) (not delete-trailing-whitespace-mode)
-                 (> (prefix-numeric-value arg) 0)))))
+                 (if (eq arg 'clean)
+                     (not (save-excursion (goto-char (point-min))
+                                          (re-search-forward "[[:blank:]]$" nil t)))
+                   (> (prefix-numeric-value arg) 0))))))
 
 (add-to-list 'minor-mode-alist '(delete-trailing-whitespace-mode " TWS"))
 

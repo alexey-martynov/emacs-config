@@ -1,6 +1,11 @@
 ;; -*- mode: emacs-lisp -*-
 (defvar running-windows (eq system-type 'windows-nt))
 (defvar running-x (eq window-system 'x))
+(defvar running-mac (eq window-system 'ns))
+
+(when running-mac
+  (set-input-method 'russian-computer)
+  (deactivate-input-method))
 
 (when running-windows
     (prefer-coding-system 'windows-1251))
@@ -14,6 +19,13 @@
   (add-to-list 'default-frame-alist
                '(font . "DejaVu Sans Mono-11")))
 
+(when running-mac
+;  (set-default-font "-*-DejaVu_Sans_Mono-medium-normal-*-11-*-*-*-m-0-iso10646-1")
+;  (add-to-list 'default-frame-alist
+;               '(font . "-*-DejaVu_Sans_Mono-medium-normal-*-11-*-*-*-m-0-iso10646-1"))
+;  (set-fontset-font t 'cyrillic (font-spec :name "DejaVu Sans Mono")))
+  (set-fontset-font t 'cyrillic (font-spec :name "Monaco")))
+
 (when (file-exists-p "~/.emacs.d/site-lisp")
   (add-to-list 'load-path "~/.emacs.d/site-lisp")
   (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
@@ -24,6 +36,7 @@
 
 (when (file-exists-p "~/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes"))
+(load-theme 'twilight t)
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
@@ -108,8 +121,6 @@
 
 (unless window-system
   (xterm-mouse-mode t))
-
-(load-theme 'twilight t)
 
 (push '("<\\?xml\\b[^>]*\\bencoding=\"utf-8\"[^>]*\\?>" . utf-8) auto-coding-regexp-alist)
 
@@ -211,9 +222,9 @@
              (when (locate-library "gtags")
                (gtags-mode 1))
              ;(ede-minor-mode 1)
-             (if (not (save-excursion (goto-char (point-min))
-                                      (re-search-forward "[[:blank:]]$" nil t)))
-                 (delete-trailing-whitespace-mode 1))
+;             (if (not (save-excursion (goto-char (point-min))
+;                                      (re-search-forward "[[:blank:]]$" nil t)))
+             (delete-trailing-whitespace-mode 'clean)
              ))
 
 (add-hook 'makefile-mode-hook
@@ -237,6 +248,9 @@
           '(lambda ()
              (define-key latex-mode-map (kbd "<RET>") 'newline-and-indent)
              (turn-on-auto-fill)
+             (setq show-trailing-whitespace t)
+             (delete-trailing-whitespace-mode 'clean)
+             (local-set-key (kbd "<f7>") 'compile)
              ))
 
 (add-hook 'haskell-mode-hook
@@ -393,10 +407,14 @@
 (when (locate-library "w3m")
   (require 'w3m-load))
 
-(when (locate-library "slime")
+(when (or (locate-library "slime") (locate-library "~/quicklisp/slime-helper"))
+  (when (locate-library "~/quicklisp/slime-helper")
+    (load "~/quicklisp/slime-helper"))
   (require 'slime)
-  (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
-  (setq slime-default-lisp 'sbcl)
+;  (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
+;  (setq slime-default-lisp 'sbcl)
+  (add-to-list 'slime-lisp-implementations '(ccl ("/opt/ccl/scripts/ccl64" "-K" "utf8")))
+  (setq slime-default-lisp 'ccl)
   (slime-setup '(slime-fancy slime-asdf))
   (when (locate-library "closure-template-html-mode")
     (autoload 'closure-template-html-mode "closure-template-html-mode" "" t)
