@@ -1,6 +1,11 @@
 ;; -*- mode: emacs-lisp -*-
 (defvar running-windows (eq system-type 'windows-nt))
 (defvar running-x (eq window-system 'x))
+(defvar running-mac (eq window-system 'ns))
+
+(when running-mac
+  (set-input-method 'russian-computer)
+  (deactivate-input-method))
 
 (when running-windows
     (prefer-coding-system 'windows-1251))
@@ -14,6 +19,13 @@
   (add-to-list 'default-frame-alist
                '(font . "DejaVu Sans Mono-11")))
 
+(when running-mac
+;  (set-default-font "-*-DejaVu_Sans_Mono-medium-normal-*-11-*-*-*-m-0-iso10646-1")
+;  (add-to-list 'default-frame-alist
+;               '(font . "-*-DejaVu_Sans_Mono-medium-normal-*-11-*-*-*-m-0-iso10646-1"))
+;  (set-fontset-font t 'cyrillic (font-spec :name "DejaVu Sans Mono")))
+  (set-fontset-font t 'cyrillic (font-spec :name "Monaco")))
+
 (when (file-exists-p "~/.emacs.d/site-lisp")
   (add-to-list 'load-path "~/.emacs.d/site-lisp")
   (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
@@ -24,6 +36,7 @@
 
 (when (file-exists-p "~/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes"))
+(load-theme 'twilight t)
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
@@ -108,8 +121,6 @@
 
 (unless window-system
   (xterm-mouse-mode t))
-
-(load-theme 'twilight t)
 
 (push '("<\\?xml\\b[^>]*\\bencoding=\"utf-8\"[^>]*\\?>" . utf-8) auto-coding-regexp-alist)
 
