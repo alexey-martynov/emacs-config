@@ -289,6 +289,9 @@
        '(("\\.yaws$" . html-mode))
        '(("\\.php3?$" . html-mode))
        auto-mode-alist))
+(setf completion-ignored-extensions
+      (append completion-ignored-extensions
+              '(".hi" ".pdf" "*.o")))
 
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
