@@ -85,13 +85,14 @@
                                    (html-mode . t))))
  '(column-number-mode t)
  '(compilation-read-command nil)
+ '(cua-auto-tabify-rectangles nil)
  '(delete-selection-mode t)
  '(font-lock-mode t t (font-lock))
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
- '(iswitch-buffer-ignore (quote ("Minibuf-[0-9]+")))
- '(iswitchb-mode t)
+; '(iswitch-buffer-ignore (quote ("Minibuf-[0-9]+")))
+; '(iswitchb-mode t)
  '(pulse-flag (quote never))
  '(require-final-newline t)
  '(scroll-bar-mode (quote right))
@@ -113,6 +114,8 @@
 
 (if running-x
     (global-set-key [f13] 'toggle-input-method))
+
+(icomplete-mode 99)
 
 (windmove-default-keybindings 'meta)
 (unless (or running-windows running-x)
