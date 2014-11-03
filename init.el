@@ -5,7 +5,9 @@
 
 (when running-mac
   (set-input-method 'russian-computer)
-  (deactivate-input-method))
+  (deactivate-input-method)
+  (setenv "PATH" (concat (getenv "PATH") ":/usr/texbin:/usr/local/bin"))
+  (setq exec-path (append exec-path '("/usr/texbin" "/usr/local/bin"))))
 
 (when running-windows
     (prefer-coding-system 'windows-1251))
