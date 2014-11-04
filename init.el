@@ -282,6 +282,7 @@
              (define-key python-mode-map (kbd "<RET>") 'newline-and-indent)
              (modify-syntax-entry ?_ "w")
              (setq show-trailing-whitespace t)
+             (delete-trailing-whitespace-mode 'clean)
              ))
 
 (add-hook 'latex-mode-hook
