@@ -1,0 +1,3 @@
+[submodule "site-lisp/egg"]
+	path = site-lisp/egg
+	url = https://github.com/bogolisk/egg.git
