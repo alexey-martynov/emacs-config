@@ -12,9 +12,6 @@
 (when running-windows
     (prefer-coding-system 'windows-1251))
 (prefer-coding-system 'utf-8)
-;;(set-default-coding-systems 'utf-8)
-;;(set-terminal-coding-system 'utf-8)
-;;(set-keyboard-coding-system 'utf-8)
 
 (when running-windows
   (set-default-font "DejaVu Sans Mono-11")
@@ -22,10 +19,6 @@
                '(font . "DejaVu Sans Mono-11")))
 
 (when running-mac
-;  (set-default-font "-*-DejaVu_Sans_Mono-medium-normal-*-11-*-*-*-m-0-iso10646-1")
-;  (add-to-list 'default-frame-alist
-;               '(font . "-*-DejaVu_Sans_Mono-medium-normal-*-11-*-*-*-m-0-iso10646-1"))
-;  (set-fontset-font t 'cyrillic (font-spec :name "DejaVu Sans Mono")))
   (set-fontset-font t 'cyrillic (font-spec :name "Monaco")))
 
 (when (file-exists-p "~/.emacs.d/site-lisp")
@@ -91,8 +84,6 @@
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
-; '(iswitch-buffer-ignore (quote ("Minibuf-[0-9]+")))
-; '(iswitchb-mode t)
  '(pulse-flag (quote never))
  '(require-final-newline t)
  '(scroll-bar-mode (quote right))
@@ -111,6 +102,8 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq make-backup-files nil)
 (setq split-width-threshold most-positive-fixnum)
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
 
 (if running-x
     (global-set-key [f13] 'toggle-input-method))
@@ -257,7 +250,7 @@
                  (wstart (window-start)))
              (unwind-protect
                  (progn ad-do-it)
-                                        ;(set-window-start (selected-window) wstart)
+                 ;(set-window-start (selected-window) wstart)
                )))
           (t
            ad-do-it)))))
@@ -281,8 +274,6 @@
              (when (locate-library "gtags")
                (gtags-mode 1))
              ;(ede-minor-mode 1)
-;             (if (not (save-excursion (goto-char (point-min))
-;                                      (re-search-forward "[[:blank:]]$" nil t)))
              (delete-trailing-whitespace-mode 'clean)
              ))
 
@@ -348,12 +339,10 @@
        '(("\\.yaws$" . html-mode))
        '(("\\.php3?$" . html-mode))
        auto-mode-alist))
+
 (setf completion-ignored-extensions
       (append completion-ignored-extensions
               '(".hi" ".pdf" "*.o")))
-
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
 
 (when (locate-library "template")
   (require 'template)
@@ -383,15 +372,6 @@
                                                                               (push (upcase (aref filename index)) result)
                                                                               (setq need-separator nil)))))))))))
   (template-initialize))
-
-;; (cond ((and
-;;        running-windows
-;;        (equal (getenv "USERDOMAIN") "TRANSAS"))
-;;       (setq tags-table-list
-;;             '("C:/VS.NET2003/Vc7/include" "C:/VS.NET2003/Vc7/PlatformSDK/Include"))
-;;       (custom-set-variables
-;;        '(ps-lpr-command "lpr")
-;;        '(ps-lpr-switches (quote ("-S" "cruncher" "-P" "lp" "-o" "l"))))))
 
 (when (locate-library "haskell-mode")
   (autoload 'haskell-mode "haskell-mode"
@@ -521,7 +501,6 @@
 
 (when (locate-library "php-mode")
   (autoload 'php-mode "php-mode" "Major mode `php-mode' for editing PHP code." t))
-  ;(add-to-list 'auto-mode-alist '("\\.php\\'" . php-mode)))
 
 (when (locate-library "uniquify")
   (require 'uniquify)
