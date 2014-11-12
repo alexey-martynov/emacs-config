@@ -190,6 +190,8 @@
   (require 'sgml-mode))
 
 (when (locate-library "gtags")
+  (setq gtags-suggested-key-mapping t)
+  (setq gtags-disable-pushy-mouse-mapping t)
   (autoload 'gtags-mode "gtags" "" t))
 
 (defun my-imenu-helper()
