@@ -284,9 +284,14 @@
 
 (add-hook 'makefile-mode-hook
           '(lambda ()
+             (local-set-key (kbd "<f7>") 'compile)
              (modify-syntax-entry ?_ "w")
              (delete-trailing-whitespace-mode 'clean)
              ))
+
+(add-hook 'compilation-mode-hook
+          '(lambda ()
+             (local-set-key (kbd "<f7>") 'recompile)))
 
 (add-hook 'python-mode-hook
           '(lambda ()
