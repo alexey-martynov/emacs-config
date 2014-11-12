@@ -314,6 +314,16 @@
              (setq gtags-ignore-case nil)
              ;(ede-minor-mode 1)
              (delete-trailing-whitespace-mode 'clean)
+             ;; Tune search directories
+             (let ((filename buffer-file-name))
+               (when filename
+                 (let ((dir (file-name-nondirectory (directory-file-name (file-name-directory filename))))
+                       (current-list (if (symbolp ff-search-directories)
+                                         (symbol-value ff-search-directories)
+                                       ff-search-directories)))
+                   (if (equal dir "src")
+                       (setq ff-search-directories (append '("../include/*") current-list))
+                     (setq ff-search-directories (append '("src/*") current-list))))))
              ))
 
 (add-hook 'makefile-mode-hook
