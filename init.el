@@ -389,6 +389,7 @@
        '(("\\.org$" . org-mode))
        '(("\\.yaws$" . html-mode))
        '(("\\.php3?$" . html-mode))
+       '(("\\.proto" . protobuf-mode))
        auto-mode-alist))
 
 (setf completion-ignored-extensions
@@ -561,3 +562,13 @@
 
 (when (locate-library "egg")
   (require 'egg))
+
+(when (locate-library "emc-tools")
+  (message "Loading EMC tools")
+  (require 'emc-tools))
+
+(when (locate-library "protobuf-mode")
+  (autoload 'protobuf-mode "protobuf-mode" "Major mode for editing Protocol Buffers description language.
+
+The hook `c-mode-common-hook' is run with no argument at mode
+initialization, then `protobuf-mode-hook'."))
