@@ -31,6 +31,7 @@
 
 (when (file-exists-p "~/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes"))
+
 (load-theme 'twilight t)
 
 (custom-set-variables
@@ -319,10 +320,10 @@
 
 (add-hook 'html-mode-hook
           '(lambda ()
-            (define-key html-mode-map (kbd "<RET>") 'newline-and-indent)
-            (setq show-trailing-whitespace t)
-            (mmm-mode-on)
-            ))
+             (define-key html-mode-map (kbd "<RET>") 'newline-and-indent)
+             (setq show-trailing-whitespace t)
+             (mmm-mode-on)
+             ))
 
 (setq auto-mode-alist
       (append
