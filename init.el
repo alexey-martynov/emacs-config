@@ -230,6 +230,10 @@
 
 (defun my-imenu() (interactive) (imenu (my-imenu-helper)))
 
+(defvar ff-search-directories-extra nil "Extra directories to search other files")
+(make-variable-buffer-local 'ff-search-directories-extra)
+(put 'ff-search-directories-extra 'safe-local-variable 'listp)
+
 (when (locate-library "fic-mode")
   (require 'fic-mode)
   (add-hook 'prog-mode-hook 'fic-mode)
@@ -241,6 +245,15 @@
              (setq show-trailing-whitespace t)
              (delete-trailing-whitespace-mode 'clean)
              ))
+
+;; TODO: Improve handling by adding check for subdirs
+(add-hook 'hack-local-variables-hook
+          '(lambda ()
+             (when ff-search-directories-extra
+               (let ((current-list (if (symbolp ff-search-directories)
+                                       (symbol-value ff-search-directories)
+                                     ff-search-directories)))
+                 (setq ff-search-directories (append ff-search-directories-extra current-list))))))
 
 ;; CC-mode
 (when (locate-library "smart-tabs-mode")
