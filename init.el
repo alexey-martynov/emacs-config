@@ -546,6 +546,9 @@
 (when (locate-library "php-mode")
   (autoload 'php-mode "php-mode" "Major mode `php-mode' for editing PHP code." t))
 
+(when (locate-library "upstart-mode")
+  (autoload 'upstart-mode "upstart-mode" "A mode for upstart files" t))
+
 (when (locate-library "uniquify")
   (require 'uniquify)
   (setq uniquify-buffer-name-style 'reverse)
