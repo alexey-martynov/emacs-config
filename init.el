@@ -218,9 +218,7 @@
 (add-hook 'emacs-lisp-mode-hook
           '(lambda ()
              (setq show-trailing-whitespace t)
-             (if (not (save-excursion (goto-char (point-min))
-                                      (re-search-forward "[[:blank:]]$" nil t)))
-                 (delete-trailing-whitespace-mode 1))
+             (delete-trailing-whitespace-mode 'clean)
              ))
 
 ;; CC-mode
@@ -287,6 +285,7 @@
 (add-hook 'makefile-mode-hook
           '(lambda ()
              (modify-syntax-entry ?_ "w")
+             (delete-trailing-whitespace-mode 'clean)
              ))
 
 (add-hook 'python-mode-hook
@@ -310,18 +309,14 @@
           '(lambda ()
              (define-key haskell-mode-map [?\C-c ?\C-r] 'inferior-haskell-reload-file)
              (setq show-trailing-whitespace t)
-             (if (not (save-excursion (goto-char (point-min))
-                                      (re-search-forward "[[:blank:]]$" nil t)))
-                 (delete-trailing-whitespace-mode 1))
+             (delete-trailing-whitespace-mode 'clean)
              ))
 
 (add-hook 'erlang-mode-hook
           '(lambda ()
              (define-key erlang-mode-map (kbd "<RET>") 'newline-and-indent)
              (setq show-trailing-whitespace t)
-             (if (not (save-excursion (goto-char (point-min))
-                                      (re-search-forward "[[:blank:]]$" nil t)))
-                 (delete-trailing-whitespace-mode 1))
+             (delete-trailing-whitespace-mode 'clean)
              ))
 
 (add-hook 'html-mode-hook
@@ -477,12 +472,10 @@
   (add-hook 'slime-mode-hook
             '(lambda ()
                (local-set-key (kbd "<RET>") 'newline-and-indent)
-               (if (not (save-excursion (goto-char (point-min))
-                                        (re-search-forward "[[:blank:]]$" nil t)))
-                   (delete-trailing-whitespace-mode 1))
+               (delete-trailing-whitespace-mode 'clean)
                ;;(unless (slime-connected-p)
                ;;  (save-excursion (slime)))))
-  )))
+               )))
 
 (when (locate-library "mof-mode")
   (require 'mof-mode))
@@ -494,17 +487,16 @@
             '(lambda ()
                (define-key closure-template-html-mode-map (kbd "C-c C-l") 'closure-template-compile)
                (setq show-trailing-whitespace t)
-               (if (not (save-excursion (goto-char (point-min))
-                                        (re-search-forward "[[:blank:]]$" nil t)))
-                   (delete-trailing-whitespace-mode 1)))))
+               (delete-trailing-whitespace-mode 'clean)
+               )))
 
 (add-hook 'js-mode-hook
           '(lambda ()
              (setq show-trailing-whitespace t)
-             (if (not (save-excursion (goto-char (point-min))
-                                      (re-search-forward "[[:blank:]]$" nil t)))
-                 (delete-trailing-whitespace-mode 1))))
-(add-hook 'js-mode-hook #'fic-mode)
+             (electric-indent-mode t)
+             (delete-trailing-whitespace-mode 'clean)
+             (fic-mode)
+             ))
 
 (when (locate-library "php-mode")
   (autoload 'php-mode "php-mode" "Major mode `php-mode' for editing PHP code." t))
