@@ -9,9 +9,9 @@
   (setenv "PATH" (concat (getenv "PATH") ":/usr/texbin:/usr/local/bin"))
   (setq exec-path (append exec-path '("/usr/texbin" "/usr/local/bin"))))
 
-(when running-windows
-    (prefer-coding-system 'windows-1251))
-(prefer-coding-system 'utf-8)
+(if running-windows
+  (prefer-coding-system 'windows-1251)
+  (prefer-coding-system 'utf-8))
 
 (when running-windows
   (set-default-font "DejaVu Sans Mono-11")
