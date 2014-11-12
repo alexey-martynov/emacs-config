@@ -161,6 +161,7 @@
 (require 'compile)
 (setq compilation-scroll-output t)
 (put 'compile-command 'safe-local-variable 'stringp)
+(setenv "MAKEFLAGS" "-w")
 
 ;;; Boost.Test fatal errors
 (add-to-list 'compilation-error-regexp-alist '("^\\(.+\\)(\\([[:digit:]]+\\)):[[:space:]]*\\(?:fatal \\)?error" 1 2 nil 2))
