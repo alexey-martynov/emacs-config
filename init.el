@@ -278,6 +278,8 @@
              (setq show-trailing-whitespace t)
              (when (locate-library "gtags")
                (gtags-mode 1))
+             (make-local-variable 'gtags-ignore-case)
+             (setq gtags-ignore-case nil)
              ;(ede-minor-mode 1)
              (delete-trailing-whitespace-mode 'clean)
              ))
