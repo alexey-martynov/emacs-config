@@ -497,6 +497,7 @@
 
 (add-hook 'js-mode-hook
           '(lambda ()
+             (define-key js-mode-map (kbd "<RET>") 'newline-and-indent)
              (setq show-trailing-whitespace t)
              (electric-indent-mode t)
              (delete-trailing-whitespace-mode 'clean)
