@@ -13,6 +13,23 @@
   (prefer-coding-system 'windows-1251)
   (prefer-coding-system 'utf-8))
 
+(cond
+ ((string= (getenv "EMC_TARGET_PLATFORM") "SP1")
+  (add-to-list 'default-frame-alist '(icon-type . "/emc/martya/local/share/icons/emacs-sp1.png"))
+  (setf frame-title-format '(multiple-frames "[SLES11SP1] %b"
+                                             ("[SLES11SP1] " invocation-name "@" system-name))))
+
+ ((string= (getenv "EMC_TARGET_PLATFORM") "SP2")
+  (message "Setting SP2 icon...")
+  (add-to-list 'default-frame-alist '(icon-type . "/emc/martya/local/share/icons/emacs-sp2.png"))
+  (setf frame-title-format '(multiple-frames "[SLES11SP2] %b"
+                                             ("[SLES11SP2] " invocation-name "@" system-name))))
+ ((string= (getenv "EMC_TARGET_PLATFORM") "SP3")
+  (message "Setting SP3 icon...")
+  (add-to-list 'default-frame-alist '(icon-type . "/emc/martya/local/share/icons/emacs-sp2.png"))
+  (setf frame-title-format '(multiple-frames "[SLES11SP3] %b"
+                                             ("[SLES11SP3] " invocation-name "@" system-name)))))
+
 (when running-windows
   (set-default-font "DejaVu Sans Mono-11")
   (add-to-list 'default-frame-alist
