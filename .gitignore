@@ -4,3 +4,4 @@
 *.elc
 auto-save-list
 tramp
+eshell

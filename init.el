@@ -3,29 +3,6 @@
 (defvar running-x (eq window-system 'x))
 (defvar running-mac (eq window-system 'ns))
 
-(when running-mac
-  (set-input-method 'russian-computer)
-  (deactivate-input-method))
-
-(when running-windows
-    (prefer-coding-system 'windows-1251))
-(prefer-coding-system 'utf-8)
-;;(set-default-coding-systems 'utf-8)
-;;(set-terminal-coding-system 'utf-8)
-;;(set-keyboard-coding-system 'utf-8)
-
-(when running-windows
-  (set-default-font "DejaVu Sans Mono-11")
-  (add-to-list 'default-frame-alist
-               '(font . "DejaVu Sans Mono-11")))
-
-(when running-mac
-;  (set-default-font "-*-DejaVu_Sans_Mono-medium-normal-*-11-*-*-*-m-0-iso10646-1")
-;  (add-to-list 'default-frame-alist
-;               '(font . "-*-DejaVu_Sans_Mono-medium-normal-*-11-*-*-*-m-0-iso10646-1"))
-;  (set-fontset-font t 'cyrillic (font-spec :name "DejaVu Sans Mono")))
-  (set-fontset-font t 'cyrillic (font-spec :name "Monaco")))
-
 (when (file-exists-p "~/.emacs.d/site-lisp")
   (add-to-list 'load-path "~/.emacs.d/site-lisp")
   (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
@@ -34,8 +11,31 @@
         (setq load-path (cons my-lisp-dir load-path))
         (normal-top-level-add-subdirs-to-load-path))))
 
+(load "cyrillic-without-yo.el")
+
+(when running-mac
+  (set-input-method 'russian-computer-without-yo)
+  (deactivate-input-method)
+  (setenv "PATH" (concat (getenv "PATH") ":/usr/texbin:/usr/local/bin"))
+  (setq exec-path (append exec-path '("/usr/texbin" "/usr/local/bin"))))
+
+(when running-windows
+  (set-input-method 'russian-computer-without-yo)
+  (deactivate-input-method)
+  (prefer-coding-system 'windows-1251)
+  (prefer-coding-system 'utf-8))
+
+(when running-windows
+  (set-default-font "DejaVu Sans Mono-11")
+  (add-to-list 'default-frame-alist
+               '(font . "DejaVu Sans Mono-11")))
+
+(when running-mac
+  (set-fontset-font t 'cyrillic (font-spec :name "Monaco")))
+
 (when (file-exists-p "~/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes"))
+
 (load-theme 'twilight t)
 
 (custom-set-variables
@@ -83,13 +83,13 @@
                                    (html-mode . t))))
  '(column-number-mode t)
  '(compilation-read-command nil)
+ '(cua-auto-tabify-rectangles nil)
  '(delete-selection-mode t)
  '(font-lock-mode t t (font-lock))
+ '(imenu-sort-function 'imenu--sort-by-name)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
- '(iswitch-buffer-ignore (quote ("Minibuf-[0-9]+")))
- '(iswitchb-mode t)
  '(pulse-flag (quote never))
  '(require-final-newline t)
  '(scroll-bar-mode (quote right))
@@ -108,9 +108,13 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq make-backup-files nil)
 (setq split-width-threshold most-positive-fixnum)
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
 
 (if running-x
     (global-set-key [f13] 'toggle-input-method))
+
+(icomplete-mode 99)
 
 (windmove-default-keybindings 'meta)
 (unless (or running-windows running-x)
@@ -121,6 +125,20 @@
 
 (unless window-system
   (xterm-mouse-mode t))
+
+;; Auto indent yanked code
+(dolist (command '(yank yank-pop))
+  (eval `(defadvice ,command (after indent-region activate)
+           (and (not current-prefix-arg)
+                (member major-mode '(emacs-lisp-mode lisp-mode
+                                                     clojure-mode    scheme-mode
+                                                     haskell-mode    ruby-mode
+                                                     rspec-mode      python-mode
+                                                     c-mode          c++-mode
+                                                     objc-mode       ;latex-mode
+                                                     plain-tex-mode))
+                (let ((mark-even-if-inactive transient-mark-mode))
+                  (indent-region (region-beginning) (region-end) nil))))))
 
 (push '("<\\?xml\\b[^>]*\\bencoding=\"utf-8\"[^>]*\\?>" . utf-8) auto-coding-regexp-alist)
 
@@ -151,6 +169,7 @@
 (require 'compile)
 (setq compilation-scroll-output t)
 (put 'compile-command 'safe-local-variable 'stringp)
+(setenv "MAKEFLAGS" "-w")
 
 ;;; Boost.Test fatal errors
 (add-to-list 'compilation-error-regexp-alist '("^\\(.+\\)(\\([[:digit:]]+\\)):[[:space:]]*\\(?:fatal \\)?error" 1 2 nil 2))
@@ -179,6 +198,8 @@
   (require 'sgml-mode))
 
 (when (locate-library "gtags")
+  (setq gtags-suggested-key-mapping t)
+  (setq gtags-disable-pushy-mouse-mapping t)
   (autoload 'gtags-mode "gtags" "" t))
 
 (defun my-imenu-helper()
@@ -205,10 +226,47 @@
 (add-hook 'emacs-lisp-mode-hook
           '(lambda ()
              (setq show-trailing-whitespace t)
-             (if (not (save-excursion (goto-char (point-min))
-                                      (re-search-forward "[[:blank:]]$" nil t)))
-                 (delete-trailing-whitespace-mode 1))
+             (delete-trailing-whitespace-mode 'clean)
              ))
+
+;; CC-mode
+(when (locate-library "smart-tabs-mode")
+  (require 'smart-tabs-mode)
+  (defadvice align (around smart-tabs activate)
+    (let ((indent-tabs-mode nil)) ad-do-it))
+  (defadvice align-regexp (around smart-tabs activate)
+    (let ((indent-tabs-mode nil)) ad-do-it))
+  (defadvice indent-relative (around smart-tabs activate)
+    (let ((indent-tabs-mode nil)) ad-do-it))
+  (defadvice indent-according-to-mode (around smart-tabs activate)
+    (let ((indent-tabs-mode indent-tabs-mode))
+      (if (memq indent-line-function
+                '(indent-relative
+                  indent-relative-maybe))
+          (setq indent-tabs-mode nil))
+      ad-do-it))
+  (defmacro smart-tabs-advice (function offset)
+    `(progn
+       (defvaralias ',offset 'tab-width)
+       (defadvice ,function (around smart-tabs activate)
+         (cond
+          (indent-tabs-mode
+           (save-excursion
+             (beginning-of-line)
+             (while (looking-at "\t*\\( +\\)\t+")
+               (replace-match "" nil nil nil 1)))
+           (setq tab-width tab-width)
+           (let ((tab-width fill-column)
+                 (,offset fill-column)
+                 (wstart (window-start)))
+             (unwind-protect
+                 (progn ad-do-it)
+                 ;(set-window-start (selected-window) wstart)
+               )))
+          (t
+           ad-do-it)))))
+  (smart-tabs-advice c-indent-line c-basic-offset)
+  (smart-tabs-advice c-indent-region c-basic-offset))
 
 (add-hook 'c-mode-common-hook
           '(lambda ()
@@ -217,13 +275,18 @@
              (local-set-key (kbd "<f7>") 'compile)
              (local-set-key (kbd "C-c M-m") 'my-imenu)
              (local-set-key (kbd "C-c , s") 'semantic-analyze-proto-impl-toggle)
+             (when (locate-library "smart-tabs-mode")
+               ;; TODO: The value 2 should be obtained from the common source
+               ;; as c-basic-offset
+               (setq tab-width 2)
+               (setq indent-tabs-mode t))
              (modify-syntax-entry ?_ "w")
              (setq show-trailing-whitespace t)
              (when (locate-library "gtags")
                (gtags-mode 1))
+             (make-local-variable 'gtags-ignore-case)
+             (setq gtags-ignore-case nil)
              ;(ede-minor-mode 1)
-;             (if (not (save-excursion (goto-char (point-min))
-;                                      (re-search-forward "[[:blank:]]$" nil t)))
              (delete-trailing-whitespace-mode 'clean)
              ))
 
@@ -231,6 +294,7 @@
           '(lambda ()
              (local-set-key (kbd "<f7>") 'compile)
              (modify-syntax-entry ?_ "w")
+             (delete-trailing-whitespace-mode 'clean)
              ))
 
 (add-hook 'compilation-mode-hook
@@ -242,6 +306,7 @@
              (define-key python-mode-map (kbd "<RET>") 'newline-and-indent)
              (modify-syntax-entry ?_ "w")
              (setq show-trailing-whitespace t)
+             (delete-trailing-whitespace-mode 'clean)
              ))
 
 (add-hook 'latex-mode-hook
@@ -257,26 +322,22 @@
           '(lambda ()
              (define-key haskell-mode-map [?\C-c ?\C-r] 'inferior-haskell-reload-file)
              (setq show-trailing-whitespace t)
-             (if (not (save-excursion (goto-char (point-min))
-                                      (re-search-forward "[[:blank:]]$" nil t)))
-                 (delete-trailing-whitespace-mode 1))
+             (delete-trailing-whitespace-mode 'clean)
              ))
 
 (add-hook 'erlang-mode-hook
           '(lambda ()
              (define-key erlang-mode-map (kbd "<RET>") 'newline-and-indent)
              (setq show-trailing-whitespace t)
-             (if (not (save-excursion (goto-char (point-min))
-                                      (re-search-forward "[[:blank:]]$" nil t)))
-                 (delete-trailing-whitespace-mode 1))
+             (delete-trailing-whitespace-mode 'clean)
              ))
 
 (add-hook 'html-mode-hook
           '(lambda ()
-            (define-key html-mode-map (kbd "<RET>") 'newline-and-indent)
-            (setq show-trailing-whitespace t)
-            (mmm-mode-on)
-            ))
+             (define-key html-mode-map (kbd "<RET>") 'newline-and-indent)
+             (setq show-trailing-whitespace t)
+             (mmm-mode-on)
+             ))
 
 (setq auto-mode-alist
       (append
@@ -294,8 +355,9 @@
        '(("\\.php3?$" . html-mode))
        auto-mode-alist))
 
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
+(setf completion-ignored-extensions
+      (append completion-ignored-extensions
+              '(".hi" ".pdf" "*.o")))
 
 (when (locate-library "template")
   (require 'template)
@@ -325,15 +387,6 @@
                                                                               (push (upcase (aref filename index)) result)
                                                                               (setq need-separator nil)))))))))))
   (template-initialize))
-
-;; (cond ((and
-;;        running-windows
-;;        (equal (getenv "USERDOMAIN") "TRANSAS"))
-;;       (setq tags-table-list
-;;             '("C:/VS.NET2003/Vc7/include" "C:/VS.NET2003/Vc7/PlatformSDK/Include"))
-;;       (custom-set-variables
-;;        '(ps-lpr-command "lpr")
-;;        '(ps-lpr-switches (quote ("-S" "cruncher" "-P" "lp" "-o" "l"))))))
 
 (when (locate-library "haskell-mode")
   (autoload 'haskell-mode "haskell-mode"
@@ -432,12 +485,10 @@
   (add-hook 'slime-mode-hook
             '(lambda ()
                (local-set-key (kbd "<RET>") 'newline-and-indent)
-               (if (not (save-excursion (goto-char (point-min))
-                                        (re-search-forward "[[:blank:]]$" nil t)))
-                   (delete-trailing-whitespace-mode 1))
+               (delete-trailing-whitespace-mode 'clean)
                ;;(unless (slime-connected-p)
                ;;  (save-excursion (slime)))))
-  )))
+               )))
 
 (when (locate-library "mof-mode")
   (require 'mof-mode))
@@ -449,21 +500,20 @@
             '(lambda ()
                (define-key closure-template-html-mode-map (kbd "C-c C-l") 'closure-template-compile)
                (setq show-trailing-whitespace t)
-               (if (not (save-excursion (goto-char (point-min))
-                                        (re-search-forward "[[:blank:]]$" nil t)))
-                   (delete-trailing-whitespace-mode 1)))))
+               (delete-trailing-whitespace-mode 'clean)
+               )))
 
 (add-hook 'js-mode-hook
           '(lambda ()
+             (define-key js-mode-map (kbd "<RET>") 'newline-and-indent)
              (setq show-trailing-whitespace t)
-             (if (not (save-excursion (goto-char (point-min))
-                                      (re-search-forward "[[:blank:]]$" nil t)))
-                 (delete-trailing-whitespace-mode 1))))
-(add-hook 'js-mode-hook #'fic-mode)
+             (electric-indent-mode t)
+             (delete-trailing-whitespace-mode 'clean)
+             (fic-mode)
+             ))
 
 (when (locate-library "php-mode")
   (autoload 'php-mode "php-mode" "Major mode `php-mode' for editing PHP code." t))
-  ;(add-to-list 'auto-mode-alist '("\\.php\\'" . php-mode)))
 
 (when (locate-library "uniquify")
   (require 'uniquify)
