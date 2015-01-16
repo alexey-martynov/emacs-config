@@ -146,7 +146,7 @@
 
 (setf completion-ignored-extensions
       (append completion-ignored-extensions
-              '(".hi")))
+              '(".hi" ".pdf")))
 
 (require 'compile)
 (setq compilation-scroll-output t)
