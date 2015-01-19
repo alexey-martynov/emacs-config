@@ -2,3 +2,5 @@
 slime
 # Closure-Template mode is obtained via symbolic link to actual implementation
 closure-template-html-mode.el
+# Egg mode is obtained from Git repository
+egg

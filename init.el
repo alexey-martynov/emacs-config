@@ -3,13 +3,25 @@
 (defvar running-x (eq window-system 'x))
 (defvar running-mac (eq window-system 'ns))
 
+(when (file-exists-p "~/.emacs.d/site-lisp")
+  (add-to-list 'load-path "~/.emacs.d/site-lisp")
+  (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+      (let* ((my-lisp-dir "~/.emacs.d/site-lisp/")
+             (default-directory my-lisp-dir))
+        (setq load-path (cons my-lisp-dir load-path))
+        (normal-top-level-add-subdirs-to-load-path))))
+
+(load "cyrillic-without-yo.el")
+
 (when running-mac
-  (set-input-method 'russian-computer)
+  (set-input-method 'russian-computer-without-yo)
   (deactivate-input-method)
   (setenv "PATH" (concat (getenv "PATH") ":/usr/texbin:/usr/local/bin"))
   (setq exec-path (append exec-path '("/usr/texbin" "/usr/local/bin"))))
 
-(if running-windows
+(when running-windows
+  (set-input-method 'russian-computer-without-yo)
+  (deactivate-input-method)
   (prefer-coding-system 'windows-1251)
   (prefer-coding-system 'utf-8))
 
@@ -37,14 +49,6 @@
 
 (when running-mac
   (set-fontset-font t 'cyrillic (font-spec :name "Monaco")))
-
-(when (file-exists-p "~/.emacs.d/site-lisp")
-  (add-to-list 'load-path "~/.emacs.d/site-lisp")
-  (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-      (let* ((my-lisp-dir "~/.emacs.d/site-lisp/")
-             (default-directory my-lisp-dir))
-        (setq load-path (cons my-lisp-dir load-path))
-        (normal-top-level-add-subdirs-to-load-path))))
 
 (when (file-exists-p "~/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes"))
@@ -152,7 +156,7 @@
                                                      haskell-mode    ruby-mode
                                                      rspec-mode      python-mode
                                                      c-mode          c++-mode
-                                                     objc-mode       latex-mode
+                                                     objc-mode       ;latex-mode
                                                      plain-tex-mode))
                 (let ((mark-even-if-inactive transient-mark-mode))
                   (indent-region (region-beginning) (region-end) nil))))))
@@ -178,6 +182,10 @@
         ("\\.hpp$" (".cpp" ".c"))
         ("\\.h$" (".cpp" ".c"))))
 (put 'ff-search-directories 'safe-local-variable 'listp)
+
+(setf completion-ignored-extensions
+      (append completion-ignored-extensions
+              '(".hi" ".pdf")))
 
 (require 'compile)
 (setq compilation-scroll-output t)
