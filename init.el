@@ -316,6 +316,9 @@
              (setq show-trailing-whitespace t)
              (delete-trailing-whitespace-mode 'clean)
              (local-set-key (kbd "<f7>") 'compile)
+             ;; Turn on Russian typesetting features
+             (setq-default tex-open-quote "\"<")
+             (setq-default tex-close-quote "\">")
              ))
 
 (add-hook 'haskell-mode-hook
