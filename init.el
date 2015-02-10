@@ -367,8 +367,8 @@ to a function that generates a unique name."
              (delete-trailing-whitespace-mode 'clean)
              (local-set-key (kbd "<f7>") 'compile)
              ;; Turn on Russian typesetting features
-             (setq-default tex-open-quote "\"<")
-             (setq-default tex-close-quote "\">")
+             (setq-default tex-open-quote "<<")
+             (setq-default tex-close-quote ">>")
              ))
 
 (add-hook 'haskell-mode-hook
