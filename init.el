@@ -33,6 +33,7 @@
 (when running-mac
   (set-fontset-font t 'cyrillic (font-spec :name "Monaco")))
 
+(require 'custom)
 (when (file-exists-p "~/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes"))
 
@@ -171,6 +172,9 @@
 (put 'compile-command 'safe-local-variable 'stringp)
 (setenv "MAKEFLAGS" "-w")
 
+(defvar compile-target nil)
+(make-variable-buffer-local 'compile-target)
+(put 'compile-target 'safe-local-variable 'stringp)
 (defun compile (command &optional comint)
   "Compile the program including the current buffer.  Default: run `make'.
 Runs COMMAND, a shell command, in a separate process asynchronously
