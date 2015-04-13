@@ -373,6 +373,8 @@ to a function that generates a unique name."
              ;; Turn on Russian typesetting features
              (setq-default tex-open-quote "<<")
              (setq-default tex-close-quote ">>")
+             (add-to-list 'tex-verbatim-environments "cxxsource")
+             (add-to-list 'tex-verbatim-environments "lispsource")
              ))
 
 (add-hook 'haskell-mode-hook
