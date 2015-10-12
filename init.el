@@ -167,6 +167,9 @@
       (append completion-ignored-extensions
               '(".hi" ".pdf")))
 
+(when (file-exists-p "~/.emacs.d/modes")
+       (mapc #'load (directory-files "~/.emacs.d/modes" t "\\.el$")))
+
 (require 'compile)
 (setq compilation-scroll-output t)
 (put 'compile-command 'safe-local-variable 'stringp)
@@ -245,6 +248,8 @@ to a function that generates a unique name."
       :back "</erl>")))
   (set-variable 'mmm-global-classes '(universal embedded-erlang)))
 
+(load "latex")
+
 (when (locate-library "delete-trailing-whitespace-mode")
   (require 'delete-trailing-whitespace-mode))
 
@@ -322,6 +327,7 @@ to a function that generates a unique name."
   (smart-tabs-advice c-indent-line c-basic-offset)
   (smart-tabs-advice c-indent-region c-basic-offset))
 
+
 (add-hook 'c-mode-common-hook
           '(lambda ()
              (local-set-key (kbd "<RET>") 'newline-and-indent)
@@ -329,6 +335,7 @@ to a function that generates a unique name."
              (local-set-key (kbd "<f7>") 'compile)
              (local-set-key (kbd "C-c M-m") 'my-imenu)
              (local-set-key (kbd "C-c , s") 'semantic-analyze-proto-impl-toggle)
+             (local-set-key (kbd "C-c l") 'latex-insert-label)
              (when (locate-library "smart-tabs-mode")
                ;; TODO: The value 2 should be obtained from the common source
                ;; as c-basic-offset
@@ -361,20 +368,6 @@ to a function that generates a unique name."
              (modify-syntax-entry ?_ "w")
              (setq show-trailing-whitespace t)
              (delete-trailing-whitespace-mode 'clean)
-             ))
-
-(add-hook 'latex-mode-hook
-          '(lambda ()
-             (define-key latex-mode-map (kbd "<RET>") 'newline-and-indent)
-             (turn-on-auto-fill)
-             (setq show-trailing-whitespace t)
-             (delete-trailing-whitespace-mode 'clean)
-             (local-set-key (kbd "<f7>") 'compile)
-             ;; Turn on Russian typesetting features
-             (setq-default tex-open-quote "<<")
-             (setq-default tex-close-quote ">>")
-             (add-to-list 'tex-verbatim-environments "cxxsource")
-             (add-to-list 'tex-verbatim-environments "lispsource")
              ))
 
 (add-hook 'haskell-mode-hook
