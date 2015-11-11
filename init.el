@@ -248,8 +248,6 @@ to a function that generates a unique name."
       :back "</erl>")))
   (set-variable 'mmm-global-classes '(universal embedded-erlang)))
 
-(load "latex")
-
 (when (locate-library "delete-trailing-whitespace-mode")
   (require 'delete-trailing-whitespace-mode))
 
