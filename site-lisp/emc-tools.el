@@ -50,7 +50,7 @@
     (interactive)
     (save-excursion
       (goto-char (point-min))
-      (let ((regex (concat comment-start-skip "COPYRIGHT\\s-+(C)\\s-EMC[^[:digit:]]**\\(?8:[[:digit:]]\\{4\\}-\\)?\\(?9:[[:digit:]]\\{4\\}\\)")))
+      (let ((regex (concat comment-start-skip "COPYRIGHT\\s-+(C)\\s-EMC[^[:digit:]]**\\(?8:[[:digit:]]\\{4\\}\\s-*-\\s-*\\)?\\(?9:[[:digit:]]\\{4\\}\\)")))
         (when (re-search-forward regex nil t 1)
           (let ((current-year (nth 5 (decode-time)))
                 (year (string-to-number (match-string-no-properties 9) 10)))
