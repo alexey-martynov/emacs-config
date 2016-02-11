@@ -50,6 +50,7 @@
 (when running-mac
   (set-fontset-font t 'cyrillic (font-spec :name "Monaco")))
 
+(require 'custom)
 (when (file-exists-p "~/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes"))
 
@@ -126,6 +127,13 @@
  '(visible-bell t)
  '(which-function-mode t))
 
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(tex-verbatim ((t (:inherit nil)))))
+
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq make-backup-files nil)
 (setq split-width-threshold most-positive-fixnum)
@@ -187,10 +195,66 @@
       (append completion-ignored-extensions
               '(".hi" ".pdf")))
 
+(when (file-exists-p "~/.emacs.d/modes")
+       (mapc #'load (directory-files "~/.emacs.d/modes" t "\\.el$")))
+
 (require 'compile)
 (setq compilation-scroll-output t)
 (put 'compile-command 'safe-local-variable 'stringp)
 (setenv "MAKEFLAGS" "-w")
+
+(defvar compile-target nil)
+(make-variable-buffer-local 'compile-target)
+(put 'compile-target 'safe-local-variable 'stringp)
+(defun compile (command &optional comint)
+  "Compile the program including the current buffer.  Default: run `make'.
+Runs COMMAND, a shell command, in a separate process asynchronously
+with output going to the buffer `*compilation*'.
+
+Patched by Alexey Martynov: if variable `compile-target' is defined it is
+appended as the final argument to the `compile-command'. This allows to
+specify a generic compile command like `make' and locally override target.
+
+You can then use the command \\[next-error] to find the next error message
+and move to the source code that caused it.
+
+If optional second arg COMINT is t the buffer will be in Comint mode with
+`compilation-shell-minor-mode'.
+
+Interactively, prompts for the command if the variable
+`compilation-read-command' is non-nil; otherwise uses `compile-command'.
+With prefix arg, always prompts.
+Additionally, with universal prefix arg, compilation buffer will be in
+comint mode, i.e. interactive.
+
+To run more than one compilation at once, start one then rename
+the \`*compilation*' buffer to some other name with
+\\[rename-buffer].  Then _switch buffers_ and start the new compilation.
+It will create a new \`*compilation*' buffer.
+
+On most systems, termination of the main compilation process
+kills its subprocesses.
+
+The name used for the buffer is actually whatever is returned by
+the function in `compilation-buffer-name-function', so you can set that
+to a function that generates a unique name."
+  (interactive
+   (list
+    (let ((command (eval compile-command)))
+      (if (or compilation-read-command current-prefix-arg)
+	  (compilation-read-command command)
+	command))
+    (consp current-prefix-arg)))
+  (unless (equal command (eval compile-command))
+    (setq compile-command command))
+  (when compile-target
+    (setq command (concat command " " compile-target)))
+  (save-some-buffers (not compilation-ask-about-save)
+                     compilation-save-buffers-predicate)
+  (setq-default compilation-directory default-directory)
+  (compilation-start command comint))
+(put 'compile-target 'safe-local-variable 'stringp)
+(put 'eval 'safe-local-variable 'listp)
 
 ;;; Boost.Test fatal errors
 (add-to-list 'compilation-error-regexp-alist '("^\\(.+\\)(\\([[:digit:]]+\\)):[[:space:]]*\\(?:fatal \\)?error" 1 2 nil 2))
@@ -302,6 +366,7 @@
 ;;  (smart-tabs-advice c-indent-line c-basic-offset)
 ;;  (smart-tabs-advice c-indent-region c-basic-offset))
 
+
 (add-hook 'c-mode-common-hook
           '(lambda ()
              (local-set-key (kbd "<RET>") 'newline-and-indent)
@@ -309,6 +374,7 @@
              (local-set-key (kbd "<f7>") 'compile)
              (local-set-key (kbd "C-c M-m") 'my-imenu)
              (local-set-key (kbd "C-c , s") 'semantic-analyze-proto-impl-toggle)
+             (local-set-key (kbd "C-c l") 'latex-insert-label)
              ;;(when (locate-library "smart-tabs-mode")
              ;;  ;; TODO: The value 2 should be obtained from the common source
              ;;  ;; as c-basic-offset
@@ -351,15 +417,6 @@
              (modify-syntax-entry ?_ "w")
              (setq show-trailing-whitespace t)
              (delete-trailing-whitespace-mode 'clean)
-             ))
-
-(add-hook 'latex-mode-hook
-          '(lambda ()
-             (define-key latex-mode-map (kbd "<RET>") 'newline-and-indent)
-             (turn-on-auto-fill)
-             (setq show-trailing-whitespace t)
-             (delete-trailing-whitespace-mode 'clean)
-             (local-set-key (kbd "<f7>") 'compile)
              ))
 
 (add-hook 'haskell-mode-hook
