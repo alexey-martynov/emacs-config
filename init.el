@@ -523,10 +523,12 @@ to a function that generates a unique name."
   (when (locate-library "~/quicklisp/slime-helper")
     (load "~/quicklisp/slime-helper"))
   (require 'slime)
-;  (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
-;  (setq slime-default-lisp 'sbcl)
-  (add-to-list 'slime-lisp-implementations '(ccl ("/opt/ccl/scripts/ccl64" "-K" "utf8")))
-  (setq slime-default-lisp 'ccl)
+  (when running-windows
+    (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
+    (setq slime-default-lisp 'sbcl))
+  (when running-mac
+    (add-to-list 'slime-lisp-implementations '(ccl ("ccl64" "-K" "utf8")))
+    (setq slime-default-lisp 'ccl))
   (slime-setup '(slime-fancy slime-asdf))
   (when (locate-library "closure-template-html-mode")
     (autoload 'closure-template-html-mode "closure-template-html-mode" "" t)
