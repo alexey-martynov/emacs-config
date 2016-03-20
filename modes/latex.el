@@ -12,6 +12,9 @@
     (c-mode
      (insert "/*$\\label{}$*/")
      (backward-char 4))
+    (lisp-mode
+     (insert ";$\\label{}$")
+     (backward-char 2))
     (latex-mode
      (insert "\\label{}")
      (backward-char))))
