@@ -22,6 +22,8 @@
 (when running-windows
   (set-input-method 'russian-computer-without-yo)
   (deactivate-input-method)
+  (setenv "PATH" (concat (getenv "PATH") ";C:\\texlive\\2014\\bin\\win32;C:\\MinGW\\bin;C:\\MinGW\\msys\\1.0\\bin"))
+  (setq exec-path (append exec-path '("C:/texlive/2014/bin/win32" "C:/MinGW/bin" "C:/MinGW/msys/1.0/bin")))
   (prefer-coding-system 'windows-1251)
   (prefer-coding-system 'utf-8))
 
