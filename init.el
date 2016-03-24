@@ -391,13 +391,6 @@ to a function that generates a unique name."
              (delete-trailing-whitespace-mode 'clean)
              ))
 
-(add-hook 'html-mode-hook
-          '(lambda ()
-             (define-key html-mode-map (kbd "<RET>") 'newline-and-indent)
-             (setq show-trailing-whitespace t)
-             (mmm-mode-on)
-             ))
-
 (setq auto-mode-alist
       (append
        '(("\\.h$" . c++-mode))
