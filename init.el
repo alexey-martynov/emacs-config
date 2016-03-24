@@ -16,8 +16,8 @@
 (when running-mac
   (set-input-method 'russian-computer-without-yo)
   (deactivate-input-method)
-  (setenv "PATH" (concat (getenv "PATH") ":/usr/texbin:/usr/local/bin"))
-  (setq exec-path (append exec-path '("/usr/texbin" "/usr/local/bin"))))
+  (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH") ":/Library/TeX/texbin"))
+  (setq exec-path (append '("/usr/local/bin") exec-path '("/Library/TeX/texbin"))))
 
 (when running-windows
   (set-input-method 'russian-computer-without-yo)
