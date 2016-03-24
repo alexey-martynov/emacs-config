@@ -557,15 +557,6 @@ to a function that generates a unique name."
                (delete-trailing-whitespace-mode 'clean)
                )))
 
-(add-hook 'js-mode-hook
-          '(lambda ()
-             (define-key js-mode-map (kbd "<RET>") 'newline-and-indent)
-             (setq show-trailing-whitespace t)
-             (electric-indent-mode t)
-             (delete-trailing-whitespace-mode 'clean)
-             (fic-mode)
-             ))
-
 (when (locate-library "php-mode")
   (autoload 'php-mode "php-mode" "Major mode `php-mode' for editing PHP code." t))
 
