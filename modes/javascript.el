@@ -1,5 +1,6 @@
 (defun avm-js-mode-hook ()
   (define-key js-mode-map (kbd "<RET>") 'newline-and-indent)
+  (setq js-indent-level 2)
   (setq show-trailing-whitespace t)
   (electric-indent-mode t)
   (delete-trailing-whitespace-mode 'clean)
