@@ -33,5 +33,6 @@
             (setq-default tex-close-quote ">>")
             (add-to-list 'tex-verbatim-environments "cxxsource")
             (add-to-list 'tex-verbatim-environments "lispsource")
+            (add-to-list 'tex-verbatim-environments "lisprepl")
             (add-to-list 'tex-verbatim-environments "console")
             ))
