@@ -623,11 +623,3 @@ to a function that generates a unique name."
 
 The hook `c-mode-common-hook' is run with no argument at mode
 initialization, then `protobuf-mode-hook'."))
-
-(when (locate-library "/usr/share/cmake-3.0/editors/emacs/cmake-mode.el")
-  (load "/usr/share/cmake-3.0/editors/emacs/cmake-mode.el")
-  (setq auto-mode-alist
-        (append
-         '(("CMakeLists\\.txt\\'" . cmake-mode))
-         '(("\\.cmake\\'" . cmake-mode))
-         auto-mode-alist)))
