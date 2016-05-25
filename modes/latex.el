@@ -12,6 +12,9 @@
     (c-mode
      (insert "/*$\\label{}$*/")
      (backward-char 4))
+    (lisp-mode
+     (insert ";$\\label{}$")
+     (backward-char 2))
     (latex-mode
      (insert "\\label{}")
      (backward-char))))
@@ -30,5 +33,6 @@
             (setq-default tex-close-quote ">>")
             (add-to-list 'tex-verbatim-environments "cxxsource")
             (add-to-list 'tex-verbatim-environments "lispsource")
+            (add-to-list 'tex-verbatim-environments "lisprepl")
             (add-to-list 'tex-verbatim-environments "console")
             ))

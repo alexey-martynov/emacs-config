@@ -16,12 +16,14 @@
 (when running-mac
   (set-input-method 'russian-computer-without-yo)
   (deactivate-input-method)
-  (setenv "PATH" (concat (getenv "PATH") ":/usr/texbin:/usr/local/bin"))
-  (setq exec-path (append exec-path '("/usr/texbin" "/usr/local/bin"))))
+  (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH") ":/Library/TeX/texbin"))
+  (setq exec-path (append '("/usr/local/bin") exec-path '("/Library/TeX/texbin"))))
 
 (when running-windows
   (set-input-method 'russian-computer-without-yo)
   (deactivate-input-method)
+  (setenv "PATH" (concat (getenv "PATH") ";C:\\texlive\\2014\\bin\\win32;C:\\MinGW\\bin;C:\\MinGW\\msys\\1.0\\bin"))
+  (setq exec-path (append exec-path '("C:/texlive/2014/bin/win32" "C:/MinGW/bin" "C:/MinGW/msys/1.0/bin")))
   (prefer-coding-system 'windows-1251)
   (prefer-coding-system 'utf-8))
 
@@ -433,13 +435,6 @@ to a function that generates a unique name."
              (delete-trailing-whitespace-mode 'clean)
              ))
 
-(add-hook 'html-mode-hook
-          '(lambda ()
-             (define-key html-mode-map (kbd "<RET>") 'newline-and-indent)
-             (setq show-trailing-whitespace t)
-             (mmm-mode-on)
-             ))
-
 (setq auto-mode-alist
       (append
        '(("\\.h$" . c++-mode))
@@ -565,8 +560,12 @@ to a function that generates a unique name."
   (when (locate-library "~/quicklisp/slime-helper")
     (load "~/quicklisp/slime-helper"))
   (require 'slime)
-  (add-to-list 'slime-lisp-implementations '(local-sbcl ("/home/martya/local/bin/sbcl")))
-  (setq slime-default-lisp 'local-sbcl)
+  (when running-windows
+    (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
+    (setq slime-default-lisp 'sbcl))
+  (when running-mac
+    (add-to-list 'slime-lisp-implementations '(ccl ("ccl64" "-K" "utf8")))
+    (setq slime-default-lisp 'ccl))
   (slime-setup '(slime-fancy slime-asdf))
   (setq common-lisp-hyperspec-root "file:///emc/martya/local/share/doc/common-lisp/HyperSpec/")
   (when (locate-library "w3m")
@@ -597,15 +596,6 @@ to a function that generates a unique name."
                (setq show-trailing-whitespace t)
                (delete-trailing-whitespace-mode 'clean)
                )))
-
-(add-hook 'js-mode-hook
-          '(lambda ()
-             (define-key js-mode-map (kbd "<RET>") 'newline-and-indent)
-             (setq show-trailing-whitespace t)
-             (electric-indent-mode t)
-             (delete-trailing-whitespace-mode 'clean)
-             (fic-mode)
-             ))
 
 (when (locate-library "php-mode")
   (autoload 'php-mode "php-mode" "Major mode `php-mode' for editing PHP code." t))
