@@ -4,3 +4,6 @@
 [submodule "site-lisp/markdown"]
 	path = site-lisp/markdown
 	url = https://github.com/jrblevin/markdown-mode.git
+[submodule "site-lisp/restclient"]
+	path = site-lisp/restclient
+	url = https://github.com/pashky/restclient.el.git
