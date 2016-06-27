@@ -1,3 +1,9 @@
 [submodule "site-lisp/egg"]
 	path = site-lisp/egg
-	url = https://github.com/bogolisk/egg.git
+	url = https://github.com/byplayer/egg.git
+[submodule "site-lisp/markdown"]
+	path = site-lisp/markdown
+	url = https://github.com/jrblevin/markdown-mode.git
+[submodule "site-lisp/restclient"]
+	path = site-lisp/restclient
+	url = https://github.com/pashky/restclient.el.git
