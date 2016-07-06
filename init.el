@@ -174,7 +174,7 @@
 
 (setf completion-ignored-extensions
       (append completion-ignored-extensions
-              '(".hi" ".pdf")))
+              '(".hi" ".pdf" ".o")))
 
 (when (file-exists-p "~/.emacs.d/modes")
        (mapc #'load (directory-files "~/.emacs.d/modes" t "\\.el$")))
@@ -406,10 +406,6 @@ to a function that generates a unique name."
        '(("\\.yaws$" . html-mode))
        '(("\\.php3?$" . html-mode))
        auto-mode-alist))
-
-(setf completion-ignored-extensions
-      (append completion-ignored-extensions
-              '(".hi" ".pdf" "*.o")))
 
 (when (locate-library "template")
   (require 'template)
