@@ -461,16 +461,6 @@ to a function that generates a unique name."
   (autoload 'inferior-haskell-load-file "inf-haskell"
     "Major mode for Haskell interaction." t))
 
-(setq ispell-dictionary "en_US")
-(setq ispell-program-name "aspell")
-
-(add-hook 'text-mode-hook
-          '(lambda ()
-             (if (buffer-file-name (current-buffer))
-                 (if (member (file-name-nondirectory (buffer-file-name (current-buffer))) '("COMMIT_EDITMSG" "TAG_EDITMSG"))
-                     (flyspell-mode t))
-               )))
-
 (when (locate-library "org-install")
   (require 'org-install)
   (setq org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)" "CANCELLED(c@/!)"))))
