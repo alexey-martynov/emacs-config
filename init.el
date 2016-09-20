@@ -87,7 +87,6 @@
  '(column-number-mode t)
  '(compilation-read-command nil)
  '(cua-auto-tabify-rectangles nil)
- '(delete-selection-mode t)
  '(font-lock-mode t t (font-lock))
  '(imenu-sort-function 'imenu--sort-by-name)
  '(indent-tabs-mode nil)
@@ -162,6 +161,8 @@
       (forward-char 36)
       (delete-char 1)))
   (define-key global-map "\C-cg" 'insert-uuid))
+
+(delete-selection-mode t)
 
 (require 'find-file)
 
