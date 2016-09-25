@@ -11,4 +11,4 @@
                '("\\.js$" (".html")))
   )
 
-(add-hook 'js-mode-hook #'avm-js-mode-hook)
+(add-hook 'js2-mode-hook #'avm-js-mode-hook)
