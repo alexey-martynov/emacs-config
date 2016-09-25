@@ -13,7 +13,12 @@
 
 (when (locate-library "js2-mode")
   (add-hook 'js2-mode-hook #'avm-js-mode-hook)
-  (setf (cdr (assoc "\\.jsm?\\'" auto-mode-alist)) 'js2-mode))
+  (let ((mode (assoc "\\.jsm?\\'" auto-mode-alist)))
+    (when mode
+      (setf (cdr mode) 'js2-mode)))
+  (let ((mode (assoc "\\.js\\'" auto-mode-alist)))
+    (when mode
+      (setf (cdr mode) 'js2-mode))))
 
 (unless (locate-library "js2-mode")
   (add-hook 'js-mode-hook #'avm-js-mode-hook))
