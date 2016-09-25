@@ -28,8 +28,8 @@
 (custom-theme-set-faces
  'twilight
  '(default ((t (:background "#141414" :foreground "#f8f8f8"))))
- '(cursor ((t (:foreground "#a7a7a7"))))
- '(region ((t (:background "#27292a"))))
+ '(cursor ((t (:background "#a7a7a7"))))
+ '(region ((t (:background "#5C6163"))))
  '(blue ((t (:foreground "blue"))))
  '(border-glyph ((t (nil))))
  '(buffers-tab ((t (:background "#141414" :foreground "#CACACA"))))
@@ -59,8 +59,6 @@
  ;;'(font-lock-warning-face ((t (:background "#EE799F" :foreground "red"))))
  '(font-lock-warning-face ((t (:background "#662335" :foreground "red"))))
  '(gui-element ((t (:background "#D4D0C8" :foreground "black"))))
- ;;'(region ((t (:background "#27292A"))))
- '(region ((t (:background "#5C6163"))))
  '(mode-line ((t (:background "grey75" :foreground "black"))))
  '(highlight ((t (:background "#111111"))))
  '(highline-face ((t (:background "SeaGreen"))))
