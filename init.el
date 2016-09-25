@@ -3,13 +3,11 @@
 (defvar running-x (eq window-system 'x))
 (defvar running-mac (eq window-system 'ns))
 
-(when (file-exists-p "~/.emacs.d/site-lisp")
-  (add-to-list 'load-path "~/.emacs.d/site-lisp")
-  (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-      (let* ((my-lisp-dir "~/.emacs.d/site-lisp/")
-             (default-directory my-lisp-dir))
-        (setq load-path (cons my-lisp-dir load-path))
-        (normal-top-level-add-subdirs-to-load-path))))
+(when (and (file-exists-p "~/.emacs.d/site-start.el") (not (symbol-function 'update-all-autoloads)))
+  (load "~/.emacs.d/site-start.el"))
+
+(when (file-exists-p "~/.emacs.d/site-lisp/loaddefs")
+  (load "~/.emacs.d/site-lisp/loaddefs"))
 
 (load "cyrillic-without-yo.el")
 

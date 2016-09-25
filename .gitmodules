@@ -10,3 +10,6 @@
 [submodule "site-lisp/smarttabs"]
 	path = site-lisp/smarttabs
 	url = https://github.com/jcsalomon/smarttabs.git
+[submodule "site-lisp/js2-mode"]
+	path = site-lisp/js2-mode
+	url = https://github.com/mooz/js2-mode.git
