@@ -203,8 +203,7 @@
 
 (when (locate-library "gtags")
   (setq gtags-suggested-key-mapping t)
-  (setq gtags-disable-pushy-mouse-mapping t)
-  (autoload 'gtags-mode "gtags" "" t))
+  (setq gtags-disable-pushy-mouse-mapping t))
 
 (defun my-imenu-helper()
   (let (index-alist
@@ -325,16 +324,10 @@
   (template-initialize))
 
 (when (locate-library "haskell-mode")
-  (autoload 'haskell-mode "haskell-mode"
-    "Major mode for editing Haskell scripts." t)
-  (autoload 'literate-haskell-mode "haskell-mode"
-    "Major mode for editing literate Haskell scripts." t)
   (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
   (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
   (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-  (setq haskell-font-lock-symbols t)
-  (autoload 'inferior-haskell-load-file "inf-haskell"
-    "Major mode for Haskell interaction." t))
+  (setq haskell-font-lock-symbols t))
 
 (when (locate-library "org-install")
   (require 'org-install)
@@ -398,7 +391,6 @@
     (setq slime-default-lisp 'ccl))
   (slime-setup '(slime-fancy slime-asdf))
   (when (locate-library "closure-template-html-mode")
-    (autoload 'closure-template-html-mode "closure-template-html-mode" "" t)
     (add-to-list 'auto-mode-alist
                  '("\\.tmpl$" . closure-template-html-mode)))
   (setq common-lisp-hyperspec-root "file:///home/alexey/docs/lisp/HyperSpec/")
@@ -422,7 +414,7 @@
   (require 'mof-mode))
 
 (when (locate-library "closure-template-html-mode")
-  (autoload 'closure-template-html-mode "closure-template-html-mode" "Major mode for editing Closure Templates" t)
+  ;;(autoload 'closure-template-html-mode "closure-template-html-mode" "Major mode for editing Closure Templates" t)
   (add-to-list 'auto-mode-alist '("\\.tmpl\\'" . closure-template-html-mode))
   (add-hook 'closure-template-html-mode-hook
             '(lambda ()
@@ -430,9 +422,6 @@
                (setq show-trailing-whitespace t)
                (delete-trailing-whitespace-mode 'clean)
                )))
-
-(when (locate-library "php-mode")
-  (autoload 'php-mode "php-mode" "Major mode `php-mode' for editing PHP code." t))
 
 (when (locate-library "uniquify")
   (require 'uniquify)
