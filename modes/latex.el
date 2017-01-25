@@ -28,8 +28,9 @@
   (delete-trailing-whitespace-mode 'clean)
   (local-set-key (kbd "<f7>") 'compile)
 
-  ;; Always turn on Flyspell
-  (flyspell-mode t)
+  ;; Always turn on Flyspell outside Windows
+  (unless running-windows
+    (flyspell-mode t))
 
   ;; Turn on Russian typesetting features
   (setq-default tex-open-quote "<<")
