@@ -86,6 +86,7 @@
  '(compilation-read-command nil)
  '(cua-auto-tabify-rectangles nil)
  '(font-lock-mode t t (font-lock))
+ '(haskell-process-type 'cabal-repl)
  '(imenu-sort-function 'imenu--sort-by-name)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
@@ -260,13 +261,6 @@
           '(lambda ()
              (define-key python-mode-map (kbd "<RET>") 'newline-and-indent)
              (modify-syntax-entry ?_ "w")
-             (setq show-trailing-whitespace t)
-             (delete-trailing-whitespace-mode 'clean)
-             ))
-
-(add-hook 'haskell-mode-hook
-          '(lambda ()
-             (define-key haskell-mode-map [?\C-c ?\C-r] 'inferior-haskell-reload-file)
              (setq show-trailing-whitespace t)
              (delete-trailing-whitespace-mode 'clean)
              ))
