@@ -19,6 +19,16 @@
      (insert "\\label{}")
      (backward-char))))
 
+(define-skeleton latex-insert-emph
+  "Insert \emph"
+  nil
+  "\\emph{" _ "}")
+
+(define-skeleton latex-insert-index
+  "Insert \index"
+  nil
+  "\\index{" _ "}")
+
 (defun avm-latex-mode-hook ()
   (define-key latex-mode-map (kbd "<RET>") 'newline-and-indent)
   (define-key latex-mode-map (kbd "C-c r") 'latex-insert-reference)
@@ -26,6 +36,8 @@
   (turn-on-auto-fill)
   (setq show-trailing-whitespace t)
   (delete-trailing-whitespace-mode 'clean)
+  (local-set-key (kbd "M-i") 'latex-insert-emph)
+  (local-set-key (kbd "C-c M-i") 'latex-insert-index)
   (local-set-key (kbd "<f7>") 'compile)
 
   ;; Always turn on Flyspell outside Windows
