@@ -3,7 +3,7 @@
 (defvar running-x (eq window-system 'x))
 (defvar running-mac (eq window-system 'ns))
 
-(when (and (file-exists-p "~/.emacs.d/site-start.el") (not (symbol-function 'update-all-autoloads)))
+(when (and (file-exists-p "~/.emacs.d/site-start.el") (not (fboundp 'update-all-autoloads)))
   (load "~/.emacs.d/site-start.el"))
 
 (when (file-exists-p "~/.emacs.d/site-lisp/loaddefs")
