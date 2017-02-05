@@ -288,6 +288,7 @@
        '(("\\.org$" . org-mode))
        '(("\\.yaws$" . html-mode))
        '(("\\.php3?$" . html-mode))
+       '(("\\.xslt?$" . xml-mode))
        auto-mode-alist))
 
 (when (locate-library "template")
