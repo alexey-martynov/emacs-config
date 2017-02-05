@@ -119,6 +119,8 @@
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
 
+(setq skeleton-end-newline nil)
+
 (if running-x
     (global-set-key [f13] 'toggle-input-method))
 
