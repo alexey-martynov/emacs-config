@@ -3,13 +3,11 @@
 (defvar running-x (eq window-system 'x))
 (defvar running-mac (eq window-system 'ns))
 
-(when (file-exists-p "~/.emacs.d/site-lisp")
-  (add-to-list 'load-path "~/.emacs.d/site-lisp")
-  (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-      (let* ((my-lisp-dir "~/.emacs.d/site-lisp/")
-             (default-directory my-lisp-dir))
-        (setq load-path (cons my-lisp-dir load-path))
-        (normal-top-level-add-subdirs-to-load-path))))
+(when (and (file-exists-p "~/.emacs.d/site-start.el") (not (fboundp 'update-all-autoloads)))
+  (load "~/.emacs.d/site-start.el"))
+
+(when (file-exists-p "~/.emacs.d/site-lisp/loaddefs")
+  (load "~/.emacs.d/site-lisp/loaddefs"))
 
 (load "cyrillic-without-yo.el")
 
@@ -104,8 +102,8 @@
  '(column-number-mode t)
  '(compilation-read-command nil)
  '(cua-auto-tabify-rectangles nil)
- '(delete-selection-mode t)
  '(font-lock-mode t t (font-lock))
+ '(haskell-process-type 'cabal-repl)
  '(imenu-sort-function 'imenu--sort-by-name)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
@@ -141,6 +139,8 @@
 (setq split-width-threshold most-positive-fixnum)
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
+
+(setq skeleton-end-newline nil)
 
 (if running-x
     (global-set-key [f13] 'toggle-input-method))
@@ -184,6 +184,8 @@
       (delete-char 1)))
   (define-key global-map "\C-cg" 'insert-uuid))
 
+(delete-selection-mode t)
+
 (require 'find-file)
 
 (setq ff-other-file-alist
@@ -195,71 +197,10 @@
 
 (setf completion-ignored-extensions
       (append completion-ignored-extensions
-              '(".hi" ".pdf")))
+              '(".hi" ".pdf" ".o")))
 
 (when (file-exists-p "~/.emacs.d/modes")
        (mapc #'load (directory-files "~/.emacs.d/modes" t "\\.el$")))
-
-(require 'compile)
-(setq compilation-scroll-output t)
-(put 'compile-command 'safe-local-variable 'stringp)
-(setenv "MAKEFLAGS" "-w")
-
-(defvar compile-target nil)
-(make-variable-buffer-local 'compile-target)
-(put 'compile-target 'safe-local-variable 'stringp)
-(defun compile (command &optional comint)
-  "Compile the program including the current buffer.  Default: run `make'.
-Runs COMMAND, a shell command, in a separate process asynchronously
-with output going to the buffer `*compilation*'.
-
-Patched by Alexey Martynov: if variable `compile-target' is defined it is
-appended as the final argument to the `compile-command'. This allows to
-specify a generic compile command like `make' and locally override target.
-
-You can then use the command \\[next-error] to find the next error message
-and move to the source code that caused it.
-
-If optional second arg COMINT is t the buffer will be in Comint mode with
-`compilation-shell-minor-mode'.
-
-Interactively, prompts for the command if the variable
-`compilation-read-command' is non-nil; otherwise uses `compile-command'.
-With prefix arg, always prompts.
-Additionally, with universal prefix arg, compilation buffer will be in
-comint mode, i.e. interactive.
-
-To run more than one compilation at once, start one then rename
-the \`*compilation*' buffer to some other name with
-\\[rename-buffer].  Then _switch buffers_ and start the new compilation.
-It will create a new \`*compilation*' buffer.
-
-On most systems, termination of the main compilation process
-kills its subprocesses.
-
-The name used for the buffer is actually whatever is returned by
-the function in `compilation-buffer-name-function', so you can set that
-to a function that generates a unique name."
-  (interactive
-   (list
-    (let ((command (eval compile-command)))
-      (if (or compilation-read-command current-prefix-arg)
-	  (compilation-read-command command)
-	command))
-    (consp current-prefix-arg)))
-  (unless (equal command (eval compile-command))
-    (setq compile-command command))
-  (when compile-target
-    (setq command (concat command " " compile-target)))
-  (save-some-buffers (not compilation-ask-about-save)
-                     compilation-save-buffers-predicate)
-  (setq-default compilation-directory default-directory)
-  (compilation-start command comint))
-(put 'compile-target 'safe-local-variable 'stringp)
-(put 'eval 'safe-local-variable 'listp)
-
-;;; Boost.Test fatal errors
-(add-to-list 'compilation-error-regexp-alist '("^\\(.+\\)(\\([[:digit:]]+\\)):[[:space:]]*\\(?:fatal \\)?error" 1 2 nil 2))
 
 (when (locate-library "mmm-mode")
   (require 'mmm-mode)
@@ -286,8 +227,7 @@ to a function that generates a unique name."
 
 (when (locate-library "gtags")
   (setq gtags-suggested-key-mapping t)
-  (setq gtags-disable-pushy-mouse-mapping t)
-  (autoload 'gtags-mode "gtags" "" t))
+  (setq gtags-disable-pushy-mouse-mapping t))
 
 (defun my-imenu-helper()
   (let (index-alist
@@ -329,79 +269,6 @@ to a function that generates a unique name."
                                      ff-search-directories)))
                  (setq ff-search-directories (append ff-search-directories-extra current-list))))))
 
-;; CC-mode
-;;(when (locate-library "smart-tabs-mode")
-;;  (require 'smart-tabs-mode)
-;;  (defadvice align (around smart-tabs activate)
-;;    (let ((indent-tabs-mode nil)) ad-do-it))
-;;  (defadvice align-regexp (around smart-tabs activate)
-;;    (let ((indent-tabs-mode nil)) ad-do-it))
-;;  (defadvice indent-relative (around smart-tabs activate)
-;;    (let ((indent-tabs-mode nil)) ad-do-it))
-;;  (defadvice indent-according-to-mode (around smart-tabs activate)
-;;    (let ((indent-tabs-mode indent-tabs-mode))
-;;      (if (memq indent-line-function
-;;                '(indent-relative
-;;                  indent-relative-maybe))
-;;          (setq indent-tabs-mode nil))
-;;      ad-do-it))
-;;  (defmacro smart-tabs-advice (function offset)
-;;    `(progn
-;;       (defvaralias ',offset 'tab-width)
-;;       (defadvice ,function (around smart-tabs activate)
-;;         (cond
-;;          (indent-tabs-mode
-;;           (save-excursion
-;;             (beginning-of-line)
-;;             (while (looking-at "\t*\\( +\\)\t+")
-;;               (replace-match "" nil nil nil 1)))
-;;           (setq tab-width tab-width)
-;;           (let ((tab-width fill-column)
-;;                 (,offset fill-column)
-;;                 (wstart (window-start)))
-;;             (unwind-protect
-;;                 (progn ad-do-it)
-;;                 ;(set-window-start (selected-window) wstart)
-;;               )))
-;;          (t
-;;           ad-do-it)))))
-;;  (smart-tabs-advice c-indent-line c-basic-offset)
-;;  (smart-tabs-advice c-indent-region c-basic-offset))
-
-
-(add-hook 'c-mode-common-hook
-          '(lambda ()
-             (local-set-key (kbd "<RET>") 'newline-and-indent)
-             (local-set-key (kbd "\C-co") 'ff-find-other-file)
-             (local-set-key (kbd "<f7>") 'compile)
-             (local-set-key (kbd "C-c M-m") 'my-imenu)
-             (local-set-key (kbd "C-c , s") 'semantic-analyze-proto-impl-toggle)
-             (local-set-key (kbd "C-c l") 'latex-insert-label)
-             ;;(when (locate-library "smart-tabs-mode")
-             ;;  ;; TODO: The value 2 should be obtained from the common source
-             ;;  ;; as c-basic-offset
-             ;;  (setq tab-width 2)
-             ;;  (setq indent-tabs-mode t)
-             (modify-syntax-entry ?_ "w")
-             (setq show-trailing-whitespace t)
-             (when (locate-library "gtags")
-               (gtags-mode 1))
-             (make-local-variable 'gtags-ignore-case)
-             (setq gtags-ignore-case nil)
-             ;(ede-minor-mode 1)
-             (delete-trailing-whitespace-mode 'clean)
-             ;; Tune search directories
-             (let ((filename buffer-file-name))
-               (when filename
-                 (let ((dir (file-name-nondirectory (directory-file-name (file-name-directory filename))))
-                       (current-list (if (symbolp ff-search-directories)
-                                         (symbol-value ff-search-directories)
-                                       ff-search-directories)))
-                   (if (equal dir "src")
-                       (setq ff-search-directories (append '("../include/*") current-list))
-                     (setq ff-search-directories (append '("src/*") current-list))))))
-             ))
-
 (add-hook 'makefile-mode-hook
           '(lambda ()
              (local-set-key (kbd "<f7>") 'compile)
@@ -417,13 +284,6 @@ to a function that generates a unique name."
           '(lambda ()
              (define-key python-mode-map (kbd "<RET>") 'newline-and-indent)
              (modify-syntax-entry ?_ "w")
-             (setq show-trailing-whitespace t)
-             (delete-trailing-whitespace-mode 'clean)
-             ))
-
-(add-hook 'haskell-mode-hook
-          '(lambda ()
-             (define-key haskell-mode-map [?\C-c ?\C-r] 'inferior-haskell-reload-file)
              (setq show-trailing-whitespace t)
              (delete-trailing-whitespace-mode 'clean)
              ))
@@ -450,11 +310,8 @@ to a function that generates a unique name."
        '(("\\.yaws$" . html-mode))
        '(("\\.php3?$" . html-mode))
        '(("\\.proto" . protobuf-mode))
+       '(("\\.xslt?$" . xml-mode))
        auto-mode-alist))
-
-(setf completion-ignored-extensions
-      (append completion-ignored-extensions
-              '(".hi" ".pdf" "*.o")))
 
 (when (locate-library "template")
   (require 'template)
@@ -486,10 +343,6 @@ to a function that generates a unique name."
   (template-initialize))
 
 (when (locate-library "haskell-mode")
-  (autoload 'haskell-mode "haskell-mode"
-    "Major mode for editing Haskell scripts." t)
-  (autoload 'literate-haskell-mode "haskell-mode"
-    "Major mode for editing literate Haskell scripts." t)
   (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
   (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
   (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
@@ -568,6 +421,9 @@ to a function that generates a unique name."
     (setq slime-default-lisp 'ccl))
   (slime-setup '(slime-fancy slime-asdf))
   (setq common-lisp-hyperspec-root "file:///emc/martya/local/share/doc/common-lisp/HyperSpec/")
+  (when (locate-library "closure-template-html-mode")
+    (add-to-list 'auto-mode-alist
+                 '("\\.tmpl$" . closure-template-html-mode)))
   (when (locate-library "w3m")
     (require 'hyperspec)
     (defun hyperspec-lookup (&optional symbol-name)
@@ -588,7 +444,7 @@ to a function that generates a unique name."
   (require 'mof-mode))
 
 (when (locate-library "closure-template-html-mode")
-  (autoload 'closure-template-html-mode "closure-template-html-mode" "Major mode for editing Closure Templates" t)
+  ;;(autoload 'closure-template-html-mode "closure-template-html-mode" "Major mode for editing Closure Templates" t)
   (add-to-list 'auto-mode-alist '("\\.tmpl\\'" . closure-template-html-mode))
   (add-hook 'closure-template-html-mode-hook
             '(lambda ()
@@ -596,12 +452,6 @@ to a function that generates a unique name."
                (setq show-trailing-whitespace t)
                (delete-trailing-whitespace-mode 'clean)
                )))
-
-(when (locate-library "php-mode")
-  (autoload 'php-mode "php-mode" "Major mode `php-mode' for editing PHP code." t))
-
-(when (locate-library "upstart-mode")
-  (autoload 'upstart-mode "upstart-mode" "A mode for upstart files" t))
 
 (when (locate-library "uniquify")
   (require 'uniquify)
@@ -623,3 +473,4 @@ to a function that generates a unique name."
 
 The hook `c-mode-common-hook' is run with no argument at mode
 initialization, then `protobuf-mode-hook'."))
+

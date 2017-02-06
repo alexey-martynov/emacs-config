@@ -7,3 +7,12 @@
 [submodule "site-lisp/restclient"]
 	path = site-lisp/restclient
 	url = https://github.com/pashky/restclient.el.git
+[submodule "site-lisp/smarttabs"]
+	path = site-lisp/smarttabs
+	url = https://github.com/jcsalomon/smarttabs.git
+[submodule "site-lisp/js2-mode"]
+	path = site-lisp/js2-mode
+	url = https://github.com/mooz/js2-mode.git
+[submodule "site-lisp/haskell-mode"]
+	path = site-lisp/haskell-mode
+	url = https://github.com/haskell/haskell-mode.git

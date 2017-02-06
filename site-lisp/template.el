@@ -1065,7 +1065,6 @@ asked whether to use the template, see `template-confirm-insecure'."
 ;;;  Main functions
 ;;;===========================================================================
 
-;;;###autoload
 (defun template-single-comment (&optional arg)
   "Decorate the comment in the current line with dashes and alike.
 The line must be a comment-only line or must contain a comment ending by
@@ -1123,7 +1122,6 @@ style to use.  The length of the resulting line is determined by
      nil syntax)))
 (put 'template-single-comment 'template-secure-command t)
 
-;;;###autoload
 (defun template-block-comment (&optional arg)
   "Decorate the current block of comment-only lines with dashes and alike.
 That is, surround the the contiguous comment-only lines around point
@@ -1552,7 +1550,6 @@ update."
 ;;;  Update header
 ;;;===========================================================================
 
-;;;###autoload
 (defun template-update-header (&optional show)
   "Replace old file name in header with current file name.
 If SHOW is t, just return region of the filename or nil.  Otherwise,
@@ -1726,7 +1723,6 @@ Add an entry to `command-history' if necessary and call function in
 	(error "No template file provided"))
     (list (expand-file-name tpl (file-name-directory (cdr use))))))
 
-;;;###autoload
 (defun template-expand-template (template)
   "Expand template file TEMPLATE and insert result in current buffer.
 Using a template for inserting some text consists of:
@@ -1764,7 +1760,6 @@ Return \(FILE TEMPLATE)."
 	      nil
 	    (expand-file-name tpl (file-name-directory (cdr use)))))))
 
-;;;###autoload
 (defun template-new-file (file template &optional with-undo)
   "Open a new file FILE by using a TEMPLATE.
 Using a template for creating a new file consists of, steps 1 to 3 are
@@ -2537,7 +2532,6 @@ See `easy-menu-define' for the format of MENU."
 	     (setq path nil)))
 	 (when path (add-submenu path menu)))))
 
-;;;###autoload
 (defunx template-initialize (&rest dummies)
   ;; checkdoc-params: (dummies)
   "Initialized package template.  See variable `template-initialize'."
