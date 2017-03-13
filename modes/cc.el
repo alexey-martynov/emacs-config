@@ -5,11 +5,6 @@
   (local-set-key (kbd "C-c M-m") 'my-imenu)
   (local-set-key (kbd "C-c , s") 'semantic-analyze-proto-impl-toggle)
   (local-set-key (kbd "C-c l") 'latex-insert-label)
-  (when (locate-library "smart-tabs-mode")
-    ;; TODO: The value 2 should be obtained from the common source
-    ;; as c-basic-offset
-    (setq tab-width 2)
-    (setq indent-tabs-mode t))
   (modify-syntax-entry ?_ "w")
   (setq show-trailing-whitespace t)
   (when (locate-library "gtags")
