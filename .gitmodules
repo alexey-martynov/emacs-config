@@ -19,3 +19,6 @@
 [submodule "site-lisp/typescript"]
 	path = site-lisp/typescript
 	url = https://github.com/ananthakumaran/typescript.el.git
+[submodule "site-lisp/scss-mode"]
+	path = site-lisp/scss-mode
+	url = https://github.com/antonj/scss-mode.git
