@@ -16,3 +16,6 @@
 [submodule "site-lisp/haskell-mode"]
 	path = site-lisp/haskell-mode
 	url = https://github.com/haskell/haskell-mode.git
+[submodule "site-lisp/typescript"]
+	path = site-lisp/typescript
+	url = https://github.com/ananthakumaran/typescript.el.git
