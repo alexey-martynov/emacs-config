@@ -413,12 +413,16 @@
   (when (locate-library "~/quicklisp/slime-helper")
     (load "~/quicklisp/slime-helper"))
   (require 'slime)
-  (when running-windows
+  (cond
+   (running-windows
     (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
     (setq slime-default-lisp 'sbcl))
-  (when running-mac
+   (running-mac
     (add-to-list 'slime-lisp-implementations '(ccl ("ccl64" "-K" "utf8")))
     (setq slime-default-lisp 'ccl))
+   (t
+    (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
+    (setq slime-default-lisp 'sbcl)))
   (slime-setup '(slime-fancy slime-asdf))
   (setq common-lisp-hyperspec-root "file:///emc/martya/local/share/doc/common-lisp/HyperSpec/")
   (when (locate-library "closure-template-html-mode")
@@ -473,4 +477,3 @@
 
 The hook `c-mode-common-hook' is run with no argument at mode
 initialization, then `protobuf-mode-hook'."))
-
