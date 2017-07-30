@@ -25,3 +25,7 @@
 [submodule "themes/solarized"]
 	path = themes/solarized
 	url = https://github.com/sellout/emacs-color-theme-solarized.git
+[submodule "site-lisp/yaml-mode"]
+	path = site-lisp/yaml-mode
+	url = https://github.com/yoshiki/yaml-mode.git
+
