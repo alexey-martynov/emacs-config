@@ -199,6 +199,10 @@
       (append completion-ignored-extensions
               '(".hi" ".pdf" ".o")))
 
+(when (locate-library "delete-trailing-whitespace-mode")
+  (message "Loading")
+  (require 'delete-trailing-whitespace-mode))
+
 (when (file-exists-p "~/.emacs.d/modes")
        (mapc #'load (directory-files "~/.emacs.d/modes" t "\\.el$")))
 
@@ -218,9 +222,6 @@
       :front "<erl>"
       :back "</erl>")))
   (set-variable 'mmm-global-classes '(universal embedded-erlang)))
-
-(when (locate-library "delete-trailing-whitespace-mode")
-  (require 'delete-trailing-whitespace-mode))
 
 (when (locate-library "sgml-mode")
   (require 'sgml-mode))
@@ -357,6 +358,14 @@
              (if (buffer-file-name (current-buffer))
                  (if (member (file-name-nondirectory (buffer-file-name (current-buffer))) '("COMMIT_EDITMSG" "TAG_EDITMSG"))
                      (flyspell-mode t))
+               )))
+
+(add-hook 'text-mode-hook
+          '(lambda ()
+             (if (buffer-file-name (current-buffer))
+                 (when (member (file-name-nondirectory (buffer-file-name (current-buffer))) '("COMMIT_EDITMSG" "TAG_EDITMSG"))
+                   (flyspell-mode t)
+                   (auto-fill-mode t))
                )))
 
 (when (locate-library "org-install")
