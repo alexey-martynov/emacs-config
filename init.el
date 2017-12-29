@@ -327,6 +327,14 @@
   (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
   (setq haskell-font-lock-symbols t))
 
+(add-hook 'text-mode-hook
+          '(lambda ()
+             (if (buffer-file-name (current-buffer))
+                 (when (member (file-name-nondirectory (buffer-file-name (current-buffer))) '("COMMIT_EDITMSG" "TAG_EDITMSG"))
+                   (flyspell-mode t)
+                   (auto-fill-mode t))
+               )))
+
 (when (locate-library "org-install")
   (require 'org-install)
   (setq org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)" "CANCELLED(c@/!)"))))
