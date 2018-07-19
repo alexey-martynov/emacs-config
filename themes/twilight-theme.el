@@ -65,7 +65,7 @@
  '(left-margin ((t (nil))))
  '(text-cursor ((t (:background "yellow" :foreground "black"))))
  '(toolbar ((t (nil))))
- '(show-paren-match ((t (:background "#09093F"))))
+ '(show-paren-match ((t (:background "#131386"))))
  '(underline ((nil (:underline nil))))
  '(zmacs-region ((t (:background "snow" :foreground "blue")))))
 
