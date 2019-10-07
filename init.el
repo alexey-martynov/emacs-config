@@ -36,8 +36,11 @@
 (require 'custom)
 (when (file-exists-p "~/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes"))
-
-(load-theme 'twilight t)
+(if (file-exists-p "~/.emacs.d/themes/solarized")
+    (progn
+      (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/solarized")
+      (load-theme 'solarized t))
+  (load-theme 'twilight t))
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
