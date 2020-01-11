@@ -1,3 +1,5 @@
+.PHONY: all clean autoload compile
+
 ifneq 'Darwin' '$(shell uname)'
 EMACS = emacs
 else
@@ -11,3 +13,7 @@ autoload:
 
 compile:
 	$(EMACS) --chdir / --batch -l ~/.emacs.d/site-start.el -f recompile-all-configuration
+
+clean:
+	find ~/.emacs.d -name "*.elc" -delete
+	rm -f ~/.emacs.d/site-lisp/loaddefs
