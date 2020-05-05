@@ -1,5 +1,11 @@
-(when (locate-library "scss-mode")
+(defun avm-typescript-mode-hook ()
+  (define-key typescript-mode-map (kbd "C-c o") 'ff-find-other-file)
   (setf typescript-indent-level 2)
   (setf show-trailing-whitespace t)
   (delete-trailing-whitespace-mode 'clean)
+  (setf ts-other-file-alist '(("\\.ts$" (".html"))))
+  (setf ff-other-file-alist 'ts-other-file-alist)
   )
+
+(when (locate-library "typescript-mode")
+  (add-hook 'typescript-mode-hook #'avm-typescript-mode-hook))
