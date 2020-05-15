@@ -11,6 +11,9 @@
 
 (load "cyrillic-without-yo.el")
 
+;; Fix End key over PuTTY
+(define-key global-map [select] 'end-of-line)
+
 (when running-mac
   (set-input-method 'russian-computer-without-yo)
   (deactivate-input-method)
@@ -54,6 +57,7 @@
 (when (file-exists-p "~/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes"))
 
+(set-frame-parameter (next-frame) 'background-mode 'dark)
 (load-theme 'twilight t)
 
 (custom-set-variables
@@ -154,8 +158,8 @@
   (global-set-key (kbd "ESC <down>") 'windmove-down)
   (global-set-key (kbd "ESC <up>") 'windmove-up))
 
-(unless window-system
-  (xterm-mouse-mode t))
+;(unless window-system
+;  (xterm-mouse-mode t))
 
 ;; Auto indent yanked code
 (dolist (command '(yank yank-pop))
