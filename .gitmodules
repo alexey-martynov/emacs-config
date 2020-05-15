@@ -22,3 +22,6 @@
 [submodule "site-lisp/scss-mode"]
 	path = site-lisp/scss-mode
 	url = https://github.com/antonj/scss-mode.git
+[submodule "site-lisp/yaml-mode"]
+	path = site-lisp/yaml-mode
+	url = https://github.com/yoshiki/yaml-mode.git
