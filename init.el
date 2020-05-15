@@ -287,8 +287,7 @@
        '(("\\.[hg]s$"  . haskell-mode))
        '(("\\.hi$"     . haskell-mode))
        '(("\\.l[hg]s$" . literate-haskell-mode))
-       '(("/COMMIT_EDITMSG$" . text-mode))
-       '(("/TAG_EDITMSG$" . text-mode))
+       '(("/.*_EDITMSG$" . text-mode))
        '(("\\.org$" . org-mode))
        '(("\\.yaws$" . html-mode))
        '(("\\.php3?$" . html-mode))
@@ -329,11 +328,13 @@
   (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
   (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
   (setq haskell-font-lock-symbols t))
+  (autoload 'inferior-haskell-load-file "inf-haskell"
+    "Major mode for Haskell interaction." t))
 
 (add-hook 'text-mode-hook
           '(lambda ()
              (if (buffer-file-name (current-buffer))
-                 (when (member (file-name-nondirectory (buffer-file-name (current-buffer))) '("COMMIT_EDITMSG" "TAG_EDITMSG"))
+                 (when (member (file-name-nondirectory (buffer-file-name (current-buffer))) '("COMMIT_EDITMSG" "TAG_EDITMSG" "PULLREQ_EDITMSG"))
                    (flyspell-mode t)
                    (auto-fill-mode t))
                )))
