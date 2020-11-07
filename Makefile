@@ -9,11 +9,11 @@ endif
 all: autoload compile
 
 autoload:
-	$(EMACS) --chdir / --batch -l ~/.emacs.d/site-start.el -f update-all-autoloads
+	$(EMACS) --chdir $(CURDIR) --batch -l $(CURDIR)/site-start.el -f update-all-autoloads
 
 compile:
-	$(EMACS) --chdir / --batch -l ~/.emacs.d/site-start.el -f recompile-all-configuration
+	$(EMACS) --chdir $(CURDIR) --batch -l $(CURDIR)/site-start.el -f recompile-all-configuration
 
 clean:
-	find ~/.emacs.d -name "*.elc" -delete
-	rm -f ~/.emacs.d/site-lisp/loaddefs
+	find $(CURDIR) -name "*.elc" -delete
+	rm -f $(CURDIR)/site-lisp/loaddefs
