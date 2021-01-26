@@ -1,4 +1,4 @@
-(setq ispell-dictionary "ru")
+(setq ispell-dictionary "en")
 (setq ispell-program-name "aspell")
 
 (defun avm-commit-mode-aspell-hook ()

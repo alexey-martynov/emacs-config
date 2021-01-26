@@ -58,7 +58,11 @@
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes"))
 
 (set-frame-parameter (next-frame) 'background-mode 'dark)
-(load-theme 'twilight t)
+;(if (file-exists-p "~/.emacs.d/themes/solarized")
+;    (progn
+;      (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/solarized")
+;      (load-theme 'solarized-dark t))
+  (load-theme 'twilight t);)
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
@@ -354,8 +358,6 @@
   (autoload 'inferior-haskell-load-file "inf-haskell"
     "Major mode for Haskell interaction." t))
 
-(setq ispell-dictionary "en")
-
 (add-hook 'text-mode-hook
           '(lambda ()
              (if (buffer-file-name (current-buffer))
@@ -422,8 +424,8 @@
    (running-windows
     (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
     (setq slime-default-lisp 'sbcl))
-   (running-mac
-    (add-to-list 'slime-lisp-implementations '(ccl ("ccl64" "-K" "utf8")))
+  (when running-mac
+    (add-to-list 'slime-lisp-implementations '(ccl ("/Users/alexey/Downloads/ccl/dx86cl64" "-K" "utf8")))
     (setq slime-default-lisp 'ccl))
    (t
     (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))

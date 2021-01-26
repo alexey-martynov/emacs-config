@@ -9,8 +9,8 @@
   (electric-indent-mode t)
   (delete-trailing-whitespace-mode 'clean)
   (fic-mode)
-  (add-to-list 'ff-other-file-alist
-               '("\\.js$" (".html")))
+  (setf js-other-file-alist '(("\\.js$" (".html"))))
+  (setf ff-other-file-alist 'js-other-file-alist)
   )
 
 (when (locate-library "js2-mode")

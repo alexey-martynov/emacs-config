@@ -22,6 +22,13 @@
 [submodule "site-lisp/scss-mode"]
 	path = site-lisp/scss-mode
 	url = https://github.com/antonj/scss-mode.git
+[submodule "themes/solarized"]
+	path = themes/solarized
+	url = https://github.com/sellout/emacs-color-theme-solarized.git
 [submodule "site-lisp/yaml-mode"]
 	path = site-lisp/yaml-mode
 	url = https://github.com/yoshiki/yaml-mode.git
+[submodule "site-lisp/org-mode"]
+	path = site-lisp/org-mode
+	url = https://code.orgmode.org/bzg/org-mode.git
+

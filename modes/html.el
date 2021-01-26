@@ -3,9 +3,8 @@
   (define-key html-mode-map (kbd "C-c o") 'ff-find-other-file)
   (setq show-trailing-whitespace t)
   (delete-trailing-whitespace-mode 'clean)
-  (mmm-mode-on)
-  (add-to-list 'ff-other-file-alist
-               '("\\.html$" (".js")))
+  (setf html-other-file-alist '(("\\.html$" (".js" ".ts"))))
+  (setf ff-other-file-alist 'html-other-file-alist)
   )
 
 (add-hook 'html-mode-hook #'avm-html-mode-hook)
