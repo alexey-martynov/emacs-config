@@ -233,12 +233,12 @@
 
 ;; TODO: Improve handling by adding check for subdirs
 (add-hook 'hack-local-variables-hook
-          '(lambda ()
-             (when ff-search-directories-extra
-               (let ((current-list (if (symbolp ff-search-directories)
-                                       (symbol-value ff-search-directories)
-                                     ff-search-directories)))
-                 (setq ff-search-directories (append ff-search-directories-extra current-list))))))
+          #'(lambda ()
+              (when ff-search-directories-extra
+                (let ((current-list (if (symbolp ff-search-directories)
+                                        (symbol-value ff-search-directories)
+                                      ff-search-directories)))
+                  (setq ff-search-directories (append ff-search-directories-extra current-list))))))
 
 (when (locate-library "fic-mode")
   (require 'fic-mode)
@@ -247,36 +247,36 @@
   (push "HACK" fic-highlighted-words))
 
 (add-hook 'emacs-lisp-mode-hook
-          '(lambda ()
-             (setq show-trailing-whitespace t)
-             (delete-trailing-whitespace-mode 'clean)
-             ))
+          #'(lambda ()
+              (setq show-trailing-whitespace t)
+              (delete-trailing-whitespace-mode 'clean)
+              ))
 
 (add-hook 'makefile-mode-hook
-          '(lambda ()
-             (local-set-key (kbd "<f7>") 'compile)
-             (modify-syntax-entry ?_ "w")
-             (delete-trailing-whitespace-mode 'clean)
-             ))
+          #'(lambda ()
+              (local-set-key (kbd "<f7>") 'compile)
+              (modify-syntax-entry ?_ "w")
+              (delete-trailing-whitespace-mode 'clean)
+              ))
 
 (add-hook 'compilation-mode-hook
-          '(lambda ()
-             (local-set-key (kbd "<f7>") 'recompile)))
+          #'(lambda ()
+              (local-set-key (kbd "<f7>") 'recompile)))
 
 (add-hook 'python-mode-hook
-          '(lambda ()
-             (define-key python-mode-map (kbd "<RET>") 'newline-and-indent)
-             (modify-syntax-entry ?_ "w")
-             (setq show-trailing-whitespace t)
-             (delete-trailing-whitespace-mode 'clean)
-             ))
+          #'(lambda ()
+              (define-key python-mode-map (kbd "<RET>") 'newline-and-indent)
+              (modify-syntax-entry ?_ "w")
+              (setq show-trailing-whitespace t)
+              (delete-trailing-whitespace-mode 'clean)
+              ))
 
 (add-hook 'erlang-mode-hook
-          '(lambda ()
-             (define-key erlang-mode-map (kbd "<RET>") 'newline-and-indent)
-             (setq show-trailing-whitespace t)
-             (delete-trailing-whitespace-mode 'clean)
-             ))
+          #'(lambda ()
+              (define-key erlang-mode-map (kbd "<RET>") 'newline-and-indent)
+              (setq show-trailing-whitespace t)
+              (delete-trailing-whitespace-mode 'clean)
+              ))
 
 (setq auto-mode-alist
       (append
@@ -332,12 +332,12 @@
     "Major mode for Haskell interaction." t))
 
 (add-hook 'text-mode-hook
-          '(lambda ()
-             (if (buffer-file-name (current-buffer))
-                 (when (member (file-name-nondirectory (buffer-file-name (current-buffer))) '("COMMIT_EDITMSG" "TAG_EDITMSG" "PULLREQ_EDITMSG"))
-                   (flyspell-mode t)
-                   (auto-fill-mode t))
-               )))
+          #'(lambda ()
+              (if (buffer-file-name (current-buffer))
+                  (when (member (file-name-nondirectory (buffer-file-name (current-buffer))) '("COMMIT_EDITMSG" "TAG_EDITMSG" "PULLREQ_EDITMSG"))
+                    (flyspell-mode t)
+                    (auto-fill-mode t))
+                )))
 
 (when (locate-library "org-install")
   (require 'org-install)
@@ -346,9 +346,9 @@
   (setq org-agenda-files '("~/agenda"))
 
   (add-hook 'org-mode-hook
-            '(lambda ()
-               (flyspell-mode t)
-               ))
+            #'(lambda ()
+                (flyspell-mode t)
+                ))
   ;;(setq org-log-done 'time)
   (global-set-key "\C-cl" 'org-store-link)
   (global-set-key "\C-ca" 'org-agenda)
@@ -367,23 +367,23 @@
   "History for arguments for running program inside GDB")
 
 (add-hook 'gdb-mode-hook
-          '(lambda ()
-            (global-set-key (kbd "<f10>") 'gud-next)
-            (global-set-key (kbd "<f11>") 'gud-step)
-            (global-set-key (kbd "<f5>") 'gud-cont)
-            (global-set-key (kbd "C-<f5>") '(lambda ()
-                                             (interactive)
-                                             (switch-to-buffer gud-comint-buffer)
-                                             (let ((args (if current-prefix-arg
-                                                             (read-shell-command "Run with args: " gud-run-args
-                                                                                 (if (equal (car gud-run-args-history) gud-run-args)
-                                                                                     '(gud-run-args-history . 1)
-                                                                                     'gud-run-args-history))
-                                                             gud-run-args)))
-                                               (unless (equal args gud-run-args)
-                                                 (setq gud-run-args args))
-                                               (gud-call (concat "run " args)))))
-            (global-set-key (kbd "S-<f5>") 'gud-finish)))
+          #'(lambda ()
+              (global-set-key (kbd "<f10>") 'gud-next)
+              (global-set-key (kbd "<f11>") 'gud-step)
+              (global-set-key (kbd "<f5>") 'gud-cont)
+              (global-set-key (kbd "C-<f5>") #'(lambda ()
+                                                 (interactive)
+                                                 (switch-to-buffer gud-comint-buffer)
+                                                 (let ((args (if current-prefix-arg
+                                                                 (read-shell-command "Run with args: " gud-run-args
+                                                                                     (if (equal (car gud-run-args-history) gud-run-args)
+                                                                                         '(gud-run-args-history . 1)
+                                                                                       'gud-run-args-history))
+                                                               gud-run-args)))
+                                                   (unless (equal args gud-run-args)
+                                                     (setq gud-run-args args))
+                                                   (gud-call (concat "run " args)))))
+              (global-set-key (kbd "S-<f5>") 'gud-finish)))
 
 
 (when (locate-library "w3m")
@@ -413,12 +413,12 @@
             (common-lisp-hyperspec symbol-name)
           (call-interactively 'common-lisp-hyperspec)))))
   (add-hook 'slime-mode-hook
-            '(lambda ()
-               (local-set-key (kbd "<RET>") 'newline-and-indent)
-               (delete-trailing-whitespace-mode 'clean)
-               ;;(unless (slime-connected-p)
-               ;;  (save-excursion (slime)))))
-               )))
+            #'(lambda ()
+                (local-set-key (kbd "<RET>") 'newline-and-indent)
+                (delete-trailing-whitespace-mode 'clean)
+                ;;(unless (slime-connected-p)
+                ;;  (save-excursion (slime)))))
+                )))
 
 (when (locate-library "mof-mode")
   (require 'mof-mode))
@@ -427,11 +427,11 @@
   ;;(autoload 'closure-template-html-mode "closure-template-html-mode" "Major mode for editing Closure Templates" t)
   (add-to-list 'auto-mode-alist '("\\.tmpl\\'" . closure-template-html-mode))
   (add-hook 'closure-template-html-mode-hook
-            '(lambda ()
-               (define-key closure-template-html-mode-map (kbd "C-c C-l") 'closure-template-compile)
-               (setq show-trailing-whitespace t)
-               (delete-trailing-whitespace-mode 'clean)
-               )))
+            #'(lambda ()
+                (define-key closure-template-html-mode-map (kbd "C-c C-l") 'closure-template-compile)
+                (setq show-trailing-whitespace t)
+                (delete-trailing-whitespace-mode 'clean)
+                )))
 
 (when (locate-library "uniquify")
   (require 'uniquify)
