@@ -7,3 +7,7 @@ tramp
 eshell
 ido.last
 site-lisp/loaddefs
+# Configured Lisp implementations
+modes/lisp.d
+# Sessions
+session.*

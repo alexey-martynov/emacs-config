@@ -22,6 +22,8 @@ important:
 
 * Mark and auto-delete trailing whitespace in programming modes.
 
+* [SLIME](#slime-configuration) Common Lisp configuration
+
 The most of extra libraries/modes are loaded via submodule to have
 fixed working version.
 
@@ -101,3 +103,18 @@ To use systemd approach the following steps required:
    
 The Bash editor customization can be done by sourcing file `bashrc`
 file in configuration.
+
+
+SLIME Configuration
+-------------------
+
+The SLIME mode file contains some customizations to allow per system
+configurations without affecting Emacs Lisp files.
+
+To configure Lisp implementations the subdirectory `modes/lisp.d` is
+used. Every executable file in this directory is treated as name of
+symbol with Common Lisp implementation. This file should be a link to
+main binary or script which launches interpreter. 
+
+Please note that Clozure CL may need additional parameters to support
+UTF-8: `-K utf-8`.

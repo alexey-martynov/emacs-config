@@ -389,37 +389,6 @@
 (when (locate-library "w3m")
   (require 'w3m-load))
 
-(when (or (locate-library "slime") (locate-library "~/quicklisp/slime-helper"))
-  (when (locate-library "~/quicklisp/slime-helper")
-    (load "~/quicklisp/slime-helper"))
-  (require 'slime)
-  (when running-windows
-    (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
-    (setq slime-default-lisp 'sbcl))
-  (when running-mac
-    (add-to-list 'slime-lisp-implementations '(ccl ("/Users/alexey/Downloads/ccl/dx86cl64" "-K" "utf8")))
-    (setq slime-default-lisp 'ccl))
-  (slime-setup '(slime-fancy slime-asdf))
-  (when (locate-library "closure-template-html-mode")
-    (add-to-list 'auto-mode-alist
-                 '("\\.tmpl$" . closure-template-html-mode)))
-  (setq common-lisp-hyperspec-root "file:///home/alexey/docs/lisp/HyperSpec/")
-  (when (locate-library "w3m")
-    (require 'hyperspec)
-    (defun hyperspec-lookup (&optional symbol-name)
-      (interactive)
-      (let ((browse-url-browser-function 'w3m-browse-url))
-        (if symbol-name
-            (common-lisp-hyperspec symbol-name)
-          (call-interactively 'common-lisp-hyperspec)))))
-  (add-hook 'slime-mode-hook
-            #'(lambda ()
-                (local-set-key (kbd "<RET>") 'newline-and-indent)
-                (delete-trailing-whitespace-mode 'clean)
-                ;;(unless (slime-connected-p)
-                ;;  (save-excursion (slime)))))
-                )))
-
 (when (locate-library "mof-mode")
   (require 'mof-mode))
 
