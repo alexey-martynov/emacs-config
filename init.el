@@ -3,8 +3,12 @@
 (defvar running-x (eq window-system 'x))
 (defvar running-mac (eq window-system 'ns))
 
-(when (and (file-exists-p "~/.emacs.d/site-start.el") (not (fboundp 'update-all-autoloads)))
-  (load "~/.emacs.d/site-start.el"))
+;; Define global variable with the configuration root
+(setq avm-config-root-dir (file-name-directory load-file-name))
+
+(let ((site-start (file-name-concat (file-name-directory load-file-name) "site-start.el")))
+  (when (and (file-exists-p site-start) (not (fboundp 'update-all-autoloads)))
+    (load site-start)))
 
 (when (file-exists-p "~/.emacs.d/site-lisp/loaddefs")
   (load "~/.emacs.d/site-lisp/loaddefs"))
@@ -185,8 +189,14 @@
   (message "Loading")
   (require 'delete-trailing-whitespace-mode))
 
-(when (file-exists-p "~/.emacs.d/modes")
-       (mapc #'load (directory-files "~/.emacs.d/modes" t "\\.el$")))
+(let ((name (concat avm-config-root-dir "modes")))
+  (when (file-exists-p name)
+       (mapc #'load (directory-files name t "\\.el$"))))
+
+;; Try to load host-based configuration override
+(let ((name (concat avm-config-root-dir "host/" (system-name))))
+  (when (file-exists-p name)
+    (load name)))
 
 (when (locate-library "mmm-mode")
   (require 'mmm-mode)

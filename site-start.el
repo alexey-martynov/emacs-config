@@ -1,4 +1,7 @@
-(message "Loaded")
+;; Define global variable with the configuration root
+(unless (boundp 'avm-config-root-dir)
+  (setq avm-config-root-dir (file-name-directory load-file-name)))
+
 (when (file-exists-p "~/.emacs.d/site-lisp")
   (add-to-list 'load-path "~/.emacs.d/site-lisp")
   (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
