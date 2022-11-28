@@ -191,7 +191,10 @@
 
 (let ((name (concat avm-config-root-dir "modes")))
   (when (file-exists-p name)
-       (mapc #'load (directory-files name t "\\.el$"))))
+    (mapc #'(lambda (file)
+              (unless (= ?. (elt (file-name-nondirectory file) 0))
+                (load file)))
+          (directory-files name t "\\.el$"))))
 
 ;; Try to load host-based configuration override
 (let ((name (concat avm-config-root-dir "host/" (system-name))))
