@@ -66,3 +66,12 @@ to a function that generates a unique name."
   (compilation-start command comint))
 (put 'compile-target 'safe-local-variable 'stringp)
 (put 'eval 'safe-local-variable 'listp)
+
+(defun avm-compilation-mode-keys-hook ()
+  (local-set-key (kbd "<f7>") 'recompile))
+
+(add-hook 'compilation-mode-hook #'avm-compilation-mode-keys-hook)
+
+(when (<= 28 emacs-major-version)
+  (require 'ansi-color)
+  (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter))

@@ -272,10 +272,6 @@
               (delete-trailing-whitespace-mode 'clean)
               ))
 
-(add-hook 'compilation-mode-hook
-          #'(lambda ()
-              (local-set-key (kbd "<f7>") 'recompile)))
-
 (add-hook 'python-mode-hook
           #'(lambda ()
               (define-key python-mode-map (kbd "<RET>") 'newline-and-indent)
