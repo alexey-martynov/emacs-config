@@ -67,7 +67,13 @@
  '(toolbar ((t (nil))))
  '(show-paren-match ((t (:background "#131386"))))
  '(underline ((nil (:underline nil))))
- '(zmacs-region ((t (:background "snow" :foreground "blue")))))
+ '(zmacs-region ((t (:background "snow" :foreground "blue"))))
+ '(smerge-upper ((t (:background "#442222"))))
+ '(smerge-refined-removed ((t (:background "#662222"))))
+ '(smerge-lower ((t (:background "#224422"))))
+ '(smerge-refined-added ((t (:background "#226622"))))
+ '(smerge-markers ((t (:background "grey50"))))
+ )
 
 ;;;###autoload
 (when load-file-name
