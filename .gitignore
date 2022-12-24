@@ -11,3 +11,5 @@ site-lisp/loaddefs
 modes/lisp.d
 # Sessions
 session.*
+# Network Security Manager
+network-security.data
