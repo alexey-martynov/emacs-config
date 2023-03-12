@@ -118,7 +118,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(tex-verbatim ((t (:inherit nil)))))
+ '(tex-verbatim ((t (:inherit nil))))
+ ;; Make other fonts to match size to default
+ '(fixed-pitch ((t (:height 1.0))))
+ '(variable-pitch ((t (:height 1.0)))))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq make-backup-files nil)
