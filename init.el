@@ -189,8 +189,10 @@
               '(".hi" ".pdf" ".o")))
 
 (when (locate-library "delete-trailing-whitespace-mode")
-  (message "Loading")
   (require 'delete-trailing-whitespace-mode))
+
+(when running-mac
+  (server-start))
 
 (let ((name (concat avm-config-root-dir "modes")))
   (when (file-exists-p name)
