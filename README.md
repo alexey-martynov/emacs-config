@@ -124,6 +124,10 @@ To use systemd approach the following steps required:
    $ ln -s "$HOME/.emacs.d/systemd/user/emacs-server.service" "$HOME/.config/systemd/user"
    ```
 
+   There are 2 units provided: `emacs-server.service` to use Emacs
+   from system and `emacs-server-local.service` to use user's local
+   Emacs from `$HOME/.local`.
+
 2. Enable unit:
 
    ```
