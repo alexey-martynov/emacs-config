@@ -1,6 +1,7 @@
 (defun avm-js-mode-hook ()
   (define-key js-mode-map (kbd "<RET>") 'newline-and-indent)
   (define-key js-mode-map (kbd "C-c o") 'ff-find-other-file)
+  (define-key js-mode-map (kbd "<f7>") 'compile)
   (make-local-variable 'js-indent-level)
   (setf js-indent-level 2)
   (setf js2-strict-missing-semi-warning nil)

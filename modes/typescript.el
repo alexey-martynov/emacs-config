@@ -1,5 +1,6 @@
 (defun avm-typescript-mode-hook ()
   (define-key typescript-mode-map (kbd "C-c o") 'ff-find-other-file)
+  (define-key typescript-mode-map (kbd "<f7>") 'compile)
   (setf typescript-indent-level 2)
   (setf show-trailing-whitespace t)
   (delete-trailing-whitespace-mode 'clean)

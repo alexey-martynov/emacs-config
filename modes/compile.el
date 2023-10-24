@@ -11,6 +11,9 @@
 ;;; Parse Boost.Test errors
 (add-to-list 'compilation-error-regexp-alist '("^\\(.+\\)(\\([[:digit:]]+\\)):[[:space:]]*\\(?:fatal \\)?error" 1 2 nil 2))
 
+;;; Parse NodeJS errors
+(add-to-list 'compilation-error-regexp-alist '("^Error: \\(.+\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)[[:space:]]-[[:space:]]" 1 2 3 2))
+
 ;;; Add per-file compilation target as a safe variable
 ;;; TODO: The following code should be contributed back
 (defvar compile-target nil)
