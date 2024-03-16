@@ -32,3 +32,6 @@
 [submodule "site-lisp/org-mode"]
 	path = site-lisp/org-mode
 	url = https://code.orgmode.org/bzg/org-mode.git
+[submodule "site-lisp/systemd-mode"]
+	path = site-lisp/systemd-mode
+	url = https://github.com/holomorph/systemd-mode.git
