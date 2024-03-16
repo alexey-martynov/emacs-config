@@ -7,6 +7,7 @@ tramp
 eshell
 ido.last
 site-lisp/loaddefs
+eln-cache
 # Configured Lisp implementations
 modes/lisp.d
 # Sessions
