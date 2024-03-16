@@ -1,13 +1,19 @@
+
 (defvar delete-trailing-whitespace-mode nil)
 
 (make-variable-buffer-local 'delete-trailing-whitespace-mode)
 (put 'delete-trailing-whitespace-mode 'safe-local-variable #'(lambda (val) (or (eq val t) (eq val nil))))
 
+(defgroup trailing-whitespace
+  nil
+  "Delete Trailing Whitespace mode"
+  :group 'editing)
+
 (defcustom delete-trailing-whitespace-keep-exts
   '("gif" "png" "jpeg" "jpg")
   "List of file extensions int which traling whitespace cleanup never performs"
-  :group 'delete-trailing-whitespace-mode
-  :type '(list string))
+  :group 'trailing-whitespace
+  :type '(repeat string))
 
 (defun delete-trailing-whitespace-on-save ()
   (if (buffer-file-name)
