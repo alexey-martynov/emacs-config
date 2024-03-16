@@ -8,6 +8,7 @@ eshell
 ido.last
 site-lisp/loaddefs
 eln-cache
+ede-projects.el
 # Configured Lisp implementations
 modes/lisp.d
 # Sessions
