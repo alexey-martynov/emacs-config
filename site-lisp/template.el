@@ -70,10 +70,10 @@
 
 (provide 'template)
 (require 'custom)
+(require 'cc-cmds)
 
 ;; General Emacs/XEmacs-compatibility compile-time macros
 (eval-when-compile
-  (require 'cl)
   (defmacro cond-emacs-xemacs (&rest args)
     (cond-emacs-xemacs-macfn
      args "`cond-emacs-xemacs' must return exactly one element"))
@@ -139,7 +139,6 @@
 			     'ignore)))))))))))
 
 (eval-when-compile
-  (require 'cl)
   (defvar init-file-loaded)		; would be useful in Emacs, too...
   (defvar file-name-buffer-file-type-alist))
 
@@ -1064,6 +1063,8 @@ asked whether to use the template, see `template-confirm-insecure'."
 ;;;===========================================================================
 ;;;  Main functions
 ;;;===========================================================================
+(defvar html-helper-build-new-buffer nil)
+(defvar html-helper-do-write-file-hooks nil)
 
 (defun template-single-comment (&optional arg)
   "Decorate the comment in the current line with dashes and alike.
@@ -1347,7 +1348,7 @@ argument SYNTAX, see `template-comment-syntax'."
       (setq str (car (pop alist)))
       (when str
 	(setq i (length str))
-	(while (>= (decf i) 0)
+	(while (>= (cl-decf i) 0)
 	  ;; (pushnew (aref str i) chars), but requires cl at runtime:
 	  (or (memq (setq c (aref str i)) chars) (push c chars)))))
     (concat "\\("
@@ -2246,15 +2247,15 @@ result is in `template-file'.  See `template-derivation-alist'."
   (template-default-file template raw num ext)
   (let* ((dir (car template-file))
 	 (full (expand-file-name (cadr template-file) dir)))
-    (when (if (string= (fourth template-file) "")
+    (when (if (string= (cl-fourth template-file) "")
 	      auto-num
 	    (setq auto-num
 		  (and (or (get-file-buffer full)
 			   (file-readable-p full))
-		       (string-to-int (fourth template-file)))))
+		       (string-to-number (cl-fourth template-file)))))
       (setq auto-num (1- auto-num)
-	    raw (third template-file)
-	    ext (fifth template-file))
+	    raw (cl-third template-file)
+	    ext (cl-fifth template-file))
       (let ((list (buffer-list))
 	    file1 dir1)
 	(while list
@@ -2286,7 +2287,7 @@ result is in `template-file'.  See `template-derivation-alist'."
   "Return numbering in FILE-RNE if the RAW and EXT parts are equal."
   (or (and (string= (car file-rne) raw)
 	   (string= (caddr file-rne) ext)
-	   (string-to-int (cadr file-rne)))
+	   (string-to-number (cadr file-rne)))
       0))
 
 
@@ -2588,8 +2589,8 @@ See `easy-menu-define' for the format of MENU."
 See function and variable `template-initialize'."
   (when (or (eq template-initialize t)
 	    (memq 'auto template-initialize))
-    (add-hook 'write-file-hooks 'template-update-buffer)
-    (add-hook 'find-file-not-found-hooks 'template-not-found-function t))
+    (add-hook 'write-file-functions 'template-update-buffer)
+    (add-hook 'find-file-not-found-functions 'template-not-found-function t))
   (when (or (eq template-initialize t)
 	    (memq 'ffap template-initialize))
     (or template-ffap-file-finder
