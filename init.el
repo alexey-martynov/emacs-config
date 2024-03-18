@@ -299,6 +299,10 @@
                                                                                   (push ?_ result))
                                                                               (push (upcase (aref filename index)) result)
                                                                               (setq need-separator nil)))))))))))
+  (let ((templates-dir (file-name-concat (file-name-directory load-file-name)
+                                         "templates/")))
+    (when (file-exists-p templates-dir)
+      (push templates-dir template-default-directories)))
   (template-initialize))
 
 (when (locate-library "haskell-mode")
