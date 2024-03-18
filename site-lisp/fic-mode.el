@@ -51,11 +51,13 @@
 
 (defcustom fic-highlighted-words '("FIXME" "TODO" "BUG")
   "Words to highlight"
-  :group 'fic-mode)
+  :group 'fic-mode
+  :type '(repeat string))
 
 (defcustom fic-author-name-regexp "[-a-zA-Z0-9_.]+"
   "Regexp describing FIXME/TODO author name"
-  :group 'fic-mode)
+  :group 'fic-mode
+  :type 'regexp)
 
 (defface fic-face
   '((((class color))
@@ -108,7 +110,7 @@
     (if fic-mode
 	(font-lock-add-keywords nil kwlist 'append)
       (font-lock-remove-keywords nil kwlist))
-    (font-lock-fontify-buffer)))
+    (font-lock-ensure)))
 
 ;;;###autoload(add-hook 'c-mode-common-hook 'fic-mode)
 ;;;###autoload(add-hook 'python-mode-hook 'fic-mode)
