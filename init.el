@@ -6,7 +6,7 @@
 ;; Define global variable with the configuration root
 (setq avm-config-root-dir (file-name-directory load-file-name))
 
-(let ((site-start (file-name-concat (file-name-directory load-file-name) "site-start.el")))
+(let ((site-start (concat (file-name-directory load-file-name) "site-start.el")))
   (when (and (file-exists-p site-start) (not (fboundp 'update-all-autoloads)))
     (load site-start)))
 
