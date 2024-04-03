@@ -1,6 +1,8 @@
 (defun avm-haskell-mode-hook ()
   ;;(define-key haskell-mode-map [?\C-c ?\C-r] 'inferior-haskell-reload-file)
-  (message "Running Haskell hooks")
+  (define-key haskell-mode-map (kbd "<f7>") 'compile)
+  (define-key haskell-mode-map (kbd "C-c M-m") 'my-imenu)
+
   (setq show-trailing-whitespace t)
   (delete-trailing-whitespace-mode 'clean)
   (interactive-haskell-mode))
