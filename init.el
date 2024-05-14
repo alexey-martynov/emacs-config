@@ -15,15 +15,14 @@
 
 (load "cyrillic-without-yo.el")
 
+(set-input-method 'russian-computer-without-yo)
+(deactivate-input-method)
+
 (when running-mac
-  (set-input-method 'russian-computer-without-yo)
-  (deactivate-input-method)
   (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH") ":/Library/TeX/texbin"))
   (setq exec-path (append '("/usr/local/bin") exec-path '("/Library/TeX/texbin"))))
 
 (when running-windows
-  (set-input-method 'russian-computer-without-yo)
-  (deactivate-input-method)
   (setenv "PATH" (concat (getenv "PATH") ";C:\\texlive\\2014\\bin\\win32;C:\\MinGW\\bin;C:\\MinGW\\msys\\1.0\\bin"))
   (setq exec-path (append exec-path '("C:/texlive/2014/bin/win32" "C:/MinGW/bin" "C:/MinGW/msys/1.0/bin")))
   (prefer-coding-system 'windows-1251)
