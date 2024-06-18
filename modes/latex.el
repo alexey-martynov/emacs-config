@@ -54,6 +54,9 @@
   (setq-default tex-open-quote "<<")
   (setq-default tex-close-quote ">>")
 
+  ;; Prevent subscript/superscript formatting
+  (setq tex-fontify-script nil)
+
   ;; Extend list of verbatim environments with
   ;; handcrafted envirinments for seminars
   (add-to-list 'tex-verbatim-environments "cxxsource")
