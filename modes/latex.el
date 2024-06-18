@@ -3,6 +3,11 @@
   (insert "\\ref{}")
   (backward-char))
 
+(defun latex-insert-autoreference ()
+  (interactive)
+  (insert "\\autoref{}")
+  (backward-char))
+
 (defun latex-insert-label ()
   (interactive)
   (case major-mode
@@ -32,6 +37,7 @@
 (defun avm-latex-mode-hook ()
   (define-key latex-mode-map (kbd "<RET>") 'newline-and-indent)
   (define-key latex-mode-map (kbd "C-c r") 'latex-insert-reference)
+  (define-key latex-mode-map (kbd "C-c C-r") 'latex-insert-autoreference)
   (define-key latex-mode-map (kbd "C-c l") 'latex-insert-label)
   (turn-on-auto-fill)
   (setq show-trailing-whitespace t)
