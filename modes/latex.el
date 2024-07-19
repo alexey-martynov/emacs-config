@@ -9,20 +9,32 @@
   "\\autoref{" _ "}")
 
 (defun latex-insert-label ()
+  "Insert LaTeX label definition depending on current major mode.
+
+If there is a highlighted region, the label command is wrapped
+around the region text."
   (interactive)
-  (cl-case major-mode
-    (c++-mode
-     (insert "/*$\\label{}$*/")
-     (backward-char 4))
-    (c-mode
-     (insert "/*$\\label{}$*/")
-     (backward-char 4))
-    (lisp-mode
-     (insert ";$\\label{}$")
-     (backward-char 2))
-    (latex-mode
-     (insert "\\label{}")
-     (backward-char))))
+  (let ((insertion (cl-case major-mode
+                     (c++-mode
+                      '("/*$\\label{" . "}$*/"))
+                     (c-mode
+                      '("/*$\\label{" . "}$*/"))
+                     (lisp-mode
+                      '(";$\\label{" . "}$"))
+                     (latex-mode
+                      '("\\label{" . "}")))))
+    (when insertion
+      (if (use-region-p)
+          (save-excursion
+            (let ((begin (region-beginning))
+                  (end (region-end)))
+              (goto-char end)
+              (insert (cdr insertion))
+              (goto-char begin)
+              (insert (car insertion))))
+        (progn
+          (insert (car insertion) (cdr insertion))
+          (backward-char (length (cdr insertion))))))))
 
 (define-skeleton latex-insert-emph
   "Insert \\emph"
