@@ -40,36 +40,33 @@
   "\\footnote{" _ "}")
 
 (defun avm-latex-mode-hook ()
-  (define-key latex-mode-map (kbd "<RET>") #'newline-and-indent)
-  (define-key latex-mode-map (kbd "C-c r") #'latex-insert-reference)
-  (define-key latex-mode-map (kbd "C-c C-r") #'latex-insert-autoreference)
-  (define-key latex-mode-map (kbd "C-c l") #'latex-insert-label)
-  (define-key latex-mode-map (kbd "C-c f") #'latex-insert-footnote)
-  (define-key latex-mode-map (kbd "M-i") #'latex-insert-emph)
-  (define-key latex-mode-map (kbd "C-c M-i") #'latex-insert-index)
-  (define-key latex-mode-map (kbd "<f7>") #'compile)
-
   (turn-on-auto-fill)
 
-  (setq show-trailing-whitespace t)
   (delete-trailing-whitespace-mode 'clean)
 
   ;; Always turn on Flyspell outside Windows
   (unless running-windows
     (flyspell-mode t))
+  )
 
-  ;; Turn on Russian typesetting features
-  (setopt tex-open-quote "<<")
-  (setopt tex-close-quote ">>")
-
-  ;; Prevent subscript/superscript formatting
-  (setopt tex-fontify-script nil)
-
-  ;; Extend list of verbatim environments with
-  ;; handcrafted envirinments for seminars
-  (add-to-list 'tex-verbatim-environments "cxxsource")
-  (add-to-list 'tex-verbatim-environments "lispsource")
-  (add-to-list 'tex-verbatim-environments "lisprepl")
-  (add-to-list 'tex-verbatim-environments "console"))
-
-(add-hook 'latex-mode-hook #'avm-latex-mode-hook)
+(use-package tex-mode
+  :defer t
+  :config (add-to-list 'tex-verbatim-environments "cxxsource")
+          (add-to-list 'tex-verbatim-environments "lispsource")
+          (add-to-list 'tex-verbatim-environments "lisprepl")
+          (add-to-list 'tex-verbatim-environments "console")
+  :bind (:map latex-mode-map
+              ("<RET>" . newline-and-indent)
+              ("C-c r" . latex-insert-reference)
+              ("C-c C-r" . latex-insert-autoreference)
+              ("C-c l" . latex-insert-label)
+              ("C-c f" . latex-insert-footnote)
+              ("M-i" . latex-insert-emph)
+              ("C-c M-i" . latex-insert-index)
+              ("<f7>" . compile))
+  :hook (latex-mode . avm-latex-mode-hook)
+  :custom (tex-open-quote "<<" "Turn on Russian typesetting features")
+          (tex-close-quote ">>" "Turn on Russian typesetting features")
+          (tex-fontify-script nil "Prevent subscript/superscript formatting")
+          (show-trailing-whitespace t)
+  )
