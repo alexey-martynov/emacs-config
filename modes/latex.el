@@ -1,16 +1,16 @@
-(defun latex-insert-reference ()
-  (interactive)
-  (insert "\\ref{}")
-  (backward-char))
+(define-skeleton latex-insert-reference
+  "Insert \\ref"
+  nil
+  "\\ref{" _ "}")
 
-(defun latex-insert-autoreference ()
-  (interactive)
-  (insert "\\autoref{}")
-  (backward-char))
+(define-skeleton latex-insert-autoreference
+  "Insert \\autoref"
+  nil
+  "\\autoref{" _ "}")
 
 (defun latex-insert-label ()
   (interactive)
-  (case major-mode
+  (cl-case major-mode
     (c++-mode
      (insert "/*$\\label{}$*/")
      (backward-char 4))
@@ -25,37 +25,45 @@
      (backward-char))))
 
 (define-skeleton latex-insert-emph
-  "Insert \emph"
+  "Insert \\emph"
   nil
   "\\emph{" _ "}")
 
 (define-skeleton latex-insert-index
-  "Insert \index"
+  "Insert \\index"
   nil
   "\\index{" _ "}")
 
+(define-skeleton latex-insert-footnote
+  "Insert \\footnote"
+  nil
+  "\\footnote{" _ "}")
+
 (defun avm-latex-mode-hook ()
-  (define-key latex-mode-map (kbd "<RET>") 'newline-and-indent)
-  (define-key latex-mode-map (kbd "C-c r") 'latex-insert-reference)
-  (define-key latex-mode-map (kbd "C-c C-r") 'latex-insert-autoreference)
-  (define-key latex-mode-map (kbd "C-c l") 'latex-insert-label)
+  (define-key latex-mode-map (kbd "<RET>") #'newline-and-indent)
+  (define-key latex-mode-map (kbd "C-c r") #'latex-insert-reference)
+  (define-key latex-mode-map (kbd "C-c C-r") #'latex-insert-autoreference)
+  (define-key latex-mode-map (kbd "C-c l") #'latex-insert-label)
+  (define-key latex-mode-map (kbd "C-c f") #'latex-insert-footnote)
+  (define-key latex-mode-map (kbd "M-i") #'latex-insert-emph)
+  (define-key latex-mode-map (kbd "C-c M-i") #'latex-insert-index)
+  (define-key latex-mode-map (kbd "<f7>") #'compile)
+
   (turn-on-auto-fill)
+
   (setq show-trailing-whitespace t)
   (delete-trailing-whitespace-mode 'clean)
-  (local-set-key (kbd "M-i") 'latex-insert-emph)
-  (local-set-key (kbd "C-c M-i") 'latex-insert-index)
-  (local-set-key (kbd "<f7>") 'compile)
 
   ;; Always turn on Flyspell outside Windows
   (unless running-windows
     (flyspell-mode t))
 
   ;; Turn on Russian typesetting features
-  (setq-default tex-open-quote "<<")
-  (setq-default tex-close-quote ">>")
+  (setopt tex-open-quote "<<")
+  (setopt tex-close-quote ">>")
 
   ;; Prevent subscript/superscript formatting
-  (setq tex-fontify-script nil)
+  (setopt tex-fontify-script nil)
 
   ;; Extend list of verbatim environments with
   ;; handcrafted envirinments for seminars
