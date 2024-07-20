@@ -1,12 +1,63 @@
-(define-skeleton latex-insert-reference
-  "Insert \\ref"
-  nil
-  "\\ref{" _ "}")
+(require 'cl-lib)
 
-(define-skeleton latex-insert-autoreference
-  "Insert \\autoref"
-  nil
-  "\\autoref{" _ "}")
+(defvar latex-aux-file nil "Auxiliary file for LaTeX source to provide labels")
+(make-variable-buffer-local 'latex-aux-file)
+(put 'latex-aux-file 'safe-local-variable 'stringp)
+
+(defun latex-list-aux-labels ()
+  "Return list of labels available from current buffer's auxiliary file."
+  (when (and latex-aux-file
+             (file-readable-p latex-aux-file))
+    (let ((source latex-aux-file))
+      (with-temp-buffer
+        (insert-file-contents source)
+        (let (labels)
+          (goto-char (point-min))
+          (while (re-search-forward "\\\\newlabel{\\([^}]*\\)}" nil t)
+            (push (match-string 1) labels))
+          labels)))))
+
+(defun latex-list-buffer-labels (labels)
+  "Return lis of labels available from current buffer appended to LABELS"
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward "\\\\label{\\([^}]*\\)}" nil t)
+      (cl-pushnew (match-string 1) labels))
+    labels))
+
+(defun latex-insert-reference-impl (command)
+  "Insert reference via COMMAND.
+
+If there is a highlighted region, the refernce COMMAND is wrapped
+around the region text. If LATEX-AUX-FILE is set the list of
+available labels is parsed from file and used as completion in
+interactive prompt. If there is no auxiliary file and now highlighted
+region the COMMAND with empty argument is inserted."
+  (cond
+   ((use-region-p)
+    (save-excursion
+      (let ((begin (region-beginning))
+            (end (region-end)))
+        (goto-char end)
+        (insert "}")
+        (goto-char begin)
+        (insert "\\" command "{"))))
+    (latex-aux-file
+     (let ((label (completing-read "Label: " (latex-list-buffer-labels (latex-list-aux-labels)))))
+       (insert "\\" command "{" label "}")))
+    (t
+     (insert "\\" command "{}")
+     (backward-char))))
+
+(defun latex-insert-reference ()
+  "Insert reference."
+  (interactive)
+  (latex-insert-reference-impl "ref"))
+
+(defun latex-insert-autoreference ()
+  "Insert autoreference."
+  (interactive)
+  (latex-insert-reference-impl "autoref"))
 
 (defun latex-insert-label ()
   "Insert LaTeX label definition depending on current major mode.
