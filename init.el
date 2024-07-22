@@ -373,16 +373,6 @@
 (when (locate-library "mof-mode")
   (require 'mof-mode))
 
-(when (locate-library "closure-template-html-mode")
-  ;;(autoload 'closure-template-html-mode "closure-template-html-mode" "Major mode for editing Closure Templates" t)
-  (add-to-list 'auto-mode-alist '("\\.tmpl\\'" . closure-template-html-mode))
-  (add-hook 'closure-template-html-mode-hook
-            #'(lambda ()
-                (define-key closure-template-html-mode-map (kbd "C-c C-l") 'closure-template-compile)
-                (setq show-trailing-whitespace t)
-                (delete-trailing-whitespace-mode 'clean)
-                )))
-
 (when (locate-library "uniquify")
   (require 'uniquify)
   (setq uniquify-buffer-name-style 'reverse)
