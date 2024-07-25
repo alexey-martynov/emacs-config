@@ -6,7 +6,7 @@
   (setf js-indent-level 2)
   (setf js2-strict-missing-semi-warning nil)
   (setf indent-tabs-mode nil)
-  (setf show-trailing-whitespace t)
+  (setq-local show-trailing-whitespace t)
   (electric-indent-mode t)
   (delete-trailing-whitespace-mode 'clean)
   (fic-mode)

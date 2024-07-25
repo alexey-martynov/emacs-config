@@ -1,6 +1,6 @@
 (defun avm-markdown-mode-hook ()
+  (setq-local show-trailing-whitespace t)
   (delete-trailing-whitespace-mode 'clean)
-  (setq show-trailing-whitespace t)
 
   (auto-fill-mode t)
   (flyspell-mode t)

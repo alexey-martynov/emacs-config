@@ -1,8 +1,11 @@
-(defun avm-slime-mode-hook ()
+(defun avm-lisp-data-mode-hook ()
+  (setq-local show-trailing-whitespace t)
     (delete-trailing-whitespace-mode 'clean)
     ;;(unless (slime-connected-p)
     ;;  (save-excursion (slime)))))
     )
+
+(add-hook 'lisp-data-mode-hook #'avm-lisp-data-mode-hook)
 
 (when (locate-library "~/quicklisp/slime-helper")
   (load "~/quicklisp/slime-helper"))
@@ -40,10 +43,10 @@
   ;;      (if symbol-name
   ;;          (common-lisp-hyperspec symbol-name)
   ;;        (call-interactively 'common-lisp-hyperspec)))))
-  :hook (slime-mode . avm-slime-mode-hook))
+  )
 
 (defun avm-closure-template-mode-hook ()
-  (setopt show-trailing-whitespace t)
+  (setq-local show-trailing-whitespace t)
   (delete-trailing-whitespace-mode 'clean)
   )
 

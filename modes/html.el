@@ -1,7 +1,7 @@
 (defun avm-html-mode-hook ()
   (define-key html-mode-map (kbd "<RET>") 'newline-and-indent)
   (define-key html-mode-map (kbd "C-c o") 'ff-find-other-file)
-  (setq show-trailing-whitespace t)
+  (setq-local show-trailing-whitespace t)
   (delete-trailing-whitespace-mode 'clean)
   (setf html-other-file-alist '(("\\.html$" (".js" ".ts"))))
   (setf ff-other-file-alist 'html-other-file-alist)

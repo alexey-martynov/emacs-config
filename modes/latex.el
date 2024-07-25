@@ -105,6 +105,7 @@ around the region text."
 (defun avm-latex-mode-hook ()
   (turn-on-auto-fill)
 
+  (setq-local show-trailing-whitespace t)
   (delete-trailing-whitespace-mode 'clean)
 
   ;; Always turn on Flyspell outside Windows
@@ -131,5 +132,4 @@ around the region text."
   :custom (tex-open-quote "<<" "Turn on Russian typesetting features")
           (tex-close-quote ">>" "Turn on Russian typesetting features")
           (tex-fontify-script nil "Prevent subscript/superscript formatting")
-          (show-trailing-whitespace t)
   )

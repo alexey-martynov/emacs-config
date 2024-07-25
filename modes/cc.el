@@ -54,13 +54,15 @@
     (setq tab-width 2)
     (setq indent-tabs-mode t))
   (modify-syntax-entry ?_ "w")
-  (setq show-trailing-whitespace t)
+
+  (setq-local show-trailing-whitespace t)
+  (delete-trailing-whitespace-mode 'clean)
+
   (when (locate-library "gtags")
     (gtags-mode 1))
   (make-local-variable 'gtags-ignore-case)
   (setq gtags-ignore-case nil)
                                         ;(ede-minor-mode 1)
-  (delete-trailing-whitespace-mode 'clean)
   )
 
 (add-hook 'c-mode-common-hook #'avm-c-mode-common-hook)

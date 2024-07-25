@@ -227,12 +227,6 @@
   (push '(fic-face . font-lock-warning-face) face-remapping-alist)
   (push "HACK" fic-highlighted-words))
 
-(add-hook 'emacs-lisp-mode-hook
-          #'(lambda ()
-              (setq show-trailing-whitespace t)
-              (delete-trailing-whitespace-mode 'clean)
-              ))
-
 (add-hook 'makefile-mode-hook
           #'(lambda ()
               (local-set-key (kbd "<f7>") 'compile)
@@ -244,14 +238,14 @@
           #'(lambda ()
               (define-key python-mode-map (kbd "<RET>") 'newline-and-indent)
               (modify-syntax-entry ?_ "w")
-              (setq show-trailing-whitespace t)
+              (setq-local show-trailing-whitespace t)
               (delete-trailing-whitespace-mode 'clean)
               ))
 
 (add-hook 'erlang-mode-hook
           #'(lambda ()
               (define-key erlang-mode-map (kbd "<RET>") 'newline-and-indent)
-              (setq show-trailing-whitespace t)
+              (setq-local show-trailing-whitespace t)
               (delete-trailing-whitespace-mode 'clean)
               ))
 

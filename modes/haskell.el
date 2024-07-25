@@ -3,7 +3,7 @@
   (define-key haskell-mode-map (kbd "<f7>") 'compile)
   (define-key haskell-mode-map (kbd "C-c M-m") 'my-imenu)
 
-  (setq show-trailing-whitespace t)
+  (setq-local show-trailing-whitespace t)
   (delete-trailing-whitespace-mode 'clean)
   (interactive-haskell-mode))
 
