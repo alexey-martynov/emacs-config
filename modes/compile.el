@@ -2,7 +2,7 @@
 
 (setq compilation-scroll-output t)
 
-;;; Allow COM:PILE-COMMAND to be specified inside files/dir-locals
+;;; Allow COMPILE-COMMAND to be specified inside files/dir-locals
 (put 'compile-command 'safe-local-variable 'stringp)
 
 ;;; Enforce GNU Make to show "Entering/Leaving directory"
@@ -61,12 +61,14 @@ to a function that generates a unique name."
     (consp current-prefix-arg)))
   (unless (equal command (eval compile-command))
     (setq compile-command command))
+  ;; Added
   (when compile-target
     (setq command (concat command " " compile-target)))
   (save-some-buffers (not compilation-ask-about-save)
                      compilation-save-buffers-predicate)
   (setq-default compilation-directory default-directory)
   (compilation-start command comint))
+
 (put 'compile-target 'safe-local-variable 'stringp)
 (put 'eval 'safe-local-variable 'listp)
 
