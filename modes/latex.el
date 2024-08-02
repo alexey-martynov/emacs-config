@@ -4,6 +4,36 @@
 (make-variable-buffer-local 'latex-aux-file)
 (put 'latex-aux-file 'safe-local-variable 'stringp)
 
+(defun latex-list-aux-labels* ()
+  "Return list of labels available from current buffer.
+
+The returned list is list of CONS cells where CAR is a label and CDR is a caption."
+  (let (labels)
+    (goto-char (point-min))
+    (while (re-search-forward "\\\\newlabel{\\([^}]*\\)}" nil t)
+      (let* ((label (match-string 1))
+             (begin (match-end 0))
+             (end (condition-case error
+                      (scan-sexps begin 1)
+                    (scan-error nil))))
+        (when end
+          ;; Obtain 3rd element
+          (setf begin (condition-case error
+                          (scan-sexps (1+ begin) 1)
+                        (scan-error nil)))
+          (when begin
+            (setf begin (condition-case error
+                            (scan-sexps (1+ begin) 1)
+                          (scan-error nil)))
+            (when begin
+              (let ((pos (condition-case error
+                             (scan-sexps (1+ begin) 1)
+                           (scan-error nil))))
+                (when pos
+                  (push (cons label (buffer-substring-no-properties (+ 2 begin) (1- pos))) labels))))))
+          (goto-char (1+ end))))
+    labels))
+
 (defun latex-list-aux-labels ()
   "Return list of labels available from current buffer's auxiliary file.
 
@@ -13,11 +43,7 @@ The returned list is list of CONS cells where CAR is a label and CDR is a captio
     (let ((source latex-aux-file))
       (with-temp-buffer
         (insert-file-contents source)
-        (let (labels)
-          (goto-char (point-min))
-          (while (re-search-forward "\\\\newlabel{\\([^}]*\\)}{{[^}]*}{[^}]*}{\\([^}]*\\)}{[^}]*}{[^}]*}}" nil t)
-            (push (cons (match-string 1) (match-string 2)) labels))
-          labels)))))
+        (latex-list-aux-labels*)))))
 
 (defun latex-list-buffer-labels (labels)
   "Return list of labels available from current buffer appended to LABELS."
@@ -125,12 +151,14 @@ of listing is created and label placed there."
     (while (eq result t)
       (setf index-alist (latex-imenu-create-label-index (latex-list-buffer-labels (latex-list-aux-labels))))
       (setf result (imenu--mouse-menu index-alist t))
-      (if (equal result imenu--rescan-item)
-          (progn
-            (imenu--cleanup)
-            (setq result t
-                  imenu--index-alist nil))
-        (insert "\\" command "{" (cdr result) "}"))
+      (cond
+       ((equal result imenu--rescan-item)
+        (progn
+          (imenu--cleanup)
+          (setq result t
+                imenu--index-alist nil)))
+       ((consp result)
+        (insert "\\" command "{" (cdr result) "}")))
     result)))
 
 (defun latex-insert-reference-impl (command)
