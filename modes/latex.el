@@ -47,6 +47,7 @@ The returned list is list of CONS cells where CAR is a label and CDR is a captio
 
 (defun latex-list-buffer-labels (labels)
   "Return list of labels available from current buffer appended to LABELS."
+  (message "Adding buffer data to %s" labels)
   (save-excursion
     (goto-char (point-min))
     (while (re-search-forward "\\\\label{\\([^}]*\\)}" nil t)
@@ -73,10 +74,11 @@ of listing is created and label placed there."
         figures
         tables
         other
-        result
+        (result '(("*Empty*" . "")))
         current-listing-id
         current-listing-caption
         current-listing-lines
+        current-listing-label
         last-label)
     (dolist (item labels)
       (let* ((label (if (stringp item) item (car item)))
@@ -105,22 +107,25 @@ of listing is created and label placed there."
                     (progn
                       ;; New listing id
                       (when current-listing-lines
+                        (push (cons "*Listing*" (concat "lst:" current-listing-id)) current-listing-lines)
                         (push (cons current-listing-id current-listing-lines) listings))
                       (setf current-listing-id id
+                            current-listing-label label
                             current-listing-caption (format "%s (%s)" caption id)
                             current-listing-lines (list (cons (caddr parts) label))))))
-              ;; No line numbers
-              (when (string= current-listing-id (cadr parts))
-                ;; Current listing name matches collected line numbers,
-                ;; add special reference
-                (push (cons "Listing" label) current-listing-lines))
-              (when current-listing-lines
-                (push (cons current-listing-caption current-listing-lines) listings))
-              (unless (string= current-listing-id (cadr parts))
-                (push (cons (format "%s (%s)" caption (cadr parts)) label) listings))
-              (setf current-listing-id nil
-                    current-listing-caption nil
-                    current-listing-lines nil)))
+              (progn
+                ;; No line numbers
+                (when current-listing-lines
+                  ;; Current listing name matches collected line numbers,
+                  ;; add special reference
+                  (push (cons "*Listing*" (concat "lst:" current-listing-id)) current-listing-lines)
+                  (push (cons current-listing-caption current-listing-lines) listings))
+                (unless (string= current-listing-id (cadr parts))
+                  (push (cons (format "%s (%s)" caption (cadr parts)) label) listings))
+                (setf current-listing-id nil
+                      current-listing-caption nil
+                      current-listing-lines nil
+                      current-listing-label nil))))
            ((string= "fig" type)
             (push (cons (format "%s (%s)" caption (cadr parts)) label) figures))
            ((string= "tbl" type)
