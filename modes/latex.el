@@ -47,7 +47,6 @@ The returned list is list of CONS cells where CAR is a label and CDR is a captio
 
 (defun latex-list-buffer-labels (labels)
   "Return list of labels available from current buffer appended to LABELS."
-  (message "Adding buffer data to %s" labels)
   (save-excursion
     (goto-char (point-min))
     (while (re-search-forward "\\\\label{\\([^}]*\\)}" nil t)
