@@ -248,6 +248,11 @@ around the region text."
   nil
   "\\footnote{" _ "}")
 
+(define-skeleton latex-insert-glossary
+  "Insert \\gls"
+  nil
+  "\\gls{" _ "}")
+
 (defun avm-latex-mode-hook ()
   (turn-on-auto-fill)
 
@@ -271,6 +276,7 @@ around the region text."
               ("C-c C-r" . latex-insert-autoreference)
               ("C-c l" . latex-insert-label)
               ("C-c f" . latex-insert-footnote)
+              ("C-c g" . latex-insert-glossary)
               ("M-i" . latex-insert-emph)
               ("C-c M-i" . latex-insert-index)
               ("<f7>" . compile))
