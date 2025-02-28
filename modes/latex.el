@@ -216,6 +216,8 @@ around the region text."
                       '("/*$\\label{" . "}$*/"))
                      (lisp-mode
                       '(";$\\label{" . "}$"))
+                     (scheme-mode
+                      '(";$\\label{" . "}$"))
                      (latex-mode
                       '("\\label{" . "}")))))
     (when insertion
