@@ -34,6 +34,7 @@
   :config
   (slime-setup '(slime-fancy slime-asdf))
   :bind (:map lisp-mode-map
+              ("C-c l" . latex-insert-label)
               ("<RET>" . newline-and-indent))
   ;;(when (locate-library "w3m")
   ;;  (require 'hyperspec)
