@@ -72,6 +72,7 @@
  '(smerge-refined-removed ((t (:background "#662222"))))
  '(smerge-lower ((t (:background "#224422"))))
  '(smerge-refined-added ((t (:background "#226622"))))
+ '(smerge-base ((t (:background "#222211"))))
  '(smerge-markers ((t (:background "grey50"))))
  )
 
