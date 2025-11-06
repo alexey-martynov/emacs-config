@@ -97,6 +97,9 @@
 (if running-x
     (global-set-key [f13] 'toggle-input-method))
 
+;; Some terminal keys
+(global-set-key (kbd "<clearline>") 'end-of-buffer)
+
 (icomplete-mode 99)
 
 (windmove-default-keybindings 'meta)
