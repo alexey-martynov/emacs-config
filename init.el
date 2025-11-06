@@ -168,8 +168,10 @@
           (directory-files name t "\\.el$"))))
 
 ;; Try to load host-based configuration override
-(let ((name (concat avm-config-root-dir "host/" (system-name))))
+(let* ((host-name (car (split-string (system-name) "\\.")))
+       (name (concat avm-config-root-dir "host/" (system-name))))
   (when (file-exists-p name)
+    (message "Loading host configuration %s" name)
     (load name)))
 
 (when (locate-library "mmm-mode")
