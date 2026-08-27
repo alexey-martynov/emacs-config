@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 
 (defvar delete-trailing-whitespace-mode nil)
 

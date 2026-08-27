@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (require 'compile)
 
 (setq compilation-scroll-output t)

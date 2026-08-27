@@ -1,4 +1,6 @@
-;; -*- mode: emacs-lisp -*-
+;; -*- mode: emacs-lisp; lexical-binding: nil; -*-
+(add-to-list 'warning-suppress-types '(files missing-lexbind-cookie))
+
 (defvar running-windows (eq system-type 'windows-nt))
 (defvar running-x (eq window-system 'x))
 (defvar running-mac (eq window-system 'ns))

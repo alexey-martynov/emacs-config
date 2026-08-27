@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defun avm-html-mode-hook ()
   (define-key html-mode-map (kbd "<RET>") 'newline-and-indent)
   (define-key html-mode-map (kbd "C-c o") 'ff-find-other-file)

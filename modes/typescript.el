@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defun avm-typescript-mode-hook ()
   (define-key typescript-mode-map (kbd "C-c o") 'ff-find-other-file)
   (define-key typescript-mode-map (kbd "<f7>") 'compile)

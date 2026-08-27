@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (when (locate-library "cmake-mode")
   (autoload 'cmake-mode "cmake-mode" "CMake mode")
 

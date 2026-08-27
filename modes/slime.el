@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defun avm-lisp-data-mode-hook ()
   (setq-local show-trailing-whitespace t)
     (delete-trailing-whitespace-mode 'clean)

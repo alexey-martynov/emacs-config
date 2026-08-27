@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defun avm-js-mode-hook ()
   (define-key js-mode-map (kbd "<RET>") 'newline-and-indent)
   (define-key js-mode-map (kbd "C-c o") 'ff-find-other-file)

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defun avm-haskell-mode-hook ()
   ;;(define-key haskell-mode-map [?\C-c ?\C-r] 'inferior-haskell-reload-file)
   (define-key haskell-mode-map (kbd "<f7>") 'compile)

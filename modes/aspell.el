@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (setq ispell-dictionary "ru")
 (setq ispell-program-name "aspell")
 

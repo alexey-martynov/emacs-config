@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (when (locate-library "dockerfile-mode")
   (autoload 'dockerfile-mode "dockerfile-mode" "Dockerfile mode")
 

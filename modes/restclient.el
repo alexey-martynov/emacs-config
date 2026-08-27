@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (when (locate-library "restclient")
   (autoload 'restclient-mode "restclient" "REST Client mode" t)
 

@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defconst c-martynov-style
   '("bsd"
     (c-basic-offset . 2)

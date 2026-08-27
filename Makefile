@@ -17,3 +17,4 @@ compile:
 clean:
 	find $(CURDIR) -name "*.elc" -delete
 	rm -f $(CURDIR)/site-lisp/loaddefs
+	rm -rf $(CURDIR)/eln-cache

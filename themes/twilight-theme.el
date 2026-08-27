@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;;; twilight-theme.el --- Twilight theme for GNU Emacs 24 (deftheme)
 ;; Version: 1.0.0
 ;; Author: Nick Parker <nickp@developernotes.com>

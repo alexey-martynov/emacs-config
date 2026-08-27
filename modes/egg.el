@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defun avm-egg-commit-buffer-mode-hook ()
   (auto-fill-mode t)
   (unless running-windows

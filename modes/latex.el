@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (require 'cl-lib)
 
 (defvar latex-aux-file nil "Auxiliary file for LaTeX source to provide labels")
