@@ -32,3 +32,6 @@
 [submodule "site-lisp/systemd-mode"]
 	path = site-lisp/systemd-mode
 	url = https://github.com/holomorph/systemd-mode.git
+[submodule "site-lisp/rust-mode"]
+	path = site-lisp/rust-mode
+	url = https://github.com/rust-lang/rust-mode.git
